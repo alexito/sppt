@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <f:view>
+
+                    <h:form id="form">
+                        <p:growl id="msgs" showDetail="true"/>
+
+
+
+
+                        <p:dataTable id="cars1" var="car" value="#{dtEditView.lista_oqs}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Row Editing
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs" />
+
+                            <p:column headerText="ITEM">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.second_Item_Number}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{car.second_Item_Number}" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Descripcion 1">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.line_Description}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{car.line_Description}" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Descripcion 2">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.description2}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{car.description2}" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Numero OR">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.number_or}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputMask id="phone" value="#{car.number_or}" mask="99999999" style="width:100%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Tipo OR">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.tipo_or}" /></f:facet>
+                                    <f:facet name="input">    
+                                        <h:selectOneMenu id="txt3" value="#{car.tipo_or}" required="true" requiredMessage="Seleccione un tipo" label="Text 3" style="width:100%">
+                                            <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="OR" itemValue="OR" />
+                                            <f:selectItem itemLabel="UW" itemValue="UW" />
+                                        </h:selectOneMenu></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <center>
+                                    <h:commandButton value="Guardar Datos"  action="#{mbGeneral.guardar_ors()}"/>
+                                </center>
+                            </f:facet> 
+
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+
+
+
+
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

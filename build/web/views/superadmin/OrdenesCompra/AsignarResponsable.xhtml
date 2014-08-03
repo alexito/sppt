@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <f:view>
+                    <h:form>
+                        <center>
+                            <p:panel header="ASIGNAR RESPONSABLE">               
+
+                                <p:panelGrid columns="3">  
+                                    <f:facet name="header">  
+                                        SELECCIONE UN RESPONSABLE
+                                    </f:facet>  
+
+                                    <h:outputText value="Usuario: " />
+                                    <p:selectOneMenu  id="cmb_usuario" value="#{mbOrdenesCompra.id_usuario}"  required="true" requiredMessage="Seleccione un Usuario"
+                                                      effect="fade"   filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="Seleccione un Usuario" itemValue="" />
+                                        <f:selectItems value="#{mbOrdenesCompra.usuarios}" />
+
+                                    </p:selectOneMenu>
+                                    <p:message for="cmb_usuario" />  
+
+                                    <h:outputText  value="Fecha Dead Line:"/>
+                                    <p:calendar id="event" value="#{mbOrdenesCompra.death_Line}">
+                                        <p:ajax event="dateSelect" listener="#{mbOrdenesCompra.onDateSelect(event)}" update="txt_semana" />
+                                    </p:calendar>
+                                    <p:message for="event" />
+
+
+
+                                    <h:outputText  value="Semana:"/>
+                                    <h:outputText id="txt_semana" value="#{mbOrdenesCompra.semana_seleccionada}" />
+                                    <h:outputText  />
+
+                                    <h:outputText value="Prioridad: " />
+                                    <p:selectOneMenu  id="cmb_prioridad" value="#{mbOrdenesCompra.id_prioridad}"  required="true" requiredMessage="Seleccione una Prioridad"
+                                                      effect="fade"   filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="Seleccione una Prioridad" itemValue="" />
+                                        <f:selectItems value="#{mbOrdenesCompra.prioridades}" />
+
+                                    </p:selectOneMenu>
+                                    <p:message for="cmb_prioridad" />
+
+
+                                    <h:outputText value="Evento: " />
+                                    <p:selectOneMenu  id="cmb_evento" value="#{mbOrdenesCompra.id_evento}"  required="true" requiredMessage="Seleccione un Evento"
+                                                      effect="fade"   filter="true" filterMatchMode="contains">
+                                        <f:selectItem itemLabel="Seleccione un Evento" itemValue="" />
+                                        <f:selectItems value="#{mbOrdenesCompra.eventos}" />
+
+                                    </p:selectOneMenu>
+                                    <p:message for="cmb_evento" />
+
+
+                                    <h:outputText  value="Observaciones:"/>
+                                    <h:inputTextarea value="#{mbOrdenesCompra.observaciones}" rows="5" cols="30" />
+                                    <h:outputText  />
+
+                                    <f:facet name="footer">
+                                        <center>
+                                            <h:commandButton value="Asignar" action="#{mbOrdenesCompra.asignar_usuario()}"/>
+                                        </center>
+                                    </f:facet> 
+
+                                </p:panelGrid>  
+                            </p:panel>
+                        </center>
+                    </h:form>
+                </f:view>
+
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

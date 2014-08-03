@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+                <h:form>  
+                    <center>
+                        <p:panel header="Desea desactivar al siguiente usuario?">               
+
+                            <p:panelGrid columns="2">  
+                                <f:facet name="header">  
+                                    USUARIO SELECCIONADO
+                                </f:facet>  
+
+
+                                <h:outputText value="Nombres: " />  
+                                <h:outputLabel id="txt_nombres" value="#{mbUsuarios.usuario_seleccionado.nombre}" />
+
+
+                                <h:outputText  value="Apellidos: " />  
+                                <h:outputLabel id="txt_apellidos" value="#{mbUsuarios.usuario_seleccionado.apellidos}" />
+
+
+                                <h:outputText  value="Cédula: " />  
+                                <h:outputLabel id="txt_cedula" value="#{mbUsuarios.usuario_seleccionado.cedula}"/>
+
+                                <h:outputText value="Rol: " />  
+                                <h:outputLabel id="txt_rol" value="#{mbUsuarios.usuario_seleccionado.rol}"/> 
+
+
+                                <h:outputText value="Contraseña: " />  
+                                <h:outputLabel id="txt_contrasenia" value="#{mbUsuarios.usuario_seleccionado.contraseña}"/> 
+
+
+                                <f:facet name="footer">
+                                    <center>
+                                        <h:commandButton value="#{mbUsuarios.estado_user}"  action="#{mbUsuarios.desactivar()}"/>
+                                    </center>
+                                </f:facet> 
+
+                            </p:panelGrid>  
+                        </p:panel>
+
+                    </center>
+
+                </h:form>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

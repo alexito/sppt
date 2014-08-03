@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <h:form id="form">  
+                    <p:dataTable id="Usuarios" var="usuario" value="#{mbUsuarios.lista_usuarios}" rowKey="#{usuario}"  
+                                 selection="#{mbUsuarios.usuario_seleccionado}" selectionMode="single"
+
+                                 widgetVar="usuariosTable"  emptyMessage="No se encontro usuario con los criterios ingresados" filteredValue="#{mbUsuarios.usuarios_filtrados}" >  
+
+                        <f:facet name="header">  
+                            SELECCIONE UN USUARIO
+                            <br/>
+                            <p:outputPanel>  
+                                <h:outputText value="Buscar:" />  
+                                <p:inputText id="globalFilter" onkeyup="usuariosTable.filter()" style="width:150px" />  
+                            </p:outputPanel>  
+                        </f:facet>  
+
+                        <p:column id="idColumn" filterBy="#{usuario.id_Usuario}"   
+                                  headerText="ID" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.id_Usuario}" />  
+                        </p:column>
+
+
+                        <p:column filterBy="#{usuario.nombre}"   
+                                  headerText="NOMBRES" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.nombre}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{usuario.apellidos}"   
+                                  headerText="APELLIDOS" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.apellidos}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{usuario.cedula}"   
+                                  headerText="CÉDULA" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.cedula}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{usuario.rol}"   
+                                  headerText="ROL" footerText="exact"  
+                                  filterMatchMode="exact">  
+                            <h:outputText value="#{usuario.rol}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{usuario.contraseña}"   
+                                  headerText="CONTRASEÑA" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.contraseña}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{usuario.email}"   
+                                  headerText="Email" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.email}" />  
+                        </p:column>
+                        
+                        
+                        <p:column filterBy="#{usuario.telefono}"   
+                                  headerText="Celular" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{usuario.telefono}" />  
+                        </p:column>
+
+                        <f:facet name="footer">  
+                            <p:commandButton value="Actualizar" action="#{mbUsuarios.pag_actualizar()}"/>
+                            <p:commandButton value="#{mbUsuarios.estado_user}" action="#{mbUsuarios.pag_desactivar()}"/>
+                            <p:commandButton value="Nuevo Usuario" action="#{mbUsuarios.pag_nuevo_usuario()}"/>  
+                            <p:commandButton value="#{mbUsuarios.usuarios_mostrados}" action="#{mbUsuarios.usuarios_desactivas()}"/>
+
+                        </f:facet>  
+
+                    </p:dataTable>  
+
+                    <h:outputText value="#{mbclientes.res}"/>
+                </h:form>  
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

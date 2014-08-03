@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <h:form id="form">  
+                    <p:dataTable id="Usuarios" var="orden" value="#{mbGeneral.lista_comentarios_estados}" rowKey="#{orden}"  
+                                 paginator="true" rows="8"   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="8,16,24,32,40,48,56,64"
+                                 >  
+
+                        <f:facet name="header">  
+                            ESTADOS
+
+                        </f:facet>  
+
+                        <p:column id="idColumn" filterBy="#{orden.id_comentario}"  
+                                  headerText="ID" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.id_comentario}" />  
+
+                        </p:column>
+
+                        <p:column filterBy="#{orden.comentario}"   
+                                  headerText="INFORMACIÓN" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.comentario}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{orden.usuario}"   
+                                  headerText="USUARIO" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.usuario}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{orden.fecha_Comentario}"  
+                                  headerText="FECHA" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.fecha_Comentario}" />  
+                        </p:column>
+                        <f:facet name="footer">
+                            <center>
+
+                                <h:commandButton value="HISTORIAL XLSX" action="#{mbGeneral.XLSX_historial_OQ(actionEvent)}"/>  
+                                <h:commandButton value="HISTORIAL PDF" action="#{mbGeneral.PDF_historial_OQ(actionEvent)}"/>   
+                            </center>
+                        </f:facet> 
+
+
+                    </p:dataTable>  
+
+
+                </h:form>
+
+                <h:form>  
+                    <center>
+                        <p:panel header="REASIGNAR USUARIO">               
+
+                            <p:panelGrid columns="3">  
+                                <f:facet name="header">  
+                                    INGRESE LA SIGUIENTE INFORMACIÓN
+                                </f:facet>  
+
+                                <h:outputText value="Usuario : " />
+                                <p:selectOneMenu  id="cmb_estado" value="#{mbGeneral.id_estado}"  required="true" requiredMessage="Seleccione un destino"
+                                                  effect="fade"   filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="Seleccione un Usuario" itemValue="" />
+                                    <f:selectItems value="#{mbGeneral.estados_disponibles}" />
+
+                                </p:selectOneMenu>
+                                <p:message for="cmb_estado"/>
+
+
+                                <h:outputText  value="Motivo: " />  
+                                <p:inputTextarea id="txt_comentario" rows="5" cols="30" value="#{mbGeneral.comentario}" required="true" autoResize="false"  requiredMessage="Ingrese un Motivo"/>
+
+                                <p:message for="txt_comentario" />
+
+
+                                <f:facet name="footer">
+                                    <center>
+                                        <h:commandButton value="Guardar"  action="#{mbGeneral.guardar_cambio_asignacion_usuario()}"/>
+                                    </center>
+                                </f:facet> 
+
+                            </p:panelGrid>  
+                        </p:panel>
+
+                    </center>
+
+                </h:form>  
+
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

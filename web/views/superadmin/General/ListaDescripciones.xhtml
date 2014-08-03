@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <h:form id="form">  
+                    <p:dataTable id="Usuarios" var="orden" value="#{mbGeneral.lista_descripciones}" rowKey="#{orden}"  
+                                 paginator="true" rows="8"   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="8,16,24,32,40,48,56,64"
+                                 >  
+
+                        <f:facet name="header">  
+                            DESCRIPCIÓNES
+
+                        </f:facet>  
+
+                        <p:column filterBy="#{orden.item_number}"   
+                                  headerText="ITEM NUMBER" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.item_number}" />  
+                        </p:column>
+
+                        <p:column id="idColumn" filterBy="#{orden.user_reference}"  
+                                  headerText="USER REFERENCE" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.user_reference}" />  
+
+                        </p:column>
+
+                        <p:column filterBy="#{orden.descripcion1}"   
+                                  headerText="DESCRIPCIÓN 1" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.descripcion1}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{orden.descripcion2}"   
+                                  headerText="DESCRIPCIÓN 2" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.descripcion2}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{orden.descripcion_larga}"  
+                                  headerText="DESCRIPCIÓN LARGA" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.descripcion_larga}" />  
+                        </p:column>
+
+                        <p:column filterBy="#{orden.search_text}"   
+                                  headerText="Search Text" footerText="contains"  
+                                  filterMatchMode="contains">  
+                            <h:outputText value="#{orden.search_text}" />  
+                        </p:column>
+
+
+
+                        <f:facet name="footer">  
+                            <p:commandButton value="Agregar una nueva descripción" action="#{mbGeneral.pag_nueva_descrip()}"/>
+                            <br/>
+                            <f:facet name="footer">
+                                <center>
+                                    <h:commandButton value="HISTORIAL XLSX" action="#{mbGeneral.XLSX_historial_OQ(actionEvent)}"/>  
+                                    <h:commandButton value="HISTORIAL PDF" action="#{mbGeneral.PDF_historial_OQ(actionEvent)}"/>   
+                                </center>
+                            </f:facet> 
+                        </f:facet>  
+
+                    </p:dataTable>  
+                    <h3>Exporta datos</h3>
+                    <h:commandLink>
+                        <p:graphicImage value="/img/excelFile.png" height="35"/>
+                        <p:dataExporter type="csv" target="Usuarios" fileName="descripciones-pdf" pageOnly="false" />
+                    </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage value="/img/pdf.png" height="35"/>
+                        <p:dataExporter type="pdf" target="Usuarios" fileName="descripciones-pdf" pageOnly="false"  />
+                    </h:commandLink>
+
+                </h:form>  
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

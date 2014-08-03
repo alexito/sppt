@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+
+                <f:view>
+
+                    <h:form id="form">
+                        <p:growl id="msgs" showDetail="true"/>
+
+                        <p:dataTable id="cars1" var="car" value="#{dtEditViewEstados.lista_estados}" editable="true" style="margin-bottom:20px">
+                            <f:facet name="header">
+                                Row Editing
+                            </f:facet>
+
+                            <p:ajax event="rowEdit" listener="#{dtEditViewEstados.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{dtEditViewEstados.onRowCancel}" update=":form:msgs" />
+
+                            <p:column headerText="ID">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.id_Estado}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{car.id_Estado}" style="width:100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="ESTADO">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.estado}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{car.estado}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+                            <p:column headerText="DESCRIPCIÓN">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{car.descripcion}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{car.descripcion}" style="width:100%" label="Year"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+
+
+
+
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
+                        </p:dataTable>
+
+                  
+
+                   
+                    </h:form>
+                </f:view>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

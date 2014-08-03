@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/Plantilla_super.xhtml">
+            <ui:define name="bodyJR">
+                <h:form>  
+                    <center>
+                        <p:panel header="Ingrese los datos del nuevo usuario">               
+
+                            <p:panelGrid columns="3">  
+                                <f:facet name="header">  
+                                    INGRESE LA SIGUIENTE INFORMACIÓN
+                                </f:facet>  
+
+
+                                <h:outputText  value="User Reference: " />  
+                                <p:inputText id="txt_user" value="#{mbGeneral.descripcion_seleccionada.user_reference}" required="true" requiredMessage="Ingrese un usuario referencia"/>
+                                <p:message for="txt_user" />
+
+                                <h:outputText  value="Descripcion 1: " />  
+                                <p:inputText id="txt_des1" value="#{mbGeneral.descripcion_seleccionada.descripcion1}" required="true" requiredMessage="Ingrese Descripcion 1"/>
+                                <p:message for="txt_des1" />
+
+                                <h:outputText  value="Descripcion 2: " />  
+                                <p:inputText id="txt_des2" value="#{mbGeneral.descripcion_seleccionada.descripcion2}" required="true" requiredMessage="Ingrese Descripcion 2"/>
+                                <p:message for="txt_des2" />
+
+                                <h:outputText  value="Descripcion Larga: " />  
+                                <p:inputText id="txt_deslarga" value="#{mbGeneral.descripcion_seleccionada.descripcion_larga}" required="true" requiredMessage="Ingrese Descripcion Larga"/>
+                                <p:message for="txt_deslarga" />
+
+                                <h:outputText  value="Search Text: " />  
+                                <p:inputText id="txt_desear" value="#{mbGeneral.descripcion_seleccionada.search_text}" required="true" requiredMessage="Ingrese Descripcion Larga"/>
+                                <p:message for="txt_desear" />
+
+                                <f:facet name="footer">
+                                    <center>
+                                        <h:commandButton value="Guardar"  action="#{mbGeneral.guardar_descripcion()}"/>
+                                    </center>
+                                </f:facet> 
+
+                            </p:panelGrid>  
+                        </p:panel>
+
+                    </center>
+
+                </h:form>  
+
+
+
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
