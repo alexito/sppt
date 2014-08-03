@@ -6,272 +6,75 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <h:body>
-        <ui:composition template="../templates/admin_template.xhtml">
-            <ui:define name="main-body">
-                                <h:form id="form">  
-                    <p:dataTable id="Usuarios" var="orden" value="#{mbGeneral.lista_ordenes_compra}" rowKey="#{orden}"  
-                                 selection="#{mbGeneral.ordenes_seleccionadas}" selectionMode="multiple"
-                                 paginator="true" rows="10"   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                 rowsPerPageTemplate="10,20,30,40,50,100,1000"
-                                 widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." filteredValue="#{mbGeneral.ordenes_filtradas}" >  
+  <h:body>
+    <ui:composition template="../templates/admin_template.xhtml">
+      <ui:define name="main-body">
+        <h:form id="form">  
+          <p:dataTable id="Solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudes}" rowKey="#{solicitud}"  
+                       selectionMode="multiple"
+                       paginator="true" rows="10"   
+                       rowsPerPageTemplate="10,20,30,40,50,100,1000"
+                       widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
-                        <f:facet name="header">  
-                            FILTROS
-                            <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
-                            <p:columnToggler datasource="Usuarios" trigger="toggler" />
-                            <br/>
+            <f:facet name="header">  
+              FILTROS
 
-                            <h:outputText  value="Fecha Desde:"/>
-                            <p:calendar id="event" value="#{mbGeneral.death_Line}">
-                                <p:ajax event="dateSelect" listener="#{mbGeneral.onDateSelect}" update="Usuarios" />
-                            </p:calendar>
+            </f:facet>  
 
-                            <h:outputText  value="Fecha Hasta:"/>
-                            <p:calendar id="fecha" value="#{mbGeneral.fecha_hasta}"> 
-                                <p:ajax event="dateSelect" listener="#{mbGeneral.onDateSelect}" update="Usuarios" />
-                            </p:calendar>
+            <p:column id="idColumn" filterBy="#{solicitud.id}"   filterStyle="width:25px"  
+                      width="35"
+                      headerText="ID" footerText="contains"  
+                      filterMatchMode="contains">  
+              <h:outputText value="#{solicitud.id}" />  
 
+            </p:column>
 
-                            <br/>
-                            <h:outputText value="Estado: " />
-                            <p:selectOneMenu  id="cmb_estado" value="#{mbGeneral.id_estado}"  
-                                              effect="fade"   filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="Seleccione un estado" itemValue="" />
-                                <f:selectItems value="#{mbGeneral.estados_proceso}" />
-                                <p:ajax update="Usuarios, lbl_Descrip "  
-                                        listener="#{mbGeneral.handleEstadoChange()}" /> 
-                            </p:selectOneMenu>
-                            <br/>
-                            <p:outputLabel id="lbl_Descrip" value="#{mbGeneral.descripcion_estado()}"/>
+            <p:column filterBy="#{solicitud.origen}"   filterStyle="width:80px"
+                      headerText="Order Number" footerText="contains"  
+                      filterMatchMode="contains">  
+              <h:outputText value="#{solicitud.origen}" />  
+            </p:column>
 
+            <p:column filterBy="#{solicitud.destino}"   filterStyle="width:30px"
+                      width="40"
+                      headerText="Or Ty" footerText="contains"  
+                      filterMatchMode="contains">  
+              <h:outputText value="#{solicitud.destino}" />  
+            </p:column>
+            
+            <p:column filterBy="#{solicitud.FSalida}"   filterStyle="width:30px"
+                      width="40"
+                      headerText="Or Ty" footerText="contains"  
+                      filterMatchMode="contains">  
+              <h:outputText value="#{solicitud.FSalida}" />  
+            </p:column>
 
-
-                            <br/>
-
-                            <h:outputLabel for="cmb_semana" value="Semana: "></h:outputLabel>
-                            <p:selectOneMenu id="cmb_semana" value="#{mbGeneral.semana_seleccionada}" required="false" >  
-                                <f:selectItem itemLabel="Seleccione una semana" itemValue="" />  
-                                <f:selectItems value="#{mbGeneral.semana}" />  
-                                <p:ajax update="Usuarios "  
-                                        listener="#{mbGeneral.handleSemanaChange()}" />
-                            </p:selectOneMenu>
-                            <p:message for="cmb_semana" />
-
-
-
-                        </f:facet>  
-
-                        <p:column id="idColumn" filterBy="#{orden.id_oq}"   filterStyle="width:25px"  
-                                  width="35"
-                                  headerText="ID OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.id_oq}" />  
-
-                        </p:column>
-
-                        <p:column filterBy="#{orden.order_Number}"   filterStyle="width:80px"
-                                  headerText="Order Number" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.order_Number}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.or_Ty}"   filterStyle="width:30px"
-                                  width="40"
-                                  headerText="Or Ty" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.or_Ty}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.order_Date}"     filterStyle="width:80px"
-                                  headerText="Order Date OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.order_Date.toLocaleString()}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.death_Line}"   
-
-                                  headerText="Dead Line OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.death_Line.toLocaleString()}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.second_Item_Number}"   filterStyle="width:80px"
-                                  headerText="2 Item Number" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.second_Item_Number}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.three_Item_Number}"   
-                                  headerText="3 Item Number" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.three_Item_Number}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.ln_Ty}"   filterStyle="width:15px"
-                                  width="20"
-                                  headerText="Ln Ty" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.ln_Ty}" />  
-                        </p:column>
-
-
-                        <p:column filterBy="#{orden.line_Description}"   
-                                  width="130"
-                                  headerText="Line Description" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.line_Description}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.description2}"   
-                                  headerText="Line Description2" footerText="contains"
-                                  width="120"
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.description2}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.supplier_Name}"   
-                                  width="115"
-                                  headerText="Supplier Name" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.supplier_Name}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.UM}"    filterStyle="width:25px"
-                                  width="30"
-                                  headerText="UM OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.UM}" />  
-                        </p:column>
-
-
-
-                        <p:column filterBy="#{orden.quantity_To_Receive}"   filterStyle="width:53px"
-                                  width="63"
-                                  headerText="Quantity Receive" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.quantity_To_Receive}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.unit_Cost}"   filterStyle="width:60px" 
-                                  width="70"
-                                  headerText="Unit Cost" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.unit_Cost}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.amount_To_Receive}"    filterStyle="width:50px"
-                                  width="60"
-                                  headerText="Amount OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.amount_To_Receive}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.report_Code_1}"   
-                                  headerText="Report Code1" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.report_Code_1}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.report_Code_2}"   
-                                  headerText="Report Code2" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.report_Code_2}" />  
-                        </p:column>
+            <f:facet name="footer">  
+             
+            </f:facet>  
 
 
 
 
-                        <p:column filterBy="#{orden.line_Number}"    filterStyle="width:20px"
-                                  width="30"
-                                  headerText="Line Number" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.line_Number}" />  
-                        </p:column>
+            <f:facet name="footer">  
+              
+            </f:facet>  
 
+          </p:dataTable>  
 
-                        <p:column filterBy="#{orden.special_handling}"   
+          <h3>Exporta datos</h3>
 
-                                  headerText="Pcc Code" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.special_handling}" />  
-                        </p:column>
+          <h:commandLink>
+            <p:graphicImage value="/img/excelFile.png" height="35"/>
+            <p:dataExporter type="csv" target="Usuarios" fileName="ventas-pdf" pageOnly="true" />
+          </h:commandLink>
+          <h:commandLink>
+            <p:graphicImage value="/img/pdf.png" height="35"/>
+            <p:dataExporter type="pdf" target="Usuarios" fileName="ventas-pdf" pageOnly="true" />
+          </h:commandLink>
+        </h:form>  
 
-                        <p:column filterBy="#{orden.transaction_Originator}"   
-
-                                  headerText="   Transaction Originator" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.transaction_Originator}" /> 
-                        </p:column>
-
-                        <p:column filterBy="#{orden.original_Number}"   
-
-                                  headerText="Original Number" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.original_Number}" /> 
-                        </p:column>
-
-
-                        <p:column filterBy="#{orden.prioridad}"   
-
-                                  headerText="Prioridad" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.prioridad}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.evento}"   
-
-                                  headerText="Evento" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.evento}" />  
-                        </p:column>
-
-                        <p:column filterBy="#{orden.antiguedad}"   filterStyle="width:20px"
-                                  width="30"
-                                  headerText="Días OQ" footerText="contains"  
-                                  filterMatchMode="contains">  
-                            <h:outputText value="#{orden.antiguedad}" /> 
-                        </p:column>
-
-                        <f:facet name="footer">  
-                            <p:commandButton value="Asignar Usuario Responsable" action="#{mbOrdenesCompra.pag_asignar_usuario()}"/>
-                            <p:commandButton value="Descripciones" action="#{mbOrdenesCompra.pag_descripciones()}"/>
-                        </f:facet>  
-
-
-
-
-                        <f:facet name="footer">  
-                            <p:commandButton value="PCC CODE" action="#{mbGeneral.pag_pcc_code()}"/>
-                            <p:commandButton value="Descripciones" action="#{mbGeneral.pag_descripciones()}"/> 
-                            <p:commandButton value="Comentarios" action="#{mbGeneral.pag_comentarios()}"/> 
-                            <p:commandButton value="Estados" action="#{mbGeneral.pag_estados()}"/> 
-                            <p:commandButton value="Asignaciones" action="#{mbGeneral.pag_asignaciones_usuarios()}"/>
-                            <p:commandButton value="Dead Line" action="#{mbGeneral.pag_death_lines()}"/> 
-                            <p:commandButton value="Graficar" action="#{mbGeneral.pag_graficar()}" onclick="this.form.target = '_blank'"/> 
-                            <p:commandButton value="Graficar Pastel" action="#{mbGeneral.pag_graf_pastel()}" onclick="this.form.target = '_blank'"/> 
-                            <p:commandButton value="Generar Solicitud" action="#{mbGeneral.pag_Generar_Reporte_Solicitud()}"/> 
-                            <p:commandButton value="Modificar" action="#{mbGeneral.modificar_ordenes()}"/> 
-                            <br/>
-                            <h:commandButton value="HISTORIAL XLSX" action="#{mbGeneral.XLSX_historial_OQ(actionEvent)}"/>  
-                            <h:commandButton value="HISTORIAL PDF" action="#{mbGeneral.PDF_historial_OQ(actionEvent)}"/>  
-                        </f:facet>  
-
-                    </p:dataTable>  
-
-                    <h3>Exporta datos</h3>
-
-                    <h:commandLink>
-                        <p:graphicImage value="/img/excelFile.png" height="35"/>
-                        <p:dataExporter type="csv" target="Usuarios" fileName="ventas-pdf" pageOnly="true" />
-                    </h:commandLink>
-                    <h:commandLink>
-                        <p:graphicImage value="/img/pdf.png" height="35"/>
-                        <p:dataExporter type="pdf" target="Usuarios" fileName="ventas-pdf" pageOnly="true" />
-                    </h:commandLink>
-                </h:form>  
- 
-            </ui:define>
-        </ui:composition>
-    </h:body>
+      </ui:define>
+    </ui:composition>
+  </h:body>
 </html>

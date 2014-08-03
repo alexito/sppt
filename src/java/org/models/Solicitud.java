@@ -29,11 +29,8 @@ public class Solicitud  implements java.io.Serializable {
     public Solicitud(int id) {
         this.id = id;
     }
-    public Solicitud(int id, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea, String origen, String destino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades) {
-       this.id = id;
-       this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
-       this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
-       this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
+    public Solicitud(int id, String origen, String destino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea) {
+       this.id = id;       
        this.origen = origen;
        this.destino = destino;
        this.FSalida = FSalida;
@@ -41,6 +38,9 @@ public class Solicitud  implements java.io.Serializable {
        this.hospedaje = hospedaje;
        this.estado = estado;
        this.novedades = novedades;
+       this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
+       this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
+       this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
     }
    
     public int getId() {

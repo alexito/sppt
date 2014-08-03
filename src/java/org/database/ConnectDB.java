@@ -26,11 +26,11 @@ public class ConnectDB {
     }
   }
 
-  public Connection getConexion() {
+  public Connection getConnection() {
     return connection;
   }
 
-  public void setConexion(Connection connection) {
+  public void setConnection(Connection connection) {
     this.connection = connection;
   }
 }

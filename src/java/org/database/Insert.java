@@ -18,7 +18,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_usuario (?,?,?,?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_usuario (?,?,?,?,?,?,?) }");
             prcProcedimientoAlmacenado.setString(1, Nombre);
             prcProcedimientoAlmacenado.setString(2, Apellido);
             prcProcedimientoAlmacenado.setString(3, Rol);
@@ -32,9 +32,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -50,7 +50,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_descripcion (?,?,?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_descripcion (?,?,?,?,?,?) }");
             prcProcedimientoAlmacenado.setString(1, Item);
             prcProcedimientoAlmacenado.setString(2, User_reference);
             prcProcedimientoAlmacenado.setString(3, Descripcion1);
@@ -63,9 +63,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -81,7 +81,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_asignar_usuario_responsable (?,?,?,?,?,?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_asignar_usuario_responsable (?,?,?,?,?,?,?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1, id_oq);
             prcProcedimientoAlmacenado.setInt(2, id_usuario);
             java.sql.Date sqlDate = new java.sql.Date(Death_Line.getTime());
@@ -99,9 +99,9 @@ public class Insert {
         } catch (Exception ex) {
             error = ex.getMessage();
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -115,7 +115,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_asignar_estados (?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_asignar_estados (?,?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1, id_estado);
             prcProcedimientoAlmacenado.setInt(2, id_oq);
             prcProcedimientoAlmacenado.setInt(3, id_usuario);
@@ -126,9 +126,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -144,7 +144,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_agregar_comentario (?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_agregar_comentario (?,?,?) }");
             prcProcedimientoAlmacenado.setString(1, comentario);
             prcProcedimientoAlmacenado.setInt(2, id_usuario);
             prcProcedimientoAlmacenado.setInt(3, id_oq);
@@ -154,9 +154,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -172,7 +172,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_asignar_usuario (?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_asignar_usuario (?,?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1, id_oq);
             prcProcedimientoAlmacenado.setInt(2, id_usuario);
             prcProcedimientoAlmacenado.setString(3, informacion);
@@ -184,9 +184,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -202,7 +202,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_agregar_death_line (?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_agregar_death_line (?,?,?,?) }");
             java.sql.Date sqlDate = new java.sql.Date(Death_Line.getTime());
             prcProcedimientoAlmacenado.setDate(1, sqlDate);
             prcProcedimientoAlmacenado.setString(2, descripcion);
@@ -214,9 +214,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -232,7 +232,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_orden (?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_orden (?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1,orden );
             prcProcedimientoAlmacenado.setInt(2, id_oq);
             prcProcedimientoAlmacenado.setString(3, tipo);
@@ -242,9 +242,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -260,7 +260,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_agregar_cometarios_por_orden (?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_agregar_cometarios_por_orden (?,?,?) }");
             prcProcedimientoAlmacenado.setString(1, comentario);
             prcProcedimientoAlmacenado.setInt(2, id_usuario);
             prcProcedimientoAlmacenado.setFloat(3, order_number);
@@ -270,9 +270,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -288,7 +288,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_solicitud(?,?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_solicitud(?,?,?,?,?) }");
             prcProcedimientoAlmacenado.setString(1, OQs);
             prcProcedimientoAlmacenado.setInt(2, id_Usuario);
             java.sql.Date sqlDate = new java.sql.Date(licitacion.getTime());
@@ -303,9 +303,9 @@ public class Insert {
             String error = ex.getMessage();
             resultado = -1;
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -321,7 +321,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_inf_adicional_reporte(?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_inf_adicional_reporte(?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1,id_oq);
             prcProcedimientoAlmacenado.setString(2, informacion);
             prcProcedimientoAlmacenado.setInt(3, id_solicitud);
@@ -332,9 +332,9 @@ public class Insert {
             String error = ex.getMessage();
             resultado = -1;
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -350,7 +350,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_guardar_evento (?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_guardar_evento (?) }");
             prcProcedimientoAlmacenado.setString(1, informacion);
             prcProcedimientoAlmacenado.execute();
             prcProcedimientoAlmacenado.close();
@@ -358,9 +358,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -376,7 +376,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_asignar_prioridad (?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_asignar_prioridad (?,?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1, id_oq);
             prcProcedimientoAlmacenado.setInt(2, id_prioridad);
             prcProcedimientoAlmacenado.setInt(3, id_usuario);
@@ -387,9 +387,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
@@ -405,7 +405,7 @@ public class Insert {
         ConnectDB conexion = new ConnectDB();
         try {
              
-            CallableStatement prcProcedimientoAlmacenado = conexion.getConexion().prepareCall("{ call p_asignar_evento (?,?,?,?) }");
+            CallableStatement prcProcedimientoAlmacenado = conexion.getConnection().prepareCall("{ call p_asignar_evento (?,?,?,?) }");
             prcProcedimientoAlmacenado.setInt(1, id_oq);
             prcProcedimientoAlmacenado.setInt(2, id_evento);
             prcProcedimientoAlmacenado.setInt(3, id_usuario);
@@ -416,9 +416,9 @@ public class Insert {
         } catch (Exception ex) {
             resultado = (ex.getMessage());
         } finally {
-            if (conexion.getConexion() != null) {
+            if (conexion.getConnection() != null) {
                 try {
-                    conexion.getConexion().close();
+                    conexion.getConnection().close();
                 } catch (Exception e) {
                 }
             }
