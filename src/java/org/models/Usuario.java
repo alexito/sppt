@@ -29,6 +29,16 @@ public class Usuario  implements java.io.Serializable {
         this.apellido = apellido;
         this.rol = rol;
     }
+    public Usuario(int id, String nombre, String apellido, String cedula, String email, String telefono, Boolean estado, String rol) {
+       this.id = id;
+       this.nombre = nombre;
+       this.apellido = apellido;
+       this.cedula = cedula;
+       this.email = email;
+       this.telefono = telefono;
+       this.estado = estado;
+       this.rol = rol;
+    }
     public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol, Set<Solicitud> solicitudsForIdUsuarioSolicita, Set<Solicitud> solicitudsForIdUsuarioCrea, Set<Solicitud> solicitudsForIdUsuarioConductor) {
        this.id = id;
        this.nombre = nombre;

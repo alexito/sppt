@@ -28,10 +28,10 @@
 
             </p:column>
 
-            <p:column filterBy="#{solicitud.origen}"  
+            <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}"  
                       headerText="Origen" footerText="contains"  
                       filterMatchMode="contains">  
-              <h:outputText value="#{solicitud.origen}" />  
+              <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />  
             </p:column>
 
             <p:column filterBy="#{solicitud.destino}" 

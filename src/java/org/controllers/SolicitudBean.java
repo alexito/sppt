@@ -19,7 +19,6 @@ public class SolicitudBean {
     this.listaSolicitudes = listaSolicitudes;
   }
   public SolicitudBean() {
-    //Obtiene datos sin filtro de las solicitudes
     listaSolicitudes = Select.selectSolicitudes();
   }
   

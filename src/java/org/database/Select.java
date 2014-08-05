@@ -24,7 +24,7 @@ import org.models.Usuario;
  */
 public class Select {
 
-  static Statement sentencia;
+  static Statement sentence;
   static ResultSet result;
 
   public static String[] Loggin(String user, String password) {
@@ -33,8 +33,8 @@ public class Select {
     try {
       String SQL = "SELECT id, nombre, apellido, rol FROM dbo.usuario WHERE cedula=" + user + " and clave=" + password + " and estado=1";
 
-      sentencia = con.getConnection().createStatement();
-      result = sentencia.executeQuery(SQL);
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
       while (result.next()) {
         Datos[0] = String.valueOf(result.getInt(1));
         Datos[1] = result.getString(2);
@@ -45,26 +45,8 @@ public class Select {
 
     } catch (SQLException e) {
     } finally {
-      if (result != null) {
-        try {
-          result.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (sentencia != null) {
-        try {
-          sentencia.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (con.getConnection() != null) {
-        try {
-          con.getConnection().close();
-        } catch (SQLException e) {
-        }
-      }
+      CloseCurrentConnection(sentence, result, con);
     }
-
     return Datos;
   }
 
@@ -74,59 +56,49 @@ public class Select {
     try {
       String SQL = " SELECT * FROM dbo.solicitud";
 
-      sentencia = con.getConnection().createStatement();
-      result = sentencia.executeQuery(SQL);
-      
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
       listSolicitudes = new ArrayList<Solicitud>();
-      
+
       while (result.next()) {
-//        Usuario u_solicita = SelectUsuarioById(result.getInt("id_usuario_solicita"));
-//        Usuario u_conductor = SelectUsuarioById(result.getInt("id_usuario_conductor"));
-//        Usuario u_crea = SelectUsuarioById(result.getInt("id_usuario_crea"));
-        Usuario u_solicita = null;
-        Usuario u_conductor = null;
-        Usuario u_crea = null;
-        listSolicitudes.add(new Solicitud(result.getInt("id"), result.getString("origen"),
-                result.getString("destino"), result.getDate("f_salida"), result.getDate("f_llegada"),
-                result.getString("hospedaje"), result.getBoolean("estado"), result.getString("novedades"),
-                u_solicita, u_conductor, u_crea));
+        int id = result.getInt("id");
+        String origen = result.getString("origen"),
+        destino = result.getString("destino");
+        Date f_salida = result.getDate("f_salida"),
+        f_llegada = result.getDate("f_llegada");
+        String hospedaje = result.getString("hospedaje");
+        Boolean estado = result.getBoolean("estado");
+        String novedades = result.getString("novedades");
+        int a = result.getInt("id_usuario_solicita");
+        int b = result.getInt("id_usuario_conductor");
+        int c = result.getInt("id_usuario_crea");
+        Usuario u_solicita = SelectUsuarioById(a);
+        Usuario u_conductor = SelectUsuarioById(b);
+        Usuario u_crea = SelectUsuarioById(c);
+        Solicitud s = new Solicitud(id, origen, destino, f_salida, f_llegada, hospedaje,
+                estado, novedades, u_solicita, u_conductor, u_crea);
+        listSolicitudes.add(s);
       }
       return listSolicitudes;
 
     } catch (SQLException e) {
     } finally {
-      if (result != null) {
-        try {
-          result.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (sentencia != null) {
-        try {
-          sentencia.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (con.getConnection() != null) {
-        try {
-          con.getConnection().close();
-        } catch (SQLException e) {
-        }
-      }
+      CloseCurrentConnection(sentence, result, con);
     }
 
     return listSolicitudes;
   }
-  
+
   public static Usuario SelectUsuarioById(int id) {
     Usuario usuario = new Usuario();
     ConnectDB con = new ConnectDB();
     try {
       String SQL = " SELECT * FROM dbo.usuario WHERE id=" + id;
 
-      sentencia = con.getConnection().createStatement();
-      result = sentencia.executeQuery(SQL);
-      
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
       while (result.next()) {
         usuario.setApellido(result.getString("apellido"));
         usuario.setNombre(result.getString("nombre"));
@@ -141,57 +113,49 @@ public class Select {
 
     } catch (SQLException e) {
     } finally {
-      if (result != null) {
-        try {
-          result.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (sentencia != null) {
-        try {
-          sentencia.close();
-        } catch (SQLException e) {
-        }
-      }
-      if (con.getConnection() != null) {
-        try {
-          con.getConnection().close();
-        } catch (SQLException e) {
-        }
-      }
+      CloseCurrentConnection(sentence, result, con);
     }
 
     return usuario;
   }
 
-  public static String get_Informacion_Adicional(int Id_oq, int id_solicitud) {
-    String informacion = "";
+public static List<Usuario> selectUsuarios() {
+    List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = "SELECT \n"
-              + "  Informacion\n"
-              + "FROM \n"
-              + "  dbo.InformacionAdicionalOQ\n"
-              + "  Where Id_oq=" + Id_oq + " and id_solicitud=" + id_solicitud;
+      String SQL = " SELECT * FROM dbo.usuario";
 
-      sentencia = con.getConnection().createStatement();
-      result = sentencia.executeQuery(SQL);
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      listUsuarios = new ArrayList<Usuario>();
+
       while (result.next()) {
-        informacion = result.getString(1);
+        Usuario s = new Usuario(result.getInt("id"), result.getString("nombre"), result.getString("apellido"),
+        result.getString("cedula"), result.getString("email"), result.getString("telefono"), result.getBoolean("estado"),
+        result.getString("rol"));
+        listUsuarios.add(s);
       }
-      return informacion;
+      return listUsuarios;
 
     } catch (SQLException e) {
     } finally {
-      if (result != null) {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listUsuarios;
+  }
+
+  public static void CloseCurrentConnection(Statement sentence, ResultSet result, ConnectDB con){
+    if (result != null) {
         try {
           result.close();
         } catch (SQLException e) {
         }
       }
-      if (sentencia != null) {
+      if (sentence != null) {
         try {
-          sentencia.close();
+          sentence.close();
         } catch (SQLException e) {
         }
       }
@@ -201,8 +165,5 @@ public class Select {
         } catch (SQLException e) {
         }
       }
-    }
-
-    return informacion;
   }
 }
