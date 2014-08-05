@@ -80,10 +80,12 @@ public class Select {
       listSolicitudes = new ArrayList<Solicitud>();
       
       while (result.next()) {
-        Usuario u_solicita = SelectUsuarioById(result.getInt("id_usuario_solicita"));
-        Usuario u_conductor = SelectUsuarioById(result.getInt("id_usuario_conductor"));
-        Usuario u_crea = SelectUsuarioById(result.getInt("id_usuario_crea"));
-        
+//        Usuario u_solicita = SelectUsuarioById(result.getInt("id_usuario_solicita"));
+//        Usuario u_conductor = SelectUsuarioById(result.getInt("id_usuario_conductor"));
+//        Usuario u_crea = SelectUsuarioById(result.getInt("id_usuario_crea"));
+        Usuario u_solicita = null;
+        Usuario u_conductor = null;
+        Usuario u_crea = null;
         listSolicitudes.add(new Solicitud(result.getInt("id"), result.getString("origen"),
                 result.getString("destino"), result.getDate("f_salida"), result.getDate("f_llegada"),
                 result.getString("hospedaje"), result.getBoolean("estado"), result.getString("novedades"),

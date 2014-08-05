@@ -10,7 +10,7 @@ public class ConnectDB {
   
   public ConnectDB() {
     connection = null;
-    String host = "192.168.2.105",
+    String host = "192.168.0.3",
             port = "1433",
             db_name = "sistemappt",
             user = "sa",

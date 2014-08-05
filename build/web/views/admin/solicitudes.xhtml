@@ -21,30 +21,27 @@
 
             </f:facet>  
 
-            <p:column id="idColumn" filterBy="#{solicitud.id}"   filterStyle="width:25px"  
-                      width="35"
+            <p:column id="idColumn" filterBy="#{solicitud.id}"    
                       headerText="ID" footerText="contains"  
                       filterMatchMode="contains">  
               <h:outputText value="#{solicitud.id}" />  
 
             </p:column>
 
-            <p:column filterBy="#{solicitud.origen}"   filterStyle="width:80px"
-                      headerText="Order Number" footerText="contains"  
+            <p:column filterBy="#{solicitud.origen}"  
+                      headerText="Origen" footerText="contains"  
                       filterMatchMode="contains">  
               <h:outputText value="#{solicitud.origen}" />  
             </p:column>
 
-            <p:column filterBy="#{solicitud.destino}"   filterStyle="width:30px"
-                      width="40"
-                      headerText="Or Ty" footerText="contains"  
+            <p:column filterBy="#{solicitud.destino}" 
+                      headerText="Destino" footerText="contains"  
                       filterMatchMode="contains">  
               <h:outputText value="#{solicitud.destino}" />  
             </p:column>
             
-            <p:column filterBy="#{solicitud.FSalida}"   filterStyle="width:30px"
-                      width="40"
-                      headerText="Or Ty" footerText="contains"  
+            <p:column filterBy="#{solicitud.FSalida}"  
+                      headerText="F Salida" footerText="contains"  
                       filterMatchMode="contains">  
               <h:outputText value="#{solicitud.FSalida}" />  
             </p:column>
@@ -52,9 +49,6 @@
             <f:facet name="footer">  
              
             </f:facet>  
-
-
-
 
             <f:facet name="footer">  
               
