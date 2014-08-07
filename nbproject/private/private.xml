@@ -3,12 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/admin/usuarios.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Select.java</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Solicitud.java</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Usuario.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/super_template.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/super/test.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/super/usuarios.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/auth/security/managedBean/AuthBean.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Insert.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/ConnectDB.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/UsuarioBean.java</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/admin/solicitudes.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Usuario.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/admin_template.xhtml</file>
         </group>
     </open-files>
 </project-private>

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:body>
+    <ui:composition template="../templates/admin_template.xhtml">
+      <ui:define name="main-body">
+        <h:form>          
+          <center>
+            <p:panel id="pnl" header="Nuevo usuario" style="margin-bottom:10px;">
+              <p:messages id="messages" />
+              <h:panelGrid columns="3" cellpadding="5">
+                <h:outputLabel for="apellido" value="Apellido: *" />
+                <p:inputText id="apellido" value="#{usuarioBean.usuario.apellido}" required="true" label="Apellido" requiredMessage="El appellido debe contener más de 2 letras.">
+                  <f:validateLength minimum="2" />
+                </p:inputText>
+                <p:message for="apellido" />
+
+                <h:outputLabel for="nombre" value="Nombre: *" />
+                <p:inputText id="nombre" value="#{usuarioBean.usuario.nombre}" required="true" label="Nombre">
+                  <f:validateLength minimum="2" />
+                </p:inputText>
+                <p:message for="nombre" />
+
+                <h:outputLabel for="cedula" value="Cédula: *" />
+                <p:inputText id="cedula" value="#{usuarioBean.usuario.cedula}" required="true" label="Cédula">
+                  <f:validateLength minimum="10" />
+                </p:inputText>
+                <p:message for="cedula" />
+
+                <h:outputLabel for="clave" value="Clave: *" />
+                <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" label="Clave">
+                  <f:validateLength minimum="5" />
+                </p:inputText>
+                <p:message for="clave" />
+
+                <h:outputLabel for="email" value="Email: *" />
+                <p:inputText id="email" value="#{usuarioBean.usuario.email}" required="true" label="Email">
+                  <f:validateLength minimum="5" />
+                  <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </p:inputText>
+                <p:message for="email" />
+
+                <h:outputLabel for="telefono" value="Teléfono: *" />
+                <p:inputText id="telefono" value="#{usuarioBean.usuario.telefono}" required="false" label="telefono">
+                  <f:validateLength minimum="7" />
+                </p:inputText>
+                <p:message for="telefono" />
+
+                <h:outputText value="Estado: " />
+                <p:selectBooleanCheckbox value="#{usuarioBean.usuario.estado}" />
+
+                <h:outputLabel for="rol" value="Rol: *" />
+                <p:inputText id="rol" value="#{usuarioBean.usuario.rol}" required="true" label="Rol">
+                  <f:validateLength minimum="5" />
+                </p:inputText>
+                <p:message for="rol" />
+
+                <!--              <p:outputLabel for="rol" value="Rol:" />
+                              <p:selectOneRadio id="console" value="{usuarioBean.usuario.rol}">
+                                  <f:selectItem itemLabel="Administrador" itemValue="admin" />
+                                  <f:selectItem itemLabel="Superadministrador" itemValue="super" />
+                              </p:selectOneRadio>-->
+                <f:facet name="footer">
+                  <center>
+                    <h:commandButton value="Guardar"  action="#{usuarioBean.saveUsuario()}"/>
+                  </center>
+                </f:facet> 
+
+              </h:panelGrid>
+
+
+            </p:panel>
+          </center>
+        </h:form>
+      </ui:define>
+    </ui:composition>
+  </h:body>
+</html>

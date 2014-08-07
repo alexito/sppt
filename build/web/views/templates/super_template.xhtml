@@ -5,61 +5,44 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <f:view contentType="text/html">
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>senior buyer</title>
-            </f:facet>
-        </h:head>
+  <f:view contentType="text/html">
+    <h:head>
+      <f:facet name="first">
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>        
+        <title>SPPT</title>
+      </f:facet>
+    </h:head>
 
-        <h:body>
+    <h:body>
 
-            <p:layout fullPage="true">
+      <p:layout fullPage="true">
+        <p:layoutUnit position="center" header="SISTEMA PARA PEDIR TRANSPORTE">
+          <h:form>  
+            <p:growl id="messages"/>
 
-                <p:layoutUnit position="north" size="80"  header="SEGUIMIENTO DE COMPRAS" resizable="false" style="alignment-adjust: central" >
-                    <ui:insert name="encabezado">
-                        <div align="right" style="float: inside;
-                             background-color: #009900;
-                           ">
-                            <h:form>
-     
-                                <h:outputText value="#{authBean.loggedUserName}" style="color: white" />
-                                <h:commandLink value="Cerrar Sesión" actionListener="#{authBean.logout}" style="color: white" />
-                            </h:form>
+            <p:menubar>
+              <p:submenu label="Administrar">
+                <p:menuitem icon="ui-icon-person" value="Usuarios" url="/views/super/usuarios.jspx" />
+                <p:menuitem icon="ui-icon-copy" value="Conductores" url="/views/super/nuevo-usuario.jspx" />
+                <p:menuitem icon="ui-icon-check" value="Solicitudes" url="/views/super/solicitudes.jspx" />
+                <p:submenu label="Mi cuenta">
+                  <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
+                  <p:menuitem icon="ui-icon-pencil" value="Editar mi informacion" url="/administration/General/ListaOQs.jspx" />
+                </p:submenu>
+              </p:submenu>
 
-                        </div>
-                    </ui:insert>
-                </p:layoutUnit>
-
-     
-                <p:layoutUnit position="west" size="300" header="CONTENIDOS" collapsible="true" closable="true" effect="drop" resizable="true">
-                    <p:menu style="width: 277px">
-                        <p:submenu label="ADMINISTRACIÓN DE:">
-
-                            <p:menuitem value="Cambiar contraseña" url="/superadmin/CambiarPassword/CambiarPassword.jspx" />
-                            <p:menuitem value="Ordenes de Compras" url="/superadmin/OrdenesCompra/ListaOQs.jspx" />
-                            <p:menuitem value="Usuarios" url="/superadmin/Usuarios/ListaUsuarios.jspx" />
-                            <p:menuitem value="Bandeja" url="/superadmin/General/ListaOQs.jspx" />
-                            <p:menuitem value="Solicitudes Generadas" url="/superadmin/SolicitudesGeneradas/ListaSolicitudes.jspx" />
-                            <p:menuitem value="Estados" url="/superadmin/EditarEstados/ListaEstados.jspx" />
-                            <p:menuitem value="Eventos" url="/superadmin/Eventos/ListaEventos.jspx" />
-                        </p:submenu>
-                    </p:menu>
-
-
-                </p:layoutUnit>
-
-                <p:layoutUnit position="center">
-                    <ui:insert name="bodyJR">Aqui cambia el contenido</ui:insert>
-                </p:layoutUnit>
-
-
-
-            </p:layout>
-
-        </h:body>
-
-    </f:view>
+              <f:facet name="options">
+                <p:inputText style="margin-right:10px" placeholder="Buscar"/>
+                <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+              </f:facet>
+            </p:menubar>
+            
+          </h:form> 
+          <ui:insert name="main-body">Contenido</ui:insert>
+        </p:layoutUnit>
+      </p:layout>
+    </h:body>
+  </f:view>
+  <link href="../../resources/css/styles.css" type="text/css" rel="stylesheet"/>
+  <script type="text/javascript" src="../../resources/javascript/js.js"></script>
 </html>
-

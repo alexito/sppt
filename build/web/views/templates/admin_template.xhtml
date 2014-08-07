@@ -23,7 +23,7 @@
             <p:menubar>
               <p:submenu label="Administrar">
                 <p:menuitem icon="ui-icon-person" value="Usuarios" url="/views/admin/usuarios.jspx" />
-                <p:menuitem icon="ui-icon-copy" value="Conductores" url="/administration/General/ListaOQs.jspx" />
+                <p:menuitem icon="ui-icon-copy" value="Conductores" url="/views/admin/test.jspx" />
                 <p:menuitem icon="ui-icon-check" value="Solicitudes" url="/views/admin/solicitudes.jspx" />
                 <p:submenu label="Mi cuenta">
                   <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
@@ -36,15 +36,13 @@
                 <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
               </f:facet>
             </p:menubar>
+            
           </h:form> 
           <ui:insert name="main-body">Contenido</ui:insert>
         </p:layoutUnit>
-
       </p:layout>
-
     </h:body>
-
   </f:view>
   <link href="../../resources/css/styles.css" type="text/css" rel="stylesheet"/>
-  <script type="text/javascript" src="../../resources/javascript/js.js"/>
+  <script type="text/javascript" src="../../resources/javascript/js.js"></script>
 </html>
