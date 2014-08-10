@@ -1,9 +1,12 @@
 *{
-  font-size: 0.97em;
+  font-size: 0.98em;
 }
 body{
   background-color: #F7F7F7;
   font-family:  Arial,sans-serif;  
+}
+body .ui-layout-unit-header-title{
+  font-size: 25px;
 }
 .container{
   width: 380px;

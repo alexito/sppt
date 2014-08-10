@@ -119,12 +119,16 @@ public class Select {
     return usuario;
   }
 
-public static List<Usuario> selectUsuarios() {
+public static List<Usuario> selectUsuarios(String filtro) {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
-    try {
-      String SQL = " SELECT * FROM usuario ORDER BY apellido ASC";
-
+    String SQL = "";
+    if(filtro.equals("conductores")){
+      SQL = " SELECT * FROM usuario WHERE rol = 'conductor' ORDER BY apellido ASC";
+    }else{
+      SQL = " SELECT * FROM usuario WHERE rol = 'super' OR rol = 'admin' ORDER BY apellido ASC";
+    }
+    try {      
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
 

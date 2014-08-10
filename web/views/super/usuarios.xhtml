@@ -14,16 +14,23 @@
 
           <p:growl id="msgs" showDetail="true"/>
 
-          <p:dataTable id="Solicitudes" var="usuario" value="#{usuarioBean.listaUsuarios}" rowKey="#{usuario}"
+          <p:menubar>
+            <p:submenu label="Administrar">              
+              <p:menuitem icon="ui-icon-copy" value="Conductores" url="/views/super/conductores.jspx" />
+              <p:menuitem icon="ui-icon-check" value="Solicitudes" url="/views/admin/solicitudes.jspx" />
+              <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
+            </p:submenu>
+            <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUser').show();" />
+            <f:facet name="options">
+              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+            </f:facet>
+          </p:menubar>
+
+          <p:dataTable resizableColumns="true" id="Solicitudes" var="usuario" value="#{usuarioBean.listaUsuarios}" rowKey="#{usuario}"
                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                        editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                        widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
-            <f:facet name="header" class="filter-bar">  
-              <p:commandButton  value="Nuevo Usuario" type="button" onclick="PF('newUser').show();" />
-
-              FILTROS
-            </f:facet>    
             <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form:msgs" />
             <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form:msgs" />
 
@@ -40,7 +47,7 @@
               </p:cellEditor>
             </p:column>
 
-            <p:column filterBy="#{usuario.nombre}"  headerText="Nombres" filterMatchMode="contains">  
+            <p:column filterBy="#{usuario.nombre}" sortBy="#{usuario.nombre}"  headerText="Nombres" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.nombre}" /></f:facet>
                 <f:facet name="input">
@@ -106,37 +113,39 @@
               </p:cellEditor>
             </p:column>
 
-            <p:column filterBy="#{usuario.rol}"  headerText="Rol" filterMatchMode="contains">  
+            <p:column sortBy="#{usuario.rol_legible}" headerText="Rol" filterMatchMode="contains">  
               <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{usuario.rol}" />
+                <f:facet name="output"><h:outputText value="#{usuario.rol_legible}" />
                 </f:facet>
                 <f:facet name="input">
-                  <p:selectOneRadio id="rol" value="#{usuario.rol}" required="true" requiredMessage="El rol es obligatorio." style="width:100%">
-                    <f:selectItems value="#{usuarioBean.tipos_rol}" />
+                  <p:selectOneRadio id="rol" value="#{usuario.rol}" required="true" requiredMessage="El rol es obligatorio.">
+                    <f:selectItems value="#{usuarioBean.tipos_rol}"/>
                   </p:selectOneRadio>
                 </f:facet>
               </p:cellEditor>              
             </p:column>
 
-            <p:column filterBy="#{usuario.estado}" headerText="Estado" filterMatchMode="contains">  
+            <p:column headerText="Estado" sortBy="#{usuario.estado_legible}">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.estado_legible}" /></f:facet>
-                <f:facet name="input"><p:selectBooleanCheckbox value="#{usuario.estado}" /></f:facet>
+                <f:facet name="input"><p:selectBooleanCheckbox value="#{usuario.estado}" style="margin-left: 45%" /></f:facet>
               </p:cellEditor>
             </p:column>
 
-            <p:column style="width:32px">
-              <p:rowEditor />
-            </p:column>
-
+            <p:column style="width:50px"> 
+              <!--              <h:outputLabel for="editrow" value="Editar" style="float: left; color: royalblue; cursor: pointer;" />-->
+              <p:rowEditor id="editrow" />              
+            </p:column>          
           </p:dataTable>  
+
+
         </h:form>  
 
 
         <!-- ________________________   NEW USER FORM  ________________________   -->
 
 
-        <p:dialog widgetVar="newUser"  minHeight="40" closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog widgetVar="newUser" header="Ingrese los datos del Nuevo Usuario"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form>          
             <center>
               <p:panel id="pnl" style="margin-bottom:10px;">
@@ -164,7 +173,7 @@
                   <p:message for="cedula" id="msgCedula" display="icon" />
 
                   <h:outputLabel for="clave" value="Clave: *" />
-                  <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" label="Clave">
+                  <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
                     <f:validateLength minimum="5" />
                     <p:ajax update="msgClave" event="keyup" />
                   </p:inputText>                
@@ -173,7 +182,7 @@
                   <h:outputLabel for="email" value="Email: *" />
                   <p:inputText id="email" value="#{usuarioBean.usuario.email}" required="true" requiredMessage="El email es obligatorio." style="width:100%">
                     <f:validateLength minimum="5" />
-                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    <f:validateRegex for="email" pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     <p:ajax update="msgEmail" event="keyup" />
                   </p:inputText>                
                   <p:message for="email" id="msgEmail" display="icon" />
