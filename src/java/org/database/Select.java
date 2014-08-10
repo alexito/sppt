@@ -123,7 +123,7 @@ public static List<Usuario> selectUsuarios() {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = " SELECT * FROM dbo.usuario";
+      String SQL = " SELECT * FROM usuario ORDER BY apellido ASC";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
@@ -132,7 +132,7 @@ public static List<Usuario> selectUsuarios() {
 
       while (result.next()) {
         Usuario s = new Usuario(result.getInt("id"), result.getString("nombre"), result.getString("apellido"),
-        result.getString("cedula"), result.getString("email"), result.getString("telefono"), result.getBoolean("estado"),
+        result.getString("cedula"), result.getString("clave"), result.getString("email"), result.getString("telefono"), result.getBoolean("estado"),
         result.getString("rol"));
         listUsuarios.add(s);
       }

@@ -14,7 +14,8 @@ public class Usuario  implements java.io.Serializable {
      private String email;
      private String telefono;
      private Boolean estado;
-     private String rol;
+     private String estado_legible;
+     private String rol;     
      private Set<Solicitud> solicitudsForIdUsuarioSolicita = new HashSet<Solicitud>(0);
      private Set<Solicitud> solicitudsForIdUsuarioCrea = new HashSet<Solicitud>(0);
      private Set<Solicitud> solicitudsForIdUsuarioConductor = new HashSet<Solicitud>(0);
@@ -34,6 +35,17 @@ public class Usuario  implements java.io.Serializable {
        this.nombre = nombre;
        this.apellido = apellido;
        this.cedula = cedula;
+       this.email = email;
+       this.telefono = telefono;
+       this.estado = estado;
+       this.rol = rol;
+    }
+    public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol) {
+       this.id = id;
+       this.nombre = nombre;
+       this.apellido = apellido;
+       this.cedula = cedula;
+       this.clave = clave;
        this.email = email;
        this.telefono = telefono;
        this.estado = estado;
@@ -110,6 +122,15 @@ public class Usuario  implements java.io.Serializable {
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+    
+    public String getEstado_legible() {            
+      return (getEstado()) ? "Activo" : "Inactivo";
+    }
+
+//    public void setEstado_legible(String estado_legible) {
+//      this.estado_legible = estado_legible;
+//    }
+    
     public String getRol() {
         return this.rol;
     }

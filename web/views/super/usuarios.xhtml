@@ -9,63 +9,120 @@
   <h:body>
     <ui:composition template="../templates/super_template.xhtml">
       <ui:define name="main-body">
-        
+
         <h:form id="form">  
-          
+
           <p:growl id="msgs" showDetail="true"/>
-          
+
           <p:dataTable id="Solicitudes" var="usuario" value="#{usuarioBean.listaUsuarios}" rowKey="#{usuario}"
                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                       editable="true"  paginator="true" rows="2"   rowsPerPageTemplate="2,4,30,40,50,100,1000"
+                       editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                        widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
             <f:facet name="header" class="filter-bar">  
               <p:commandButton  value="Nuevo Usuario" type="button" onclick="PF('newUser').show();" />
-              
+
               FILTROS
             </f:facet>    
             <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form:msgs" />
             <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form:msgs" />
 
-            <p:column filterBy="#{usuario.apellido}"  headerText="Apellidos" filterMatchMode="contains">  
+            <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.apellido}" /></f:facet>
-                <f:facet name="input"><p:inputText value="#{usuario.apellido}" style="width:100%"/></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="apellido" value="#{usuario.apellido}" required="true" requiredMessage="El apellido es obligatorio." style="width: 100%;">
+                    <f:validateLength minimum="2" />
+                    <p:ajax update="msgApellido" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="apellido" id="msgApellido" display="icon" />
+                </f:facet>
               </p:cellEditor>
             </p:column>
 
             <p:column filterBy="#{usuario.nombre}"  headerText="Nombres" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.nombre}" /></f:facet>
-                <f:facet name="input"><p:inputText value="#{usuario.nombre}" style="width:100%"/></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="nombre" value="#{usuario.nombre}" required="true" requiredMessage="La nombre es obligatorio." style="width:100%">
+                    <f:validateLength minimum="2" />
+                    <p:ajax update="msgNombre" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="nombre" id="msgNombre" display="icon" />
+                </f:facet>
               </p:cellEditor>
             </p:column>
 
             <p:column filterBy="#{usuario.cedula}"  headerText="Cédula" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.cedula}" /></f:facet>
-                <f:facet name="input"><p:inputText value="#{usuario.cedula}" style="width:100%"/></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="cedula" value="#{usuario.cedula}" required="true" requiredMessage="La cédula es obligatoria." style="width:100%">
+                    <f:validateLength minimum="10" />
+                    <p:ajax update="msgCedula" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="cedula" id="msgCedula" display="icon" />
+                </f:facet>
               </p:cellEditor>
             </p:column>
-            
+
+            <p:column headerText="Clave">  
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{usuario.clave}" /></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="clave" value="#{usuario.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
+                    <f:validateLength minimum="5" />
+                    <p:ajax update="msgClave" event="keyup" />
+                  </p:inputText>
+                  <p:message for="clave" id="msgClave" showSummary="true" showDetail="false" display="icon" />
+                </f:facet>
+              </p:cellEditor>
+            </p:column>
+
             <p:column filterBy="#{usuario.email}"  headerText="Email" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.email}" /></f:facet>
-                <f:facet name="input"><p:inputText value="#{usuario.email}" style="width:100%"/></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="email" value="#{usuario.email}" required="true" requiredMessage="El email es obligatorio." style="width:100%">
+                    <f:validateLength minimum="5" for="email" />
+                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    <p:ajax update="msgEmail" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="email" id="msgEmail" display="icon" />
+                </f:facet>
               </p:cellEditor>
             </p:column>
-            
+
             <p:column filterBy="#{usuario.telefono}"  headerText="Telefono" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.telefono}" /></f:facet>
-                <f:facet name="input"><p:inputText value="#{usuario.telefono}" style="width:100%"/></f:facet>
+                <f:facet name="input">
+                  <p:inputText id="telefono" value="#{usuario.telefono}" required="false" requiredMessage="El telefono es obligatorio." style="width:100%">
+                    <f:validateLength minimum="7" />
+                    <p:ajax update="msgTelefono" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="telefono" id="msgTelefono" display="icon" />
+                </f:facet>
               </p:cellEditor>
             </p:column>
-            
-            <p:column filterBy="#{usuario.rol}"  
-                      headerText="Rol" 
-                      filterMatchMode="contains">  
-              <h:outputText value="#{usuario.rol}" />  
+
+            <p:column filterBy="#{usuario.rol}"  headerText="Rol" filterMatchMode="contains">  
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{usuario.rol}" />
+                </f:facet>
+                <f:facet name="input">
+                  <p:selectOneRadio id="rol" value="#{usuario.rol}" required="true" requiredMessage="El rol es obligatorio." style="width:100%">
+                    <f:selectItems value="#{usuarioBean.tipos_rol}" />
+                  </p:selectOneRadio>
+                </f:facet>
+              </p:cellEditor>              
+            </p:column>
+
+            <p:column filterBy="#{usuario.estado}" headerText="Estado" filterMatchMode="contains">  
+              <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{usuario.estado_legible}" /></f:facet>
+                <f:facet name="input"><p:selectBooleanCheckbox value="#{usuario.estado}" /></f:facet>
+              </p:cellEditor>
             </p:column>
 
             <p:column style="width:32px">
@@ -74,74 +131,80 @@
 
           </p:dataTable>  
         </h:form>  
-          
+
+
+        <!-- ________________________   NEW USER FORM  ________________________   -->
+
+
         <p:dialog widgetVar="newUser"  minHeight="40" closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form>          
-          <center>
-            <p:panel id="pnl" style="margin-bottom:10px;">
-              <p:messages id="messages" />
-              <h:panelGrid columns="3" cellpadding="5">
-                <h:outputLabel for="apellido" value="Apellido: *" />
-                <p:inputText id="apellido" value="#{usuarioBean.usuario.apellido}" required="true" label="Apellido" requiredMessage="El appellido debe contener más de 2 letras.">
-                  <f:validateLength minimum="2" />
-                </p:inputText>
-                <p:message for="apellido" />
+            <center>
+              <p:panel id="pnl" style="margin-bottom:10px;">
+                <p:messages id="messages" />
+                <h:panelGrid id="grid" columns="3" cellpadding="5">
+                  <h:outputLabel for="apellido" value="Apellido: *" />
+                  <p:inputText id="apellido" value="#{usuarioBean.usuario.apellido}" required="true" requiredMessage="El apellido es obligatorio." style="width:100%">
+                    <f:validateLength minimum="2" />
+                    <p:ajax update="msgApellido" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="apellido" id="msgApellido" display="icon" />
 
-                <h:outputLabel for="nombre" value="Nombre: *" />
-                <p:inputText id="nombre" value="#{usuarioBean.usuario.nombre}" required="true" label="Nombre">
-                  <f:validateLength minimum="2" />
-                </p:inputText>
-                <p:message for="nombre" />
+                  <h:outputLabel for="nombre" value="Nombre: *" />
+                  <p:inputText id="nombre" value="#{usuarioBean.usuario.nombre}" required="true" requiredMessage="El nombre es obligatorio." style="width:100%">
+                    <f:validateLength minimum="2" />
+                    <p:ajax update="msgNombre" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="nombre" id="msgNombre" display="icon" />
 
-                <h:outputLabel for="cedula" value="Cédula: *" />
-                <p:inputText id="cedula" value="#{usuarioBean.usuario.cedula}" required="true" label="Cédula">
-                  <f:validateLength minimum="10" />
-                </p:inputText>
-                <p:message for="cedula" />
+                  <h:outputLabel for="cedula" value="Cédula: *" />
+                  <p:inputText id="cedula" value="#{usuarioBean.usuario.cedula}" required="true" requiredMessage="La cédula es obligatoria." style="width:100%">
+                    <f:validateLength minimum="10" />
+                    <p:ajax update="msgCedula" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="cedula" id="msgCedula" display="icon" />
 
-                <h:outputLabel for="clave" value="Clave: *" />
-                <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" label="Clave">
-                  <f:validateLength minimum="5" />
-                </p:inputText>
-                <p:message for="clave" />
+                  <h:outputLabel for="clave" value="Clave: *" />
+                  <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" label="Clave">
+                    <f:validateLength minimum="5" />
+                    <p:ajax update="msgClave" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="clave" id="msgClave" display="icon" />
 
-                <h:outputLabel for="email" value="Email: *" />
-                <p:inputText id="email" value="#{usuarioBean.usuario.email}" required="true" label="Email">
-                  <f:validateLength minimum="5" />
-                  <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                </p:inputText>
-                <p:message for="email" />
+                  <h:outputLabel for="email" value="Email: *" />
+                  <p:inputText id="email" value="#{usuarioBean.usuario.email}" required="true" requiredMessage="El email es obligatorio." style="width:100%">
+                    <f:validateLength minimum="5" />
+                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    <p:ajax update="msgEmail" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="email" id="msgEmail" display="icon" />
 
-                <h:outputLabel for="telefono" value="Teléfono: *" />
-                <p:inputText id="telefono" value="#{usuarioBean.usuario.telefono}" required="false" label="telefono">
-                  <f:validateLength minimum="7" />
-                </p:inputText>
-                <p:message for="telefono" />
+                  <h:outputLabel for="telefono" value="Teléfono: *" />
+                  <p:inputText id="telefono" value="#{usuarioBean.usuario.telefono}" required="false" requiredMessage="El teléfono es obligatorio." style="width:100%">
+                    <f:validateLength minimum="7" />
+                    <p:ajax update="msgTelefono" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="telefono" id="msgTelefono" display="icon" />
 
-                <h:outputText value="Estado: " />
-                <p:selectBooleanCheckbox value="#{usuarioBean.usuario.estado}" />
+                  <p:outputLabel for="rol" value="Rol:" />
+                  <p:selectOneRadio id="rol" value="#{usuarioBean.usuario.rol}" required="true" requiredMessage="El rol es obligatorio." style="width:100%">
+                    <f:selectItems value="#{usuarioBean.tipos_rol}" />
+                    <p:ajax update="msgRol" event="keyup" />
+                  </p:selectOneRadio>
+                  <p:message for="rol" id="msgRol" display="icon" />
 
-                <h:outputLabel for="rol" value="Rol: *" />
-                <p:inputText id="rol" value="#{usuarioBean.usuario.rol}" required="true" label="Rol">
-                  <f:validateLength minimum="5" />
-                </p:inputText>
-                <p:message for="rol" />
+                  <h:outputLabel value="Estado: " />
+                  <p:selectBooleanCheckbox id="estado" value="#{usuarioBean.usuario.estado}" />
+                  <p:message for="estado" id="msgEstado" display="icon" />
 
-                <!--              <p:outputLabel for="rol" value="Rol:" />
-                              <p:selectOneRadio id="console" value="{usuarioBean.usuario.rol}">
-                                  <f:selectItem itemLabel="Administrador" itemValue="admin" />
-                                  <f:selectItem itemLabel="Superadministrador" itemValue="super" />
-                              </p:selectOneRadio>-->
+                </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <h:commandButton value="Guardar"  action="#{usuarioBean.saveUsuario()}"/>
+                    <p:commandButton ajax="true" update="grid" validateClient="true" value="Guardar"  action="#{usuarioBean.saveUsuario()}"/>
                   </center>
                 </f:facet> 
-
-              </h:panelGrid>
-            </p:panel>
-          </center>
-        </h:form>
+              </p:panel>
+            </center>
+          </h:form>
         </p:dialog>
       </ui:define>
     </ui:composition>
