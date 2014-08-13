@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,15 +66,15 @@ public class Select {
         id_usuarios.putIfAbsent(result.getInt("id_usuario_crea"), result.getInt("id_usuario_crea"));
       }
 
-      map_localidades = selectMappedLocalidades(id_localidades);
-      map_usuarios = selectMappedUsuarios(id_usuarios);
+      map_localidades = selectMappedLocalidades(false, id_localidades);
+      map_usuarios = selectMappedUsuarios(false, id_usuarios);
       sentence = con.getConnection().createStatement(); 
       result = sentence.executeQuery(SQL);
 
       while (result.next()) {
         int id = result.getInt("id");
-        Date f_salida = result.getDate("f_salida"),
-                f_llegada = result.getDate("f_llegada");
+        Timestamp f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
         String hospedaje = result.getString("hospedaje");
         Boolean estado = result.getBoolean("estado");
         String novedades = result.getString("novedades");
@@ -93,26 +95,29 @@ public class Select {
     return listSolicitudes;
   }
 
-  private static Map<Integer, Localidad> selectMappedLocalidades(Map<Integer, Integer> ids) {
+  public static Map<Integer, Localidad> selectMappedLocalidades(boolean all, Map<Integer, Integer> ids) {
     ConnectDB con = new ConnectDB();
-    Map<Integer, Localidad> response = new HashMap<Integer, Localidad>();
-    Iterator iterator = ids.entrySet().iterator();
+    Map<Integer, Localidad> response = new HashMap<Integer, Localidad>();    
     String SQL = "SELECT * FROM localidad WHERE";
+    
     boolean ban = false;
     ResultSet res = null;
     Statement sent = null;
     try {
-      
-      while (iterator.hasNext()) {
-        Map.Entry mapEntry = (Map.Entry) iterator.next();
-        if (!ban) {
-          SQL += " id=" + mapEntry.getValue();
-          ban = true;
-        } else {
-          SQL += " OR id=" + mapEntry.getValue();
+      if(!all){
+        Iterator iterator = ids.entrySet().iterator();
+        while (iterator.hasNext()) {
+          Map.Entry mapEntry = (Map.Entry) iterator.next();
+          if (!ban) {
+            SQL += " id=" + mapEntry.getValue();
+            ban = true;
+          } else {
+            SQL += " OR id=" + mapEntry.getValue();
+          }
         }
+      }else{
+        SQL = "SELECT * FROM localidad";
       }
-      
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
 
@@ -128,16 +133,17 @@ public class Select {
     return response;
   }
   
-    private static Map<Integer, Usuario> selectMappedUsuarios(Map<Integer, Integer> ids) {
+    public static Map<Integer, Usuario> selectMappedUsuarios(boolean all, Map<Integer, Integer> ids) {
     ConnectDB con = new ConnectDB();
     Map<Integer, Usuario> response = new HashMap<Integer, Usuario>();
-    Iterator iterator = ids.entrySet().iterator();
+    
     String SQL = "SELECT * FROM usuario WHERE";
     boolean ban = false;
     ResultSet res = null;
     Statement sent = null;
     try {
-      
+      if(!all){
+      Iterator iterator = ids.entrySet().iterator();
       while (iterator.hasNext()) {
         Map.Entry mapEntry = (Map.Entry) iterator.next();
         if (!ban) {
@@ -147,7 +153,9 @@ public class Select {
           SQL += " OR id=" + mapEntry.getValue();
         }
       }
-      
+      }else{
+        SQL = "SELECT * FROM usuario";
+      }
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
 
@@ -173,7 +181,7 @@ public class Select {
     }
     return response;
   }
-    
+  
   public static List<Usuario> selectUsuarios(String filtro) {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();

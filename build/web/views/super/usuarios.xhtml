@@ -104,7 +104,7 @@
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{usuario.telefono}" /></f:facet>
                 <f:facet name="input">
-                  <p:inputText id="telefono" value="#{usuario.telefono}" required="false" requiredMessage="El telefono es obligatorio." style="width:100%">
+                  <p:inputText id="telefono" value="#{usuario.telefono}" required="true" requiredMessage="El telefono es obligatorio." style="width:100%">
                     <f:validateLength minimum="7" />
                     <p:ajax update="msgTelefono" event="keyup" />
                   </p:inputText>                

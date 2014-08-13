@@ -1,6 +1,11 @@
 package org.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Solicitud implements java.io.Serializable {
 
@@ -15,6 +20,8 @@ public class Solicitud implements java.io.Serializable {
   private String hospedaje;
   private Boolean estado;
   private String novedades;
+  
+  SimpleDateFormat datetime_format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
   public Solicitud() {
   }
@@ -99,7 +106,7 @@ public class Solicitud implements java.io.Serializable {
     this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
   }
 
-  public Date getFSalida() {
+  public Date getFSalida() throws ParseException {
     return this.FSalida;
   }
 
@@ -126,6 +133,10 @@ public class Solicitud implements java.io.Serializable {
   public Boolean getEstado() {
     return this.estado;
   }
+  
+  public String getEstado_legible() {            
+    return (getEstado()) ? "Activo" : "Inactivo";
+  }
 
   public void setEstado(Boolean estado) {
     this.estado = estado;
@@ -142,5 +153,6 @@ public class Solicitud implements java.io.Serializable {
   public String getNombre_solicita() {
     return "";
   }
+  
 
 }

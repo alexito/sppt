@@ -22,7 +22,7 @@ public class UsuarioBean {
   private List<Usuario> listaUsuarios;
   private List<Usuario> listaConductores;
 
-    private Map<String, String> tipos_rol = new HashMap<String, String>();
+  private Map<String, String> tipos_rol = new HashMap<String, String>();
   private Usuario usuario;
   private Usuario conductor;
 
