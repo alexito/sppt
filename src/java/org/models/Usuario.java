@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Usuario  implements java.io.Serializable {
-
-
      private int id;
      private String nombre;
      private String apellido;
@@ -16,10 +14,10 @@ public class Usuario  implements java.io.Serializable {
      private Boolean estado;
      private String estado_legible;
      private String rol_legible;
-     private String rol;     
-     private Set<Solicitud> solicitudsForIdUsuarioSolicita = new HashSet<Solicitud>(0);
-     private Set<Solicitud> solicitudsForIdUsuarioCrea = new HashSet<Solicitud>(0);
-     private Set<Solicitud> solicitudsForIdUsuarioConductor = new HashSet<Solicitud>(0);
+     private String rol;
+     private Set solicitudsForIdUsuarioSolicita = new HashSet(0);
+     private Set solicitudsForIdUsuarioCrea = new HashSet(0);
+     private Set solicitudsForIdUsuarioConductor = new HashSet(0);
 
     public Usuario() {
     }
@@ -31,16 +29,7 @@ public class Usuario  implements java.io.Serializable {
         this.apellido = apellido;
         this.rol = rol;
     }
-    public Usuario(int id, String nombre, String apellido, String cedula, String email, String telefono, Boolean estado, String rol) {
-       this.id = id;
-       this.nombre = nombre;
-       this.apellido = apellido;
-       this.cedula = cedula;
-       this.email = email;
-       this.telefono = telefono;
-       this.estado = estado;
-       this.rol = rol;
-    }
+    
     public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol) {
        this.id = id;
        this.nombre = nombre;
@@ -52,7 +41,8 @@ public class Usuario  implements java.io.Serializable {
        this.estado = estado;
        this.rol = rol;
     }
-    public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol, Set<Solicitud> solicitudsForIdUsuarioSolicita, Set<Solicitud> solicitudsForIdUsuarioCrea, Set<Solicitud> solicitudsForIdUsuarioConductor) {
+    
+    public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol, Set solicitudsForIdUsuarioSolicita, Set solicitudsForIdUsuarioCrea, Set solicitudsForIdUsuarioConductor) {
        this.id = id;
        this.nombre = nombre;
        this.apellido = apellido;
@@ -139,32 +129,32 @@ public class Usuario  implements java.io.Serializable {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    public Set<Solicitud> getSolicitudsForIdUsuarioSolicita() {
+    public Set getSolicitudsForIdUsuarioSolicita() {
         return this.solicitudsForIdUsuarioSolicita;
     }
     
-    public void setSolicitudsForIdUsuarioSolicita(Set<Solicitud> solicitudsForIdUsuarioSolicita) {
+    public void setSolicitudsForIdUsuarioSolicita(Set solicitudsForIdUsuarioSolicita) {
         this.solicitudsForIdUsuarioSolicita = solicitudsForIdUsuarioSolicita;
     }
-    public Set<Solicitud> getSolicitudsForIdUsuarioCrea() {
+    public Set getSolicitudsForIdUsuarioCrea() {
         return this.solicitudsForIdUsuarioCrea;
     }
     
-    public void setSolicitudsForIdUsuarioCrea(Set<Solicitud> solicitudsForIdUsuarioCrea) {
+    public void setSolicitudsForIdUsuarioCrea(Set solicitudsForIdUsuarioCrea) {
         this.solicitudsForIdUsuarioCrea = solicitudsForIdUsuarioCrea;
     }
-    public Set<Solicitud> getSolicitudsForIdUsuarioConductor() {
+    public Set getSolicitudsForIdUsuarioConductor() {
         return this.solicitudsForIdUsuarioConductor;
     }
     
-    public void setSolicitudsForIdUsuarioConductor(Set<Solicitud> solicitudsForIdUsuarioConductor) {
+    public void setSolicitudsForIdUsuarioConductor(Set solicitudsForIdUsuarioConductor) {
         this.solicitudsForIdUsuarioConductor = solicitudsForIdUsuarioConductor;
     }
-    
+
     @Override
     public String toString() {
         return nombre + apellido;
-    }
+}
 }
 
 

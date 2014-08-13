@@ -1,23 +1,20 @@
 package org.models;
+
 import java.util.Date;
 
 public class Solicitud implements java.io.Serializable {
 
   private int id;
+  private Localidad localidadByOrigen;
+  private Localidad localidadByDestino;
   private Usuario usuarioByIdUsuarioSolicita;
   private Usuario usuarioByIdUsuarioConductor;
   private Usuario usuarioByIdUsuarioCrea;
-  private String origen;
-  private String destino;
   private Date FSalida;
   private Date FLlegada;
   private String hospedaje;
   private Boolean estado;
   private String novedades;
-  private String nombre_solicita;
-
-  private String nombre_conductor;
-  private String nombre_crea;
 
   public Solicitud() {
   }
@@ -26,24 +23,24 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Solicitud(int id, String origen, String destino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, String u_solicita, String u_conductor, String u_crea) {
+  public Solicitud(int id, Localidad localidadByOrigen, Localidad localidadByDestino, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades) {
     this.id = id;
-    this.origen = origen;
-    this.destino = destino;
+    this.localidadByOrigen = localidadByOrigen;
+    this.localidadByDestino = localidadByDestino;
+    this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
+    this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
+    this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
     this.hospedaje = hospedaje;
     this.estado = estado;
     this.novedades = novedades;
-    this.nombre_solicita = u_solicita;
-    this.nombre_conductor = u_conductor;
-    this.nombre_crea = u_crea;
   }
 
-  public Solicitud(int id, String origen, String destino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea) {
+  public Solicitud(int id, Localidad localidadByOrigen, Localidad localidadByDestino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea) {
     this.id = id;
-    this.origen = origen;
-    this.destino = destino;
+    this.localidadByOrigen = localidadByOrigen;
+    this.localidadByDestino = localidadByDestino;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
     this.hospedaje = hospedaje;
@@ -60,6 +57,22 @@ public class Solicitud implements java.io.Serializable {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public Localidad getLocalidadByOrigen() {
+    return this.localidadByOrigen;
+  }
+
+  public void setLocalidadByOrigen(Localidad localidadByOrigen) {
+    this.localidadByOrigen = localidadByOrigen;
+  }
+
+  public Localidad getLocalidadByDestino() {
+    return this.localidadByDestino;
+  }
+
+  public void setLocalidadByDestino(Localidad localidadByDestino) {
+    this.localidadByDestino = localidadByDestino;
   }
 
   public Usuario getUsuarioByIdUsuarioSolicita() {
@@ -84,22 +97,6 @@ public class Solicitud implements java.io.Serializable {
 
   public void setUsuarioByIdUsuarioCrea(Usuario usuarioByIdUsuarioCrea) {
     this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
-  }
-
-  public String getOrigen() {
-    return this.origen;
-  }
-
-  public void setOrigen(String origen) {
-    this.origen = origen;
-  }
-
-  public String getDestino() {
-    return this.destino;
-  }
-
-  public void setDestino(String destino) {
-    this.destino = destino;
   }
 
   public Date getFSalida() {
@@ -143,31 +140,7 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public String getNombre_solicita() {
-    return nombre_solicita;
-  }
-
-  public void setNombre_solicita(String nombre_solicita) {
-    this.nombre_solicita = nombre_solicita;
-  }
-  
-  public String getNombre_conductor() {
-    return nombre_conductor;
-  }
-
-  public void setNombre_conductor(String nombre_conductor) {
-    this.nombre_conductor = nombre_conductor;
-  }
-
-  public String getNombre_crea() {
-    return nombre_crea;
-  }
-
-  public void setNombre_crea(String nombre_crea) {
-    this.nombre_crea = nombre_crea;
-  }
-
-  @Override
-  public String toString() {
     return "";
   }
+
 }

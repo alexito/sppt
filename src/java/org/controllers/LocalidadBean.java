@@ -2,9 +2,7 @@ package org.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
@@ -17,14 +15,11 @@ import org.primefaces.event.RowEditEvent;
 
 @ManagedBean
 @Dependent
-public class UsuarioBean {
+public class LocalidadBean {
 
   private List<Usuario> listaUsuarios;
-  private List<Usuario> listaConductores;
-
-    private Map<String, String> tipos_rol = new HashMap<String, String>();
+ 
   private Usuario usuario;
-  private Usuario conductor;
 
   public void saveUsuario() throws IOException, SQLException {
     Insert.InsertUsuario(usuario); 
@@ -33,13 +28,6 @@ public class UsuarioBean {
     extContext.redirect("usuarios.jspx");
   }
   
-  public void saveConductor() throws IOException, SQLException {
-    Insert.InsertUsuario(conductor); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("conductores.jspx");
-  }
-
   public void onRowEdit(RowEditEvent event) throws SQLException {
     Usuario editedUsuario = (Usuario) event.getObject();
     Update.UpdateUsuario(editedUsuario);
@@ -59,14 +47,6 @@ public class UsuarioBean {
     this.usuario = usuario;
   }
   
-  public Usuario getConductor() {
-    return conductor;
-  }
-
-  public void setConductor(Usuario conductor) {
-    this.conductor = conductor;
-  }
-
   public List<Usuario> getListaUsuarios() {
     return listaUsuarios;
   }
@@ -75,34 +55,10 @@ public class UsuarioBean {
     this.listaUsuarios = listaUsuarios;
   }
   
-  public List<Usuario> getListaConductores() {
-    return listaConductores;
-  }
-
-  public void setListaConductores(List<Usuario> listaConductores) {
-    this.listaConductores = listaConductores;
-  }
-
-  public UsuarioBean() {
+  public LocalidadBean() {
     usuario = new Usuario();   
     listaUsuarios = Select.selectUsuarios("usuarios");
     
-    conductor = new Usuario();
-    conductor.setRol("conductor");
-    listaConductores = Select.selectUsuarios("conductores");
-    
-    tipos_rol.put("Administrador", "super");
-    tipos_rol.put("Usuario", "admin");
-    
-    
   }
   
-  public Map<String, String> getTipos_rol() {
-    return tipos_rol;
-  }
-
-  public void setTipos_rol(Map<String, String> tipo_rol) {
-    this.tipos_rol = tipo_rol;
-  }
-
 }

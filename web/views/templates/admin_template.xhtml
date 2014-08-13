@@ -19,23 +19,6 @@
         <p:layoutUnit position="center" header="SISTEMA PARA PEDIR TRANSPORTE">
           <h:form>  
             <p:growl id="messages"/>
-
-            <p:menubar>
-              <p:submenu label="Administrar">
-<!--                <p:menuitem icon="ui-icon-person" value="Usuarios" url="/views/admin/usuarios.jspx" />
-                <p:menuitem icon="ui-icon-copy" value="Conductores" url="/views/admin/test.jspx" />-->
-                <p:menuitem icon="ui-icon-check" value="Solicitudes" url="/views/admin/solicitudes.jspx" />
-                <p:submenu label="Mi cuenta">
-                  <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
-                  <p:menuitem icon="ui-icon-pencil" value="Editar mi informacion" url="/administration/General/ListaOQs.jspx" />
-                </p:submenu>
-              </p:submenu>
-
-              <f:facet name="options">
-                <p:inputText style="margin-right:10px" placeholder="Buscar"/>
-                <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
-              </f:facet>
-            </p:menubar>
             
           </h:form> 
           <ui:insert name="main-body">Contenido</ui:insert>

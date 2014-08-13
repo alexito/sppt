@@ -34,10 +34,10 @@
               <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />  
             </p:column>
 
-            <p:column filterBy="#{solicitud.destino}" 
+            <p:column filterBy="#{solicitud.localidadByDestino.nombre}" 
                       headerText="Destino" footerText="contains"  
                       filterMatchMode="contains">  
-              <h:outputText value="#{solicitud.destino}" />  
+              <h:outputText value="#{solicitud.localidadByDestino.nombre}" />  
             </p:column>
             
             <p:column filterBy="#{solicitud.FSalida}"  
