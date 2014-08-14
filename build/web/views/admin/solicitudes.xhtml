@@ -18,7 +18,7 @@
               <p:menuitem icon="ui-icon-copy" value="Conductores" url="/views/super/conductores.jspx" />
               <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
             </p:submenu>
-            <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUser').show();" />
+            <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" />
             <f:facet name="options">
               <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
             </f:facet>
@@ -63,7 +63,7 @@
               </p:cellEditor>
             </p:column>
             
-            <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="Fecha Salida">  
+            <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida">  
               <p:cellEditor>
                 <f:facet name="output">
                   <h:outputText value="#{solicitud.FSalida}">
@@ -76,7 +76,7 @@
               </p:cellEditor>
             </p:column>
             
-            <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="Fecha Llegada">  
+            <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
               <p:cellEditor>
                 <f:facet name="output">
                   <h:outputText value="#{solicitud.FLlegada}">
@@ -145,14 +145,7 @@
             </p:column>
 
             <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" headerText="Creado por:" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" /></f:facet>
-                <f:facet name="input">                  
-                  <p:selectOneMenu id="crea" value="#{solicitud.usuarioByIdUsuarioCrea.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
-                  </p:selectOneMenu>
-                </f:facet>
-              </p:cellEditor>
+              <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" />
             </p:column>
             
             <p:column style="width:50px"> 
@@ -161,6 +154,76 @@
           </p:dataTable>  
 
         </h:form>  
+        
+        <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
+        
+        <p:dialog widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+          <h:form>          
+            <center>
+              <p:panel id="pnl" style="margin-bottom:10px;">
+                <p:messages id="messages" />
+                <h:panelGrid id="grid" columns="3" cellpadding="5">
+
+                  <h:outputLabel for="origen" value="Origen: *" />
+                  <p:selectOneMenu id="origen" value="#{solicitudBean.solicitud.localidadByOrigen.id}" style="width: 100%;">
+                    <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                  </p:selectOneMenu>
+                  <br></br>
+                  
+                  <h:outputLabel for="destino" value="Destino: *" />
+                  <p:selectOneMenu id="destino" value="#{solicitudBean.solicitud.localidadByDestino.id}" style="width: 100%;">
+                    <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                  </p:selectOneMenu>
+                  <br></br>
+                  
+                  <h:outputLabel for="fsalida" value="Fecha Salida: *" />
+                  <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
+                  <br></br>
+                  
+                  <h:outputLabel for="fllegada" value="Fecha Llegada: *" />
+                  <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
+                  <br></br>
+                  
+                  <h:outputLabel for="hospedaje" value="Hospedaje: *" />
+                  <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                    <f:validateLength minimum="7" />
+                    <p:ajax update="msgHospedaje" event="keyup" />
+                  </p:inputTextarea>                
+                  <p:message for="hospedaje" id="msgHospedaje" display="icon" />
+
+                  <h:outputLabel for="novedades" value="Novedades: *" />
+                  <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                    <f:validateLength minimum="7" />
+                    <p:ajax update="msgNovedades" event="keyup" />
+                  </p:inputTextarea>                
+                  <p:message for="novedades" id="msgNovedades" display="icon" />
+                  
+                  <h:outputLabel for="estado" value="Estado: *" />
+                  <p:selectBooleanCheckbox id="estado" value="#{solicitud.estado}" style="margin-left: 45%" />
+                  <br></br>
+                  
+                  <h:outputLabel for="solicita" value="Solicita: *" />
+                  <p:selectOneMenu id="solicita" value="#{solicitudBean.solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
+                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                  </p:selectOneMenu>
+                  <br></br>
+                  
+                  <h:outputLabel for="conductor" value="Conductor: *" />
+                  <p:selectOneMenu id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
+                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                  </p:selectOneMenu>
+                  <br></br>
+
+                </h:panelGrid>
+                <f:facet name="footer">
+                  <center>
+                    <p:commandButton ajax="true" update="grid" validateClient="true" value="Guardar"  action="#{solicitudBean.saveSolicitud()}"/>
+                  </center>
+                </f:facet> 
+              </p:panel>
+            </center>
+          </h:form>
+        </p:dialog>
 
       </ui:define>
     </ui:composition>

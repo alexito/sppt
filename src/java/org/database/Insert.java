@@ -2,6 +2,8 @@ package org.database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import org.models.Solicitud;
 import org.models.Usuario;
 
 public class Insert {
@@ -20,6 +22,25 @@ public class Insert {
     psInsert.setString(8, usuario.getRol());
     
     return RunSQL(con, psInsert);
+    
+  }
+  
+  public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "INSERT INTO solicitud (origen, destino, f_salida, f_llegada, hospedaje, estado, novedades, id_usuario_solicita, id_usuario_conductor, id_usuario_crea ) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    psUpdate.setInt(1, solicitud.getLocalidadByOrigen().getId());
+    psUpdate.setInt(2, solicitud.getLocalidadByDestino().getId());
+    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psUpdate.setString(5, solicitud.getHospedaje());
+    psUpdate.setBoolean(6, solicitud.getEstado());
+    psUpdate.setString(7, solicitud.getNovedades());
+    psUpdate.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioCrea().getId());
+        
+    return RunSQL(con, psUpdate);
     
   }
 

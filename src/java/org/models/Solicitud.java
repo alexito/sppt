@@ -24,6 +24,11 @@ public class Solicitud implements java.io.Serializable {
   SimpleDateFormat datetime_format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
   public Solicitud() {
+    this.localidadByOrigen = new Localidad();
+    this.localidadByDestino = new Localidad();
+    this.usuarioByIdUsuarioSolicita = new Usuario();
+    this.usuarioByIdUsuarioConductor = new Usuario();
+    this.usuarioByIdUsuarioCrea = new Usuario();
   }
 
   public Solicitud(int id) {

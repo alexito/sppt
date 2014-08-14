@@ -1,5 +1,6 @@
 package org.controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
 import org.models.Localidad;
@@ -23,7 +27,16 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudes;
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
-  private int id_localidad;
+  private Solicitud solicitud;
+  private int loc_origen;
+
+  public int getLoc_origen() {
+    return loc_origen;
+  }
+
+  public void setLoc_origen(int loc_origen) {
+    this.loc_origen = loc_origen;
+  }
 
   public Map<String, Integer> getListaUsuarios() {
     return listaUsuarios;
@@ -36,8 +49,6 @@ public class SolicitudBean {
   public Map<String, Integer> getListaLocalidades() {
     return listaLocalidades;
   }
-
-  private Solicitud solicitud;
 
   public Solicitud getSolicitud() {
     return solicitud;
@@ -56,10 +67,13 @@ public class SolicitudBean {
   }
 
   public SolicitudBean() {
-    solicitud = new Solicitud();
+    
     listaSolicitudes = Select.selectSolicitudes();
     Map<Integer, Localidad> locs = Select.selectMappedLocalidades(true, null);
     Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, null);
+    
+    solicitud = new Solicitud();
+    
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
   }
@@ -98,4 +112,12 @@ public class SolicitudBean {
     }
     return res;
   }
+  
+  public void saveSolicitud() throws IOException, SQLException, ParseException {
+    Insert.InsertSolicitud(solicitud); 
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext extContext = context.getExternalContext();
+    extContext.redirect("solicitudes.jspx");
+  }
+  
 }
