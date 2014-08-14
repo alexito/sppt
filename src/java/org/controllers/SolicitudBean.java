@@ -1,6 +1,7 @@
 package org.controllers;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,11 +64,13 @@ public class SolicitudBean {
     listaUsuarios = mapUsuario(usus);
   }
 
-  public void onRowEdit(RowEditEvent event) throws SQLException {
-    Usuario editedUsuario = (Usuario) event.getObject();
-    Update.UpdateUsuario(editedUsuario);
-//        FacesMessage msg = new FacesMessage("OQ Edited", ((OQs) event.getObject()).getDescription2());
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
+  public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException {
+    Solicitud editedUsuario = (Solicitud) event.getObject();
+    Update.UpdateSolicitud(editedUsuario);
+    solicitud = new Solicitud();
+    listaSolicitudes = Select.selectSolicitudes();
+    
+    return listaSolicitudes;
   }
 
   public void onRowCancel(RowEditEvent event) {

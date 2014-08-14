@@ -29,8 +29,8 @@
                        editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                        widgetVar="solicitudTable"  emptyMessage="No se encontraron datos." >
             
-            <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form:msgs" />
-            <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form:msgs" />
+            <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form:Solicitudes" />
+            <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form:Solicitudes" />
             
             <f:facet name="header">  
               FILTROS
@@ -143,7 +143,7 @@
                 </f:facet>
               </p:cellEditor>
             </p:column>
-            
+
             <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" headerText="Creado por:" filterMatchMode="contains">  
               <p:cellEditor>
                 <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" /></f:facet>
@@ -156,7 +156,7 @@
             </p:column>
             
             <p:column style="width:50px"> 
-              <p:rowEditor id="editrow" >Editar</p:rowEditor> 
+              <p:rowEditor id="editrow" ></p:rowEditor> 
             </p:column> 
           </p:dataTable>  
 

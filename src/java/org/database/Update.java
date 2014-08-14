@@ -5,8 +5,12 @@
 package org.database;
 
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import org.models.Solicitud;
 import org.models.Usuario;
 
 /**
@@ -28,6 +32,26 @@ public class Update {
     psUpdate.setBoolean(7, usuario.getEstado());
     psUpdate.setString(8, usuario.getRol());
     psUpdate.setInt(9, usuario.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  public static String UpdateSolicitud(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET origen=?, destino=?, f_salida=?, f_llegada=?, hospedaje=?, estado=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=?, id_usuario_crea=? WHERE id=?";
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    psUpdate.setInt(1, solicitud.getLocalidadByOrigen().getId());
+    psUpdate.setInt(2, solicitud.getLocalidadByDestino().getId());
+    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psUpdate.setString(5, solicitud.getHospedaje());
+    psUpdate.setBoolean(6, solicitud.getEstado());
+    psUpdate.setString(7, solicitud.getNovedades());
+    psUpdate.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioCrea().getId());
+    psUpdate.setInt(11, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     
