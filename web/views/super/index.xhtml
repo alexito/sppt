@@ -457,7 +457,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview:Solicitudes" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{solicitudBean.saveSolicitud()}" />
+                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newSolicitud').hide();"  action="#{solicitudBean.saveSolicitud()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -482,7 +482,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview:Localidades" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{localidadBean.saveLocalidad()}" />
+                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{localidadBean.saveLocalidad()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -557,7 +557,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview:Usuarios" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{usuarioBean.saveUsuario()}" />
+                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newUsuario').hide();"  action="#{usuarioBean.saveUsuario()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -616,7 +616,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview:Conductores" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{usuarioBean.saveConductor()}" />
+                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newConductor').hide();"  action="#{usuarioBean.saveConductor()}" />
                   </center>
                 </f:facet> 
               </p:panel>

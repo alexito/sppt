@@ -13,7 +13,7 @@ import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
 import org.models.Usuario;
-import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.*;
 
 @ManagedBean
 @Dependent

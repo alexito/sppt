@@ -68,7 +68,7 @@ public class SolicitudBean {
   public void setListaSolicitudes(List<Solicitud> listaSolicitudes) {
     this.listaSolicitudes = listaSolicitudes;
   }
-
+  
   public SolicitudBean() {
     
     listaSolicitudes = Select.selectSolicitudes();
