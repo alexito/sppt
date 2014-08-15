@@ -81,13 +81,14 @@ public class SolicitudBean {
     listaUsuarios = mapUsuario(usus);
   }
   
-  public void saveSolicitud() throws IOException, SQLException, ParseException {
+  public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
     Usuario logged_user = Select.LoggedUser();    
     solicitud.setUsuarioByIdUsuarioCrea(logged_user);
     Insert.InsertSolicitud(solicitud); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("solicitudes.jspx");
+    solicitud = new Solicitud();
+    listaSolicitudes = Select.selectSolicitudes();
+        
+    return listaSolicitudes;
   }
 
   public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException {

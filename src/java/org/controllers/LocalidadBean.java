@@ -40,11 +40,11 @@ public class LocalidadBean {
   }
   
     
-  public void saveLocalidad() throws IOException, SQLException, ParseException {
+  public List<Localidad> saveLocalidad() throws IOException, SQLException, ParseException {
     Insert.InsertLocalidad(localidad); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("solicitudes.jspx");
+    localidad = new Localidad();
+    listaLocalidades = Select.selectLocalidades();
+    return listaLocalidades;
   }
   
   public void onRowEdit(RowEditEvent event) throws SQLException, ParseException {

@@ -26,18 +26,19 @@ public class UsuarioBean {
   private Usuario usuario;
   private Usuario conductor;
 
-  public void saveUsuario() throws IOException, SQLException {
+  public List<Usuario> saveUsuario() throws IOException, SQLException {
     Insert.InsertUsuario(usuario); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("usuarios.jspx");
+    usuario = new Usuario();   
+    listaUsuarios = Select.selectUsuarios("usuarios");
+    return listaUsuarios;
   }
   
-  public void saveConductor() throws IOException, SQLException {
+  public List<Usuario> saveConductor() throws IOException, SQLException {
     Insert.InsertUsuario(conductor); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("conductores.jspx");
+    conductor = new Usuario();
+    conductor.setRol("conductor");
+    listaConductores = Select.selectUsuarios("conductores");
+    return listaConductores;
   }
 
   public void onRowEdit(RowEditEvent event) throws SQLException {
