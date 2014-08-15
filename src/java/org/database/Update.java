@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
 
@@ -32,6 +33,17 @@ public class Update {
     psUpdate.setBoolean(7, usuario.getEstado());
     psUpdate.setString(8, usuario.getRol());
     psUpdate.setInt(9, usuario.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  public static String UpdateLocalidad(Localidad localidad) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE localidad SET nombre=? WHERE id=?";
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    
+    psUpdate.setString(1, localidad.getNombre());
     
     return RunSQL(con, psUpdate);
     
@@ -78,8 +90,8 @@ public class Update {
           con.getConnection().close();
         } catch (SQLException e) {
           return "Ocurrio un error inesperado";
-        }
       }
     }    
   }
+}
 }

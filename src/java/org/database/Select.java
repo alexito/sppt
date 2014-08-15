@@ -1,5 +1,7 @@
 package org.database;
 
+import static auth.security.managedBean.AuthBean.USER_KEY;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -24,15 +28,17 @@ public class Select {
     String[] Datos = new String[6];
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = "SELECT id, nombre, apellido, rol FROM dbo.usuario WHERE cedula=" + user + " and clave=" + password + " and estado=1";
+      String SQL = "SELECT id, nombre, apellido, cedula, clave, rol FROM dbo.usuario WHERE cedula=" + user + " and clave=" + password + " and estado=1";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
       while (result.next()) {
-        Datos[0] = String.valueOf(result.getInt(1));
-        Datos[1] = result.getString(2);
-        Datos[2] = result.getString(3);
-        Datos[3] = result.getString(4);
+        Datos[0] = String.valueOf(result.getInt("id"));
+        Datos[1] = result.getString("nombre");
+        Datos[2] = result.getString("apellido");
+        Datos[3] = result.getString("cedula");
+        Datos[4] = result.getString("clave");
+        Datos[5] = result.getString("rol");
       }
       return Datos;
 
@@ -115,8 +121,9 @@ public class Select {
             SQL += " OR id=" + mapEntry.getValue();
           }
         }
+        SQL += " ORDER BY nombre";
       }else{
-        SQL = "SELECT * FROM localidad";
+        SQL = "SELECT * FROM localidad ORDER BY nombre";
       }
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
@@ -181,7 +188,18 @@ public class Select {
     }
     return response;
   }
-  
+    
+  public static Usuario LoggedUser() throws IOException {
+    Usuario logged_user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USER_KEY);
+    if(logged_user == null){    
+      String url = " ";
+      FacesContext context = FacesContext.getCurrentInstance();
+      ExternalContext extContext = context.getExternalContext();
+      url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, "/index.xhtml"));            
+      extContext.redirect(url);
+    }
+    return logged_user;
+  }
   public static List<Usuario> selectUsuarios(String filtro) {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
@@ -211,6 +229,30 @@ public class Select {
     }
 
     return listUsuarios;
+  }
+  public static List<Localidad> selectLocalidades() {
+    List<Localidad> listLocalidades = null;
+    ConnectDB con = new ConnectDB();
+    String SQL = " SELECT * FROM localidad ORDER BY nombre ASC";
+   
+    try {
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      listLocalidades = new ArrayList<Localidad>();
+
+      while (result.next()) {
+        Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
+        listLocalidades.add(s);
+      }
+      return listLocalidades;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listLocalidades;
   }
 
   public static void CloseCurrentConnection(Statement sentence, ResultSet result, ConnectDB con) {

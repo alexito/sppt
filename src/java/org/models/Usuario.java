@@ -23,10 +23,12 @@ public class Usuario  implements java.io.Serializable {
     }
 
 	
-    public Usuario(int id, String nombre, String apellido, String rol) {
+    public Usuario(int id, String nombre, String apellido, String cedula, String clave, String rol) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.cedula = cedula;
+        this.clave = clave;
         this.rol = rol;
     }
     

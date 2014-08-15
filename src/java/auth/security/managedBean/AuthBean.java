@@ -51,10 +51,10 @@ public class AuthBean {
     String url = " ";
     try {
       String Datos[] = Select.Loggin(user, password);
-      if ("admin".equals(Datos[3]) || "super".equals(Datos[3])) {
+      if ("admin".equals(Datos[5]) || "super".equals(Datos[5])) {
         url = extContext.encodeActionURL(
-                context.getApplication().getViewHandler().getActionURL(context, "usuarios.jspx"));
-            extContext.getSessionMap().put(USER_KEY, new Usuario(Integer.parseInt(Datos[0]), Datos[1], Datos[2] , "admin"));
+                context.getApplication().getViewHandler().getActionURL(context, "/views/super/usuarios.xhtml"));
+            extContext.getSessionMap().put(USER_KEY, new Usuario(Integer.parseInt(Datos[0]), Datos[1], Datos[2] , Datos[3] , Datos[4] , Datos[5]));
         extContext.redirect(url);
         return;
 

@@ -1,5 +1,6 @@
 package org.controllers;
 
+import static auth.security.managedBean.AuthBean.USER_KEY;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -9,9 +10,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -77,13 +80,22 @@ public class SolicitudBean {
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
   }
+  
+  public void saveSolicitud() throws IOException, SQLException, ParseException {
+    Usuario logged_user = Select.LoggedUser();    
+    solicitud.setUsuarioByIdUsuarioCrea(logged_user);
+    Insert.InsertSolicitud(solicitud); 
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext extContext = context.getExternalContext();
+    extContext.redirect("solicitudes.jspx");
+  }
 
-  public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException {
-    Solicitud editedUsuario = (Solicitud) event.getObject();
+  public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException {
+    Solicitud editedUsuario = (Solicitud) event.getObject();    
     Update.UpdateSolicitud(editedUsuario);
     solicitud = new Solicitud();
     listaSolicitudes = Select.selectSolicitudes();
-    
+        
     return listaSolicitudes;
   }
 
@@ -111,13 +123,6 @@ public class SolicitudBean {
       res.put(obj.getApellido() + " " + obj.getNombre(), obj.getId());
     }
     return res;
-  }
-  
-  public void saveSolicitud() throws IOException, SQLException, ParseException {
-    Insert.InsertSolicitud(solicitud); 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext extContext = context.getExternalContext();
-    extContext.redirect("solicitudes.jspx");
   }
   
 }

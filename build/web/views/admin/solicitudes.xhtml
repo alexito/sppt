@@ -9,9 +9,7 @@
   <h:body>
     <ui:composition template="../templates/admin_template.xhtml">
       <ui:define name="main-body">
-        <h:form id="form">  
-          <p:growl id="msgs" showDetail="true"/>
-
+        <h:form id="form">
           <p:menubar>
             <p:submenu label="Administrar">              
               <p:menuitem icon="ui-icon-person" value="Usuarios" url="/views/super/usuarios.jspx" />
@@ -19,148 +17,188 @@
               <p:menuitem icon="ui-icon-key" value="Cambiar clave" url="/administration/CambiarPassword/CambiarPassword.jspx" />
             </p:submenu>
             <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" />
+            <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" />
             <f:facet name="options">
-              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />              
             </f:facet>
           </p:menubar>
-          
-          <p:dataTable id="Solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudes}" rowKey="#{solicitud}"
-                       paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                       editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
-                       widgetVar="solicitudTable"  emptyMessage="No se encontraron datos." >
-            
-            <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form:Solicitudes" />
-            <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form:Solicitudes" />
-            
-            <f:facet name="header">  
-              FILTROS
 
-            </f:facet>  
-            
-            <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
-              <h:outputText value="#{solicitud.id}" />
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.localidadByOrigen.nombre}" sortBy="#{solicitud.localidadByOrigen.nombre}" headerText="Origen" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.localidadByOrigen.nombre}" /></f:facet>
-                <f:facet name="input">                  
-                  <p:selectOneMenu id="origen" value="#{solicitud.localidadByOrigen.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
-                  </p:selectOneMenu>
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.localidadByDestino.nombre}" sortBy="#{solicitud.localidadByDestino.nombre}" headerText="Destino" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.localidadByDestino.nombre}" /></f:facet>
-                <f:facet name="input">                  
-                  <p:selectOneMenu id="destino" value="#{solicitud.localidadByDestino.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
-                  </p:selectOneMenu>
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida">  
-              <p:cellEditor>
-                <f:facet name="output">
-                  <h:outputText value="#{solicitud.FSalida}">
-                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                  </h:outputText>
-                </f:facet>
-                <f:facet name="input"> 
-                  <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
-              <p:cellEditor>
-                <f:facet name="output">
-                  <h:outputText value="#{solicitud.FLlegada}">
-                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                  </h:outputText>
-                </f:facet>
-                <f:facet name="input"> 
-                  <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                <f:facet name="input">
-                  <p:inputText id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                    <f:validateLength minimum="7" />
-                    <p:ajax update="msgHospedaje" event="keyup" />
-                  </p:inputText>                
-                  <p:message for="hospedaje" id="msgHospedaje" display="icon" />
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
-                <f:facet name="input">
-                  <p:inputText id="novedades" value="#{solicitud.novedades}" style="width:100%">
-                    <f:validateLength minimum="7" />
-                    <p:ajax update="msgNovedades" event="keyup" />
-                  </p:inputText>                
-                  <p:message for="novedades" id="msgNovedades" display="icon" />
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column headerText="Estado" sortBy="#{solicitud.estado_legible}" width="60">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
-                <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" headerText="Solicitado por:" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" /></f:facet>
-                <f:facet name="input">                  
-                  <p:selectOneMenu id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
-                  </p:selectOneMenu>
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
-            
-            <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" headerText="Conductor" filterMatchMode="contains">  
-              <p:cellEditor>
-                <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" /></f:facet>
-                <f:facet name="input">                  
-                  <p:selectOneMenu id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
-                  </p:selectOneMenu>
-                </f:facet>
-              </p:cellEditor>
-            </p:column>
+          <p:tabView id="tabview" dynamic="true" >
+            <p:tab title="Solicitudes" id="tab1">
 
-            <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" headerText="Creado por:" filterMatchMode="contains">  
-              <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" />
-            </p:column>
-            
-            <p:column style="width:50px"> 
-              <p:rowEditor id="editrow" ></p:rowEditor> 
-            </p:column> 
-          </p:dataTable>  
+              <p:growl id="msgs" showDetail="true"/>
 
+              <p:dataTable id="Solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudes}" rowKey="#{solicitud}"
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
+                           widgetVar="solicitudTable"  emptyMessage="No se encontraron datos." >
+
+                <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form:tabview:Solicitudes" />
+                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form:tabview:Solicitudes" />
+
+                <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
+                  <h:outputText value="#{solicitud.id}" />
+                </p:column>
+
+                <p:column filterBy="#{solicitud.localidadByOrigen.nombre}" sortBy="#{solicitud.localidadByOrigen.nombre}" headerText="Origen" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.localidadByOrigen.nombre}" /></f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu id="origen" value="#{solicitud.localidadByOrigen.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                      </p:selectOneMenu>
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.localidadByDestino.nombre}" sortBy="#{solicitud.localidadByDestino.nombre}" headerText="Destino" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.localidadByDestino.nombre}" /></f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu id="destino" value="#{solicitud.localidadByDestino.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                      </p:selectOneMenu>
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.FSalida}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"> 
+                      <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.FLlegada}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"> 
+                      <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
+                    <f:facet name="input">
+                      <p:inputText id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgHospedaje" event="keyup" />
+                      </p:inputText>                
+                      <p:message for="hospedaje" id="msgHospedaje" display="icon" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
+                    <f:facet name="input">
+                      <p:inputText id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgNovedades" event="keyup" />
+                      </p:inputText>                
+                      <p:message for="novedades" id="msgNovedades" display="icon" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Estado" sortBy="#{solicitud.estado_legible}" width="60">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
+                    <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" headerText="Solicitado por:" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" /></f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                      </p:selectOneMenu>
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" headerText="Conductor" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" /></f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                      </p:selectOneMenu>
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" headerText="Creado por:" filterMatchMode="contains">  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" />
+                </p:column>
+
+                <p:column style="width:50px"> 
+                  <p:rowEditor id="editrow" /> 
+                </p:column> 
+              </p:dataTable>  
+
+            </p:tab>
+            
+            <!-- __________TAB 2__________ -->
+            
+            <p:tab title="Localidades" id="tab2">
+
+              <p:dataTable id="Localidades" var="localidad" value="#{localidadBean.listaLocalidades}" rowKey="#{localidad}"
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
+                           widgetVar="localidadTable"  emptyMessage="No se encontraron datos." >
+
+                <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form:tabview:Localidades" />
+                <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" update=":form:tabview:Localidades" />
+
+                <p:column headerText="ID" sortBy="#{localidad.id}" width="50">  
+                  <h:outputText value="#{localidad.id}" />
+                </p:column>
+
+
+                <p:column filterBy="#{localidad.nombre}"  headerText="Nombre" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{localidad.nombre}" /></f:facet>
+                    <f:facet name="input">
+                      <p:inputText id="loc_nombre" value="#{localidad.nombre}" style="width:100%" required="true">                        
+                        <p:ajax update="msgLoc_nombre" event="keyup" />
+                      </p:inputText>                
+                      <p:message for="loc_nombre" id="msgLoc_nombre" display="icon" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+                
+                <p:column style="width:50px">                   
+                  <p:rowEditor id="editrow" /> 
+                </p:column> 
+              </p:dataTable>  
+
+            </p:tab>
+            
+          </p:tabView>
         </h:form>  
-        
+
         <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
-        
+
         <p:dialog widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form>          
             <center>
-              <p:panel id="pnl" style="margin-bottom:10px;">
+              <p:panel id="pn2" style="margin-bottom:10px;">
                 <p:messages id="messages" />
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
 
@@ -169,45 +207,45 @@
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="destino" value="Destino: *" />
                   <p:selectOneMenu id="destino" value="#{solicitudBean.solicitud.localidadByDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="fsalida" value="Fecha Salida: *" />
-                  <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
+                  <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
                   <br></br>
-                  
+
                   <h:outputLabel for="fllegada" value="Fecha Llegada: *" />
-                  <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
+                  <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
                   <br></br>
-                  
+
                   <h:outputLabel for="hospedaje" value="Hospedaje: *" />
-                  <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                  <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">
                     <f:validateLength minimum="7" />
                     <p:ajax update="msgHospedaje" event="keyup" />
                   </p:inputTextarea>                
                   <p:message for="hospedaje" id="msgHospedaje" display="icon" />
 
                   <h:outputLabel for="novedades" value="Novedades: *" />
-                  <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width:100%">
                     <f:validateLength minimum="7" />
                     <p:ajax update="msgNovedades" event="keyup" />
                   </p:inputTextarea>                
                   <p:message for="novedades" id="msgNovedades" display="icon" />
-                  
+
                   <h:outputLabel for="estado" value="Estado: *" />
-                  <p:selectBooleanCheckbox id="estado" value="#{solicitud.estado}" style="margin-left: 45%" />
+                  <p:selectBooleanCheckbox id="estado" value="#{solicitudBean.solicitud.estado}" style="margin-left: 45%" />
                   <br></br>
-                  
+
                   <h:outputLabel for="solicita" value="Solicita: *" />
                   <p:selectOneMenu id="solicita" value="#{solicitudBean.solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="conductor" value="Conductor: *" />
                   <p:selectOneMenu id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
@@ -218,6 +256,31 @@
                 <f:facet name="footer">
                   <center>
                     <p:commandButton ajax="true" update="grid" validateClient="true" value="Guardar"  action="#{solicitudBean.saveSolicitud()}"/>
+                  </center>
+                </f:facet> 
+              </p:panel>
+            </center>
+          </h:form>
+        </p:dialog>
+
+        <!-- ________________________   NEW LOCALIDAD FORM  ________________________   -->
+
+        <p:dialog widgetVar="newLocalidad" header="Ingrese los datos de la Nueva Localidad"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+          <h:form>          
+            <center>
+              <p:panel id="pn2" style="margin-bottom:10px;">
+                <h:panelGrid id="grid2" columns="3" cellpadding="5">
+
+                  <h:outputLabel for="loc_nombre" value="Nombre *" />
+                  <p:inputText id="loc_nombre" value="#{localidadBean.localidad.nombre}" style="width:100%" required="true">                    
+                    <p:ajax update="msgLoc_nombre" event="keyup" />
+                  </p:inputText>                
+                  <p:message for="loc_nombre" id="msgLoc_nombre" display="icon" />
+
+                </h:panelGrid>
+                <f:facet name="footer">
+                  <center>
+                    <p:commandButton ajax="true" update="grid2" validateClient="true" value="Guardar"  action="#{localidadBean.saveLocalidad()}"/>
                   </center>
                 </f:facet> 
               </p:panel>
