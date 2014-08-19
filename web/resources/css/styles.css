@@ -33,3 +33,16 @@ body .ui-layout-unit-header-title{
   vertical-align: middle;
   text-decoration-line: none;
 }
+.ui-tabs .ui-tabs-panel{
+  padding: 0;
+}
+#ajax-status{
+  position: absolute;
+  z-index: 1;
+  right: 40px;
+  top: 66px;
+}
+#ajax-status img{
+  width: 120px;
+  height: auto;
+}

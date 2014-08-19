@@ -9,7 +9,18 @@
   <h:body>
     <ui:composition template="../templates/admin_template.xhtml">
       <ui:define name="main-body">
-        <h:form id="form">
+
+        <p:ajaxStatus id="ajax-status">  
+          <f:facet name="start">  
+            <h:graphicImage value="../../resources/images/loader.GIF" />  
+          </f:facet>  
+
+          <f:facet name="complete">  
+            <h:outputText value="" />  
+          </f:facet>  
+        </p:ajaxStatus> 
+
+        <h:form id="form-main-data">
           <p:growl id="msgs" showDetail="true"/>
           <p:menubar>
             <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" />
@@ -21,7 +32,7 @@
             </f:facet>
           </p:menubar>
 
-          <p:tabView id="tabview" dynamic="true" effect="drop" effectDuration="fast">
+          <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast">
 
             <p:tab title="Solicitudes" id="tab1">
 
@@ -30,8 +41,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="solicitudTable"  emptyMessage="No se encontraron datos." >
 
-                <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form:tabview:Solicitudes" />
-                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form:tabview:Solicitudes" />
+                <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form-main-data:tabview:Solicitudes" />
+                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form-main-data:tabview:Solicitudes" />
 
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
                   <h:outputText value="#{solicitud.id}" />
@@ -160,8 +171,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="localidadTable"  emptyMessage="No se encontraron datos." >
 
-                <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form:tabview:Localidades" />
-                <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" update=":form:tabview:Localidades" />
+                <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form-main-data:tabview:Localidades" />
+                <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" update=":form-main-data:tabview:Localidades" />
 
                 <p:column headerText="ID" sortBy="#{localidad.id}" width="50">  
                   <h:outputText value="#{localidad.id}" />
@@ -195,8 +206,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
-                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form:msgs" />
+                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Usuarios" />
+                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form-main-data:tabview:Usuarios" />
 
                 <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
                   <p:cellEditor>
@@ -310,8 +321,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
-                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form:msgs" />
+                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Conductores" />
+                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form-main-data:tabview:Conductores" />
 
                 <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
                   <p:cellEditor>
@@ -398,7 +409,7 @@
         <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
 
         <p:dialog widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-          <h:form>          
+          <h:form id="form-new-solicitud">          
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
                 <p:messages id="messages" />
@@ -457,7 +468,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newSolicitud').hide();"  action="#{solicitudBean.saveSolicitud()}" />
+                    <p:commandButton ajax="true" update=":form-main-data, :form-new-solicitud" validateClient="true" value="Guardar" onclick="PF('newSolicitud').hide();"  action="#{solicitudBean.saveSolicitud()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -468,7 +479,7 @@
         <!-- ________________________   NEW LOCALIDAD FORM  ________________________   -->
 
         <p:dialog widgetVar="newLocalidad" header="Ingrese los datos de la Nueva Localidad"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-          <h:form>          
+          <h:form id="form-new-localidad">          
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
                 <h:panelGrid id="grid2" columns="3" cellpadding="5">
@@ -482,7 +493,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{localidadBean.saveLocalidad()}" />
+                    <p:commandButton ajax="true" update=":form-main-data, :form-new-solicitud, :form-new-localidad" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{localidadBean.saveLocalidad()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -495,7 +506,7 @@
 
 
         <p:dialog widgetVar="newUsuario" header="Ingrese los datos del Nuevo Usuario"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-          <h:form>          
+          <h:form id="form-new-usuario">          
             <center>
               <p:panel id="pn3" style="margin-bottom:10px;">
                 <p:messages id="messages" />
@@ -557,7 +568,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newUsuario').hide();"  action="#{usuarioBean.saveUsuario()}" />
+                    <p:commandButton ajax="true" update=":form-main-data, :form-new-solicitud, :form-new-usuario" validateClient="true" value="Guardar" onclick="PF('newUsuario').hide();"  action="#{usuarioBean.saveUsuario()}" />
                   </center>
                 </f:facet> 
               </p:panel>
@@ -566,9 +577,9 @@
         </p:dialog>
 
         <!-- ________________________   NEW CONDUCTOR FORM  ________________________   -->
-        
-         <p:dialog widgetVar="newConductor" header="Ingrese los datos del Nuevo Conductor"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-          <h:form>          
+
+        <p:dialog widgetVar="newConductor" header="Ingrese los datos del Nuevo Conductor"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+          <h:form id="form-new-conductor">          
             <center>
               <p:panel id="pnl" style="margin-bottom:10px;">
                 <p:messages id="messages" />
@@ -616,7 +627,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
-                    <p:commandButton ajax="true" update=":form:tabview" validateClient="true" value="Guardar" onclick="PF('newConductor').hide();"  action="#{usuarioBean.saveConductor()}" />
+                    <p:commandButton ajax="true" update=":form-main-data, :form-new-solicitud, :form-new-conductor" validateClient="true" value="Guardar" onclick="PF('newConductor').hide();"  action="#{usuarioBean.saveConductor()}" />
                   </center>
                 </f:facet> 
               </p:panel>
