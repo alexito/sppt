@@ -73,7 +73,7 @@ public class Select {
       }
 
       map_localidades = selectMappedLocalidades(false, id_localidades);
-      map_usuarios = selectMappedUsuarios(false, id_usuarios);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
       sentence = con.getConnection().createStatement(); 
       result = sentence.executeQuery(SQL);
 
@@ -121,9 +121,9 @@ public class Select {
             SQL += " OR id=" + mapEntry.getValue();
           }
         }
-        SQL += " ORDER BY nombre";
+        SQL += " ORDER BY nombre ASC";
       }else{
-        SQL = "SELECT * FROM localidad ORDER BY nombre";
+        SQL = "SELECT * FROM localidad";
       }
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
@@ -140,7 +140,7 @@ public class Select {
     return response;
   }
   
-    public static Map<Integer, Usuario> selectMappedUsuarios(boolean all, Map<Integer, Integer> ids) {
+    public static Map<Integer, Usuario> selectMappedUsuarios(boolean all, boolean isConductor, Map<Integer, Integer> ids) {
     ConnectDB con = new ConnectDB();
     Map<Integer, Usuario> response = new HashMap<Integer, Usuario>();
     
@@ -161,8 +161,13 @@ public class Select {
         }
       }
       }else{
-        SQL = "SELECT * FROM usuario";
+        if(isConductor)
+          SQL = "SELECT * FROM usuario WHERE rol='conductor' AND estado=1";
+        else
+          SQL = "SELECT * FROM usuario WHERE rol='admin' AND estado=1";
       }
+      SQL += " ORDER BY apellido ASC";
+      
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
 

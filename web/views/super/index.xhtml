@@ -10,7 +10,7 @@
     <ui:composition template="../templates/admin_template.xhtml">
       <ui:define name="main-body">
 
-        <p:ajaxStatus id="ajax-status">  
+        <p:ajaxStatus id="ajax-status" >  
           <f:facet name="start">  
             <h:graphicImage value="../../resources/images/loader.GIF" />  
           </f:facet>  
@@ -23,12 +23,13 @@
         <h:form id="form-main-data">
           <p:growl id="msgs" showDetail="true"/>
           <p:menubar>
-            <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" />
-            <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" />
-            <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUsuario').show();" />
-            <p:menuitem icon="ui-icon-copy" value="Nuevo Conductor"  onclick="PF('newConductor').show();" />
+            <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;" />
+            <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
+            <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUsuario').show();" style="margin-left: 15px;" />
+            <p:menuitem icon="ui-icon-copy" value="Nuevo Conductor"  onclick="PF('newConductor').show();" style="margin-left: 15px;" />            
+            <p:menuitem icon="ui-icon-refresh" value="Actualizar Datos" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-main-data:tabview" style="margin-left: 15px; font-weight: bold;" />
             <f:facet name="options">
-              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />              
+              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
             </f:facet>
           </p:menubar>
 
@@ -41,8 +42,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="solicitudTable"  emptyMessage="No se encontraron datos." >
 
-                <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form-main-data:tabview:Solicitudes" />
-                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" update=":form-main-data:tabview:Solicitudes" />
+                <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form-main-data:tabview:Solicitudes"/>
+                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" />
 
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
                   <h:outputText value="#{solicitud.id}" />
@@ -100,10 +101,10 @@
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
                     <f:facet name="input">
-                      <p:inputText id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
                         <f:validateLength minimum="7" />
                         <p:ajax update="msgHospedaje" event="keyup" />
-                      </p:inputText>                
+                      </p:inputTextarea>                
                       <p:message for="hospedaje" id="msgHospedaje" display="icon" />
                     </f:facet>
                   </p:cellEditor>
@@ -113,10 +114,10 @@
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
                     <f:facet name="input">
-                      <p:inputText id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                      <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
                         <f:validateLength minimum="7" />
                         <p:ajax update="msgNovedades" event="keyup" />
-                      </p:inputText>                
+                      </p:inputTextarea>                
                       <p:message for="novedades" id="msgNovedades" display="icon" />
                     </f:facet>
                   </p:cellEditor>
@@ -129,9 +130,13 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" headerText="Solicitado por:" filterMatchMode="contains">  
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
                   <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" /></f:facet>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
+                      <p:spacer width="5"/>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
+                    </f:facet>
                     <f:facet name="input">                  
                       <p:selectOneMenu id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
                         <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
@@ -140,18 +145,24 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.nombre}" headerText="Conductor" filterMatchMode="contains">  
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">  
                   <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" /></f:facet>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.apellido}" />
+                      <p:spacer width="5"/>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />
+                    </f:facet>
                     <f:facet name="input">                  
                       <p:selectOneMenu id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                        <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                        <f:selectItems value="#{solicitudBean.listaConductores}" />                    
                       </p:selectOneMenu>
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
 
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.nombre}" headerText="Creado por:" filterMatchMode="contains">  
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.apellido}" headerText="Creado por:" filterMatchMode="contains">  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.apellido}" />
+                  <p:spacer width="5"/>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" />
                 </p:column>
 
@@ -171,15 +182,14 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="localidadTable"  emptyMessage="No se encontraron datos." >
 
-                <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form-main-data:tabview:Localidades" />
-                <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" update=":form-main-data:tabview:Localidades" />
+                <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form-main-data:tabview:Localidades, :form-main-data:tabview:Solicitudes, :form-new-solicitud"/>
+                <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" />
 
                 <p:column headerText="ID" sortBy="#{localidad.id}" width="50">  
                   <h:outputText value="#{localidad.id}" />
                 </p:column>
 
-
-                <p:column filterBy="#{localidad.nombre}"  headerText="Nombre" filterMatchMode="contains">  
+                <p:column filterBy="#{localidad.nombre}" sortBy="#{localidad.nombre}"  headerText="Nombre" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{localidad.nombre}" /></f:facet>
                     <f:facet name="input">
@@ -206,8 +216,8 @@
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
                            widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
 
-                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Usuarios" />
-                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form-main-data:tabview:Usuarios" />
+                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Usuarios, :form-main-data:tabview:Solicitudes, :form-new-solicitud" />
+                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" />
 
                 <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
                   <p:cellEditor>
@@ -319,10 +329,10 @@
               <p:dataTable id="Conductores" var="usuario" value="#{usuarioBean.listaConductores}" rowKey="#{usuario}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                            editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
-                           widgetVar="usuariosTable"  emptyMessage="No se encontraron datos." >  
+                           widgetVar="usuariosTable" emptyMessage="No se encontraron datos." >  
 
-                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Conductores" />
-                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" update=":form-main-data:tabview:Conductores" />
+                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" update=":form-main-data:tabview:Conductores, :form-main-data:tabview:Solicitudes, :form-new-solicitud" />
+                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" />
 
                 <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
                   <p:cellEditor>
@@ -408,7 +418,7 @@
 
         <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
 
-        <p:dialog widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog dynamic="true" widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-solicitud">          
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
@@ -461,7 +471,7 @@
 
                   <h:outputLabel for="conductor" value="Conductor: *" />
                   <p:selectOneMenu id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                    <f:selectItems value="#{solicitudBean.listaConductores}" />
                   </p:selectOneMenu>
                   <br></br>
 
@@ -478,7 +488,7 @@
 
         <!-- ________________________   NEW LOCALIDAD FORM  ________________________   -->
 
-        <p:dialog widgetVar="newLocalidad" header="Ingrese los datos de la Nueva Localidad"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog dynamic="true" widgetVar="newLocalidad" header="Ingrese los datos de la Nueva Localidad"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-localidad">          
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
@@ -505,7 +515,7 @@
         <!-- ________________________   NEW USUARIO FORM  ________________________   -->
 
 
-        <p:dialog widgetVar="newUsuario" header="Ingrese los datos del Nuevo Usuario"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog dynamic="true" widgetVar="newUsuario" header="Ingrese los datos del Nuevo Usuario"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-usuario">          
             <center>
               <p:panel id="pn3" style="margin-bottom:10px;">
@@ -578,7 +588,7 @@
 
         <!-- ________________________   NEW CONDUCTOR FORM  ________________________   -->
 
-        <p:dialog widgetVar="newConductor" header="Ingrese los datos del Nuevo Conductor"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog dynamic="true" widgetVar="newConductor" header="Ingrese los datos del Nuevo Conductor"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-conductor">          
             <center>
               <p:panel id="pnl" style="margin-bottom:10px;">

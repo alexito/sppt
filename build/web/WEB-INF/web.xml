@@ -36,6 +36,10 @@
         <filter-name>AuthSuperAdminFilter</filter-name>
         <url-pattern>/super/*</url-pattern>
     </filter-mapping>
+    <context-param>
+      <param-name>primefaces.THEME</param-name>
+      <param-value>bootstrap</param-value>
+    </context-param>
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>

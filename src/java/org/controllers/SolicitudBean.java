@@ -1,20 +1,14 @@
 package org.controllers;
 
-import static auth.security.managedBean.AuthBean.USER_KEY;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -30,6 +24,7 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudes;
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
+  private Map<String, Integer> listaConductores;
   private Solicitud solicitud;
   private int loc_origen;
 
@@ -41,6 +36,14 @@ public class SolicitudBean {
     this.loc_origen = loc_origen;
   }
 
+  public Map<String, Integer> getListaConductores() {
+    return listaConductores;
+  }
+
+  public void setListaConductores(Map<String, Integer> listaConductores) {
+    this.listaConductores = listaConductores;
+  }
+  
   public Map<String, Integer> getListaUsuarios() {
     return listaUsuarios;
   }
@@ -73,12 +76,14 @@ public class SolicitudBean {
     
     listaSolicitudes = Select.selectSolicitudes();
     Map<Integer, Localidad> locs = Select.selectMappedLocalidades(true, null);
-    Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, null);
+    Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
+    Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
     
     solicitud = new Solicitud();
     
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
+    listaConductores = mapUsuario(cond);
   }
   
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
@@ -125,5 +130,7 @@ public class SolicitudBean {
     }
     return res;
   }
+  
+  public void refreshAll(){}
   
 }

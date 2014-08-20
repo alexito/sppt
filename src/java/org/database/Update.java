@@ -44,6 +44,7 @@ public class Update {
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
     
     psUpdate.setString(1, localidad.getNombre());
+    psUpdate.setInt(2, localidad.getId());
     
     return RunSQL(con, psUpdate);
     
