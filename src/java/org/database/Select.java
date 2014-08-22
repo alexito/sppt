@@ -2,11 +2,9 @@ package org.database;
 
 import static auth.security.managedBean.AuthBean.USER_KEY;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,11 +63,9 @@ public class Select {
 
       listSolicitudes = new ArrayList<Solicitud>();
       while (result.next()) {
-        id_localidades.putIfAbsent(result.getInt("origen"), result.getInt("origen"));
-        id_localidades.putIfAbsent(result.getInt("destino"), result.getInt("destino"));
-        id_usuarios.putIfAbsent(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
-        id_usuarios.putIfAbsent(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
-        id_usuarios.putIfAbsent(result.getInt("id_usuario_crea"), result.getInt("id_usuario_crea"));
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_crea"), result.getInt("id_usuario_crea"));
       }
 
       map_localidades = selectMappedLocalidades(false, id_localidades);

@@ -1,31 +1,24 @@
 package org.models;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Solicitud implements java.io.Serializable {
 
-  private int id;
-  private Localidad localidadByOrigen;
-  private Localidad localidadByDestino;
-  private Usuario usuarioByIdUsuarioSolicita;
-  private Usuario usuarioByIdUsuarioConductor;
-  private Usuario usuarioByIdUsuarioCrea;
+  private int id;  
+  private Date FCreacion;
   private Date FSalida;
   private Date FLlegada;
   private String hospedaje;
   private Boolean estado;
   private String novedades;
+  private Distancia distanciaById;
+  private Usuario usuarioByIdUsuarioSolicita;
+  private Usuario usuarioByIdUsuarioConductor;
+  private Usuario usuarioByIdUsuarioCrea;
   
-  SimpleDateFormat datetime_format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
   public Solicitud() {
-    this.localidadByOrigen = new Localidad();
-    this.localidadByDestino = new Localidad();
+    this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
     this.usuarioByIdUsuarioConductor = new Usuario();
     this.usuarioByIdUsuarioCrea = new Usuario();
@@ -35,32 +28,18 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Solicitud(int id, Localidad localidadByOrigen, Localidad localidadByDestino, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades) {
+  public Solicitud(int id, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea, Date FCreacion, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades) {
     this.id = id;
-    this.localidadByOrigen = localidadByOrigen;
-    this.localidadByDestino = localidadByDestino;
+    this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
     this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
+    this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
     this.hospedaje = hospedaje;
     this.estado = estado;
     this.novedades = novedades;
-  }
-
-  public Solicitud(int id, Localidad localidadByOrigen, Localidad localidadByDestino, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea) {
-    this.id = id;
-    this.localidadByOrigen = localidadByOrigen;
-    this.localidadByDestino = localidadByDestino;
-    this.FSalida = FSalida;
-    this.FLlegada = FLlegada;
-    this.hospedaje = hospedaje;
-    this.estado = estado;
-    this.novedades = novedades;
-    this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
-    this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
-    this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
   }
 
   public int getId() {
@@ -71,20 +50,12 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Localidad getLocalidadByOrigen() {
-    return this.localidadByOrigen;
+  public Distancia getDistanciaById() {
+    return this.distanciaById;
   }
 
-  public void setLocalidadByOrigen(Localidad localidadByOrigen) {
-    this.localidadByOrigen = localidadByOrigen;
-  }
-
-  public Localidad getLocalidadByDestino() {
-    return this.localidadByDestino;
-  }
-
-  public void setLocalidadByDestino(Localidad localidadByDestino) {
-    this.localidadByDestino = localidadByDestino;
+  public void setDistanciaById(Distancia distanciaById) {
+    this.distanciaById = distanciaById;
   }
 
   public Usuario getUsuarioByIdUsuarioSolicita() {
@@ -119,6 +90,14 @@ public class Solicitud implements java.io.Serializable {
     this.FSalida = FSalida;
   }
 
+  public Date getFCreacion() {
+    return this.FCreacion;
+  }
+
+  public void setFCreacion(Date FCreacion) {
+    this.FCreacion = FCreacion;
+  }
+  
   public Date getFLlegada() {
     return this.FLlegada;
   }

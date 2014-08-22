@@ -53,7 +53,7 @@
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.localidadByOrigen.nombre}" /></f:facet>
                     <f:facet name="input">                  
-                      <p:selectOneMenu id="origen" value="#{solicitud.localidadByOrigen.id}" style="width: 100%;">
+                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitud.localidadByOrigen.id}" style="width: 100%;">
                         <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                       </p:selectOneMenu>
                     </f:facet>
@@ -64,7 +64,7 @@
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.localidadByDestino.nombre}" /></f:facet>
                     <f:facet name="input">                  
-                      <p:selectOneMenu id="destino" value="#{solicitud.localidadByDestino.id}" style="width: 100%;">
+                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitud.localidadByDestino.id}" style="width: 100%;">
                         <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                       </p:selectOneMenu>
                     </f:facet>
@@ -138,7 +138,7 @@
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
                     </f:facet>
                     <f:facet name="input">                  
-                      <p:selectOneMenu id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
+                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
                         <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
                       </p:selectOneMenu>
                     </f:facet>
@@ -153,7 +153,7 @@
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />
                     </f:facet>
                     <f:facet name="input">                  
-                      <p:selectOneMenu id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
+                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
                         <f:selectItems value="#{solicitudBean.listaConductores}" />                    
                       </p:selectOneMenu>
                     </f:facet>
@@ -426,13 +426,13 @@
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
 
                   <h:outputLabel for="origen" value="Origen: *" />
-                  <p:selectOneMenu id="origen" value="#{solicitudBean.solicitud.localidadByOrigen.id}" style="width: 100%;">
+                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitudBean.solicitud.localidadByOrigen.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
 
                   <h:outputLabel for="destino" value="Destino: *" />
-                  <p:selectOneMenu id="destino" value="#{solicitudBean.solicitud.localidadByDestino.id}" style="width: 100%;">
+                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitud.localidadByDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
@@ -464,13 +464,13 @@
                   <br></br>
 
                   <h:outputLabel for="solicita" value="Solicita: *" />
-                  <p:selectOneMenu id="solicita" value="#{solicitudBean.solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
+                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="solicita" value="#{solicitudBean.solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
                   </p:selectOneMenu>
                   <br></br>
 
                   <h:outputLabel for="conductor" value="Conductor: *" />
-                  <p:selectOneMenu id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
+                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaConductores}" />
                   </p:selectOneMenu>
                   <br></br>
