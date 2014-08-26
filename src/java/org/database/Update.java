@@ -54,8 +54,8 @@ public class Update {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET origen=?, destino=?, f_salida=?, f_llegada=?, hospedaje=?, estado=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=?, id_usuario_crea=? WHERE id=?";
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
-    psUpdate.setInt(1, solicitud.getLocalidadByOrigen().getId());
-    psUpdate.setInt(2, solicitud.getLocalidadByDestino().getId());
+//    psUpdate.setInt(1, solicitud.getLocalidadByOrigen().getId());
+//    psUpdate.setInt(2, solicitud.getLocalidadByDestino().getId());
     psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
     psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psUpdate.setString(5, solicitud.getHospedaje());

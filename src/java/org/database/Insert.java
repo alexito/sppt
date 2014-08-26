@@ -11,7 +11,7 @@ public class Insert {
 
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
-    String SQL = "INSERT INTO usuario ( nombre, apellido, cedula, clave, email, telefono, estado, rol) VALUES (?,?,?,?,?,?,?,?)";
+    String SQL = "INSERT INTO usuario ( PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL, PRSNTLFN, estado, rol) VALUES (?,?,?,?,?,?,?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
     psInsert.setString(1, usuario.getNombre());
     psInsert.setString(2, usuario.getApellido());
@@ -30,8 +30,8 @@ public class Insert {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (origen, destino, f_salida, f_llegada, hospedaje, estado, novedades, id_usuario_solicita, id_usuario_conductor, id_usuario_crea ) VALUES (?,?,?,?,?,?,?,?,?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
-    psInsert.setInt(1, solicitud.getLocalidadByOrigen().getId());
-    psInsert.setInt(2, solicitud.getLocalidadByDestino().getId());
+//    psInsert.setInt(1, solicitud.getLocalidadByOrigen().getId());
+//    psInsert.setInt(2, solicitud.getLocalidadByDestino().getId());
     psInsert.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
     psInsert.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psInsert.setString(5, solicitud.getHospedaje());

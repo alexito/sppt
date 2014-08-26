@@ -48,13 +48,13 @@ public class AuthBean {
   public void doLogin(ActionEvent e) throws IOException {
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext extContext = context.getExternalContext();
-    String url = " ";
+    String url = "";
     try {
-      String Datos[] = Select.Loggin(user, password);
-      if ("admin".equals(Datos[5]) || "super".equals(Datos[5])) {
+      Usuario usuario = Select.Loggin(user, password);
+      if ("super".equals(usuario.getRol())) {
         url = extContext.encodeActionURL(
                 context.getApplication().getViewHandler().getActionURL(context, "/views/super/index.xhtml"));
-            extContext.getSessionMap().put(USER_KEY, new Usuario(Integer.parseInt(Datos[0]), Datos[1], Datos[2] , Datos[3] , Datos[4] , Datos[5]));
+            extContext.getSessionMap().put(USER_KEY, usuario);
         extContext.redirect(url);
         return;
 

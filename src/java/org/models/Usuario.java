@@ -3,15 +3,17 @@ package org.models;
 public class Usuario implements java.io.Serializable {
 
   private int id;
+  private String codemp;
+  private String codapr;
   private String nombre;
   private String apellido;
   private String cedula;
   private String clave;
   private String email;
   private String telefono;
+  private String movil;
   private Boolean estado;
   private String rol;
-  private Usuario usuarioByIdUsuarioAprobador;
 
   public Usuario() {
   }
@@ -25,7 +27,7 @@ public class Usuario implements java.io.Serializable {
     this.rol = rol;
   }
 
-  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol) {
+  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, String movil, Boolean estado, String rol, String codemp, String codapr) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -33,21 +35,11 @@ public class Usuario implements java.io.Serializable {
     this.clave = clave;
     this.email = email;
     this.telefono = telefono;
+    this.movil = movil;
     this.estado = estado;
     this.rol = rol;
-  }
-
-  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, Boolean estado, String rol, Usuario usuarioByIdUsuarioAprobador) {
-    this.id = id;
-    this.nombre = nombre;
-    this.apellido = apellido;
-    this.cedula = cedula;
-    this.clave = clave;
-    this.email = email;
-    this.telefono = telefono;
-    this.estado = estado;
-    this.rol = rol;
-    this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
+    this.codemp = codemp;
+    this.codapr = codapr;
   }
 
   public int getId() {
@@ -57,7 +49,23 @@ public class Usuario implements java.io.Serializable {
   public void setId(int id) {
     this.id = id;
   }
+  
+  public String getCodemp() {
+    return codemp;
+  }
 
+  public void setCodemp(String codemp) {
+    this.codemp = codemp;
+  }
+
+  public String getCodapr() {
+    return codapr;
+  }
+
+  public void setCodapr(String codapr) {
+    this.codapr = codapr;
+  }
+  
   public String getNombre() {
     return this.nombre;
   }
@@ -105,6 +113,14 @@ public class Usuario implements java.io.Serializable {
   public void setTelefono(String telefono) {
     this.telefono = telefono;
   }
+  
+  public String getMovil() {
+    return this.movil;
+  }
+
+  public void setMovil(String movil) {
+    this.movil = movil;
+  }
 
   public Boolean getEstado() {
     return this.estado;
@@ -128,14 +144,6 @@ public class Usuario implements java.io.Serializable {
 
   public void setRol(String rol) {
     this.rol = rol;
-  }
-
-  public Usuario getUsuarioByIdUsuarioAprobador() {
-    return usuarioByIdUsuarioAprobador;
-  }
-
-  public void setUsuarioByIdUsuarioAprobador(Usuario usuarioByIdUsuarioAprobador) {
-    this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
   }
 
   @Override

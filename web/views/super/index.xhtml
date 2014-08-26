@@ -7,31 +7,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:body>
-    <ui:composition template="../templates/admin_template.xhtml">
+    <ui:composition template="../templates/super_template.xhtml">
       <ui:define name="main-body">
-
-        <p:ajaxStatus id="ajax-status" >  
-          <f:facet name="start">  
-            <h:graphicImage value="../../resources/images/loader.GIF" />  
-          </f:facet>  
-
-          <f:facet name="complete">  
-            <h:outputText value="" />  
-          </f:facet>  
-        </p:ajaxStatus> 
-
-        <h:form id="form-main-data">
-          <p:growl id="msgs" showDetail="true"/>
-          <p:menubar>
-            <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;" />
-            <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
-            <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUsuario').show();" style="margin-left: 15px;" />
-            <p:menuitem icon="ui-icon-copy" value="Nuevo Conductor"  onclick="PF('newConductor').show();" style="margin-left: 15px;" />            
-            <p:menuitem icon="ui-icon-refresh" value="Actualizar Datos" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-main-data:tabview" style="margin-left: 15px; font-weight: bold;" />
-            <f:facet name="options">
-              <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
-            </f:facet>
-          </p:menubar>
+        <h:form id="form-main-data">          
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast">
 

@@ -22,29 +22,31 @@ public class Select {
   static Statement sentence;
   static ResultSet result;
 
-  public static String[] Loggin(String user, String password) {
-    String[] Datos = new String[6];
+  public static Usuario Loggin(String user, String password) {
+    Usuario usuario = new Usuario();
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = "SELECT id, nombre, apellido, cedula, clave, rol FROM dbo.usuario WHERE cedula=" + user + " and clave=" + password + " and estado=1";
+      String SQL = "SELECT id, EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, rol FROM usuario WHERE PRSNCDLA=" + user + " and clave=" + password + " and estado=1";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
       while (result.next()) {
-        Datos[0] = String.valueOf(result.getInt("id"));
-        Datos[1] = result.getString("nombre");
-        Datos[2] = result.getString("apellido");
-        Datos[3] = result.getString("cedula");
-        Datos[4] = result.getString("clave");
-        Datos[5] = result.getString("rol");
+        usuario.setId(result.getInt("id"));
+        usuario.setCodemp(result.getString("EMPLCDGO"));
+        usuario.setCodapr(result.getString("EMPLFAPR"));
+        usuario.setNombre(result.getString("PRSNNMBR"));
+        usuario.setApellido(result.getString("PRSNAPLL"));
+        usuario.setCedula(result.getString("PRSNCDLA"));
+        usuario.setClave(result.getString("clave"));
+        usuario.setRol(result.getString("rol"));
       }
-      return Datos;
+      return usuario;
 
     } catch (SQLException e) {
     } finally {
       CloseCurrentConnection(sentence, result, con);
     }
-    return Datos;
+    return usuario;
   }
 
   public static List<Solicitud> selectSolicitudes() {
@@ -80,12 +82,12 @@ public class Select {
         String hospedaje = result.getString("hospedaje");
         Boolean estado = result.getBoolean("estado");
         String novedades = result.getString("novedades");
-        Solicitud s = new Solicitud(id, map_localidades.get(result.getInt("origen")),
-                map_localidades.get(result.getInt("destino")), f_salida, f_llegada, 
-                hospedaje, estado, novedades, map_usuarios.get(result.getInt("id_usuario_solicita")),
-                map_usuarios.get(result.getInt("id_usuario_conductor")),
-                map_usuarios.get(result.getInt("id_usuario_crea")));
-        listSolicitudes.add(s);
+//        Solicitud s = new Solicitud(id, map_localidades.get(result.getInt("origen")),
+//                map_localidades.get(result.getInt("destino")), f_salida, f_llegada, 
+//                hospedaje, estado, novedades, map_usuarios.get(result.getInt("id_usuario_solicita")),
+//                map_usuarios.get(result.getInt("id_usuario_conductor")),
+//                map_usuarios.get(result.getInt("id_usuario_crea")));
+//        listSolicitudes.add(s);
       }
       return listSolicitudes;
 
@@ -205,10 +207,11 @@ public class Select {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
     String SQL = "";
+    String fields = "";
     if (filtro.equals("conductores")) {
-      SQL = " SELECT * FROM usuario WHERE rol = 'conductor' ORDER BY apellido ASC";
+      SQL = " SELECT * FROM usuario WHERE rol = 'conductor' ORDER BY PRSNAPLL ASC";
     } else {
-      SQL = " SELECT * FROM usuario WHERE rol = 'super' OR rol = 'admin' ORDER BY apellido ASC";
+      SQL = " SELECT * FROM usuario WHERE rol = 'super' OR rol = 'admin' ORDER BY PRSNAPLL ASC";
     }
     try {
       sentence = con.getConnection().createStatement();
@@ -217,9 +220,9 @@ public class Select {
       listUsuarios = new ArrayList<Usuario>();
 
       while (result.next()) {
-        Usuario s = new Usuario(result.getInt("id"), result.getString("nombre"), result.getString("apellido"),
-                result.getString("cedula"), result.getString("clave"), result.getString("email"), result.getString("telefono"), result.getBoolean("estado"),
-                result.getString("rol"));
+        Usuario s = new Usuario(result.getInt("id"), result.getString("PRSNNMBR"), result.getString("PRSNAPLL"),
+                result.getString("PRSNCDLA"), result.getString("clave"), result.getString("PRSNMAIL"), result.getString("PRSNTLFN"),
+                result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"));
         listUsuarios.add(s);
       }
       return listUsuarios;
