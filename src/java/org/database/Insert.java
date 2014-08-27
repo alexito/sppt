@@ -11,16 +11,18 @@ public class Insert {
 
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
-    String SQL = "INSERT INTO usuario ( PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL, PRSNTLFN, estado, rol) VALUES (?,?,?,?,?,?,?,?)";
+    String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL, PRSNTLFN, estado, rol) VALUES (?,?,?,?,?,?,?,?,?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
-    psInsert.setString(1, usuario.getNombre());
-    psInsert.setString(2, usuario.getApellido());
-    psInsert.setString(3, usuario.getCedula());
-    psInsert.setString(4, usuario.getClave());
-    psInsert.setString(5, usuario.getEmail());
-    psInsert.setString(6, usuario.getTelefono());
-    psInsert.setBoolean(7, usuario.getEstado());
-    psInsert.setString(8, usuario.getRol());
+    psInsert.setString(1, usuario.getCodemp());
+    psInsert.setString(2, usuario.getCodapr());
+    psInsert.setString(3, usuario.getNombre());
+    psInsert.setString(4, usuario.getApellido());
+    psInsert.setString(5, usuario.getCedula());
+    psInsert.setString(6, usuario.getClave());
+    psInsert.setString(7, usuario.getEmail());
+    psInsert.setString(8, usuario.getTelefono());
+    psInsert.setBoolean(9, usuario.getEstado());
+    psInsert.setString(10, usuario.getRol());
     
     return RunSQL(con, psInsert);
     

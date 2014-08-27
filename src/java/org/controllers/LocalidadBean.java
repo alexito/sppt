@@ -4,23 +4,22 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ViewScoped;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
 import org.models.Localidad;
-import org.models.Usuario;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
-@Dependent
+@ViewScoped
 public class LocalidadBean {
 
+  private Localidad localidadSeleccionada;
   private List<Localidad> listaLocalidades;
+  private List<Localidad> listaEditarDistancia;
   private Localidad localidad;
 
   public List<Localidad> getListaLocalidades() {
@@ -31,6 +30,22 @@ public class LocalidadBean {
     this.listaLocalidades = listaLocalidades;
   }
 
+  public Localidad getLocalidadSeleccionada() {
+    return localidadSeleccionada;
+  }
+
+  public void setLocalidadSeleccionada(Localidad localidadSeleccionada) {
+    this.localidadSeleccionada = localidadSeleccionada;
+  }
+  
+  public List<Localidad> getListaEditarDistancia() {
+    return listaEditarDistancia;
+  }
+
+  public void setListaEditarDistancia(List<Localidad> listaEditarDistancia) {
+    this.listaEditarDistancia = listaEditarDistancia;
+  }
+  
   public Localidad getLocalidad() {
     return localidad;
   }
@@ -43,7 +58,7 @@ public class LocalidadBean {
   public List<Localidad> saveLocalidad() throws IOException, SQLException, ParseException {
     Insert.InsertLocalidad(localidad); 
     localidad = new Localidad();
-    listaLocalidades = Select.selectLocalidades();
+    listaLocalidades = Select.selectLocalidades(0);
     return listaLocalidades;
   }
   
@@ -55,11 +70,16 @@ public class LocalidadBean {
   public void onRowCancel(RowEditEvent event) {
 
   }
-
+  
+  public void onRowSelect(SelectEvent event) {
+    Localidad loc = (Localidad) event.getObject();
+    listaEditarDistancia = Select.selectLocalidades(loc.getId());
+  }
  
   public LocalidadBean() {
-    localidad = new Localidad();   
-    listaLocalidades = Select.selectLocalidades();
+    localidad = new Localidad();  
+    localidadSeleccionada = new Localidad();
+    listaLocalidades = Select.selectLocalidades(0);
     
   }
   

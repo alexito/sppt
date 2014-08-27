@@ -234,23 +234,40 @@ public class Select {
 
     return listUsuarios;
   }
-  public static List<Localidad> selectLocalidades() {
+  /**
+   * Si avoidId = 0 retorna la lista normal de las localidades
+   * De lo contrario hace una busqueda y comparacion con datos de distancia
+   * @param avoidId
+   * @return 
+   */
+  public static List<Localidad> selectLocalidades(int avoidId) {
     List<Localidad> listLocalidades = null;
     ConnectDB con = new ConnectDB();
-    String SQL = " SELECT * FROM localidad ORDER BY nombre ASC";
+    String SQL = " SELECT * FROM localidad WHERE id!=" + avoidId + " ORDER BY nombre ASC";
    
     try {
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
 
       listLocalidades = new ArrayList<Localidad>();
+      
+      if(avoidId == 0){
 
-      while (result.next()) {
-        Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
-        listLocalidades.add(s);
-      }
+        while (result.next()) {
+          Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
+          listLocalidades.add(s);
+        }
       return listLocalidades;
-
+      }else{
+        Map<Integer, String> dist_values = selectDistanciasById(avoidId);
+        int a = 0, b;
+        b=a;
+//        while (result.next()) {
+//          Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
+//          listLocalidades.add(s);
+//        }
+      }
+        
     } catch (SQLException e) {
     } finally {
       CloseCurrentConnection(sentence, result, con);
@@ -258,7 +275,29 @@ public class Select {
 
     return listLocalidades;
   }
+  
+  public static Map<Integer, String> selectDistanciasById(int id){
+    Map<Integer, String> response = new HashMap<Integer, String>();  
+    
+    ConnectDB con = new ConnectDB();
+    try {
+      String SQL = "SELECT id, distancia FROM distancia WHERE id=" + id;
 
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+      while (result.next()) {
+        response.put(result.getInt("id"), result.getString("distancia"));        
+      }
+      return response;
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+    
+    return response;
+  }
+  
+  
   public static void CloseCurrentConnection(Statement sentence, ResultSet result, ConnectDB con) {
     if (result != null) {
       try {

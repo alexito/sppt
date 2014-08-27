@@ -1,14 +1,10 @@
 package org.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Localidad implements java.io.Serializable {
 
   private int id;
   private String nombre;
-  private Set solicitudsForOrigen = new HashSet(0);
-  private Set solicitudsForDestino = new HashSet(0);
+  private String distancia;
 
   public Localidad() {
   }
@@ -22,11 +18,10 @@ public class Localidad implements java.io.Serializable {
     this.nombre = nombre;
   }
   
-  public Localidad(int id, String nombre, Set solicitudsForOrigen, Set solicitudsForDestino) {
+  public Localidad(int id, String nombre, String distancia) {
     this.id = id;
     this.nombre = nombre;
-    this.solicitudsForOrigen = solicitudsForOrigen;
-    this.solicitudsForDestino = solicitudsForDestino;
+    this.distancia = distancia;
   }
 
   public int getId() {
@@ -44,20 +39,12 @@ public class Localidad implements java.io.Serializable {
   public void setNombre(String nombre) {
     this.nombre = nombre;
   }
-
-  public Set getSolicitudsForOrigen() {
-    return this.solicitudsForOrigen;
+  
+  public String getDistancia() {
+    return distancia;
   }
 
-  public void setSolicitudsForOrigen(Set solicitudsForOrigen) {
-    this.solicitudsForOrigen = solicitudsForOrigen;
-  }
-
-  public Set getSolicitudsForDestino() {
-    return this.solicitudsForDestino;
-  }
-
-  public void setSolicitudsForDestino(Set solicitudsForDestino) {
-    this.solicitudsForDestino = solicitudsForDestino;
+  public void setDistancia(String distancia) {
+    this.distancia = distancia;
   }
 }
