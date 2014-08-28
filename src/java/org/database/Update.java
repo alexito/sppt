@@ -63,7 +63,7 @@ public class Update {
     psUpdate.setString(7, solicitud.getNovedades());
     psUpdate.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
     psUpdate.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
-    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioCrea().getId());
+//    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioCrea().getId());
     psUpdate.setInt(11, solicitud.getId());
     
     return RunSQL(con, psUpdate);

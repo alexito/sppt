@@ -4,9 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/admin/usuarios.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Localidad.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Select.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/super/index.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Insert.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/LocalidadBean.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Usuario.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Solicitud.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/UsuarioBean.java</file>

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.models.Distancia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -58,36 +59,50 @@ public class Select {
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
 
-      Map<Integer, Integer> id_localidades = new HashMap<Integer, Integer>();
       Map<Integer, Localidad> map_localidades;
       Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
       Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
 
       listSolicitudes = new ArrayList<Solicitud>();
       while (result.next()) {
         id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
         id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
-        id_usuarios.put(result.getInt("id_usuario_crea"), result.getInt("id_usuario_crea"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
       }
 
-      map_localidades = selectMappedLocalidades(false, id_localidades);
+      map_localidades = selectMappedLocalidades(true, null);
       map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
       sentence = con.getConnection().createStatement(); 
       result = sentence.executeQuery(SQL);
 
       while (result.next()) {
         int id = result.getInt("id");
-        Timestamp f_salida = result.getTimestamp("f_salida"),
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
                 f_llegada = result.getTimestamp("f_llegada");
-        String hospedaje = result.getString("hospedaje");
-        Boolean estado = result.getBoolean("estado");
-        String novedades = result.getString("novedades");
-//        Solicitud s = new Solicitud(id, map_localidades.get(result.getInt("origen")),
-//                map_localidades.get(result.getInt("destino")), f_salida, f_llegada, 
-//                hospedaje, estado, novedades, map_usuarios.get(result.getInt("id_usuario_solicita")),
-//                map_usuarios.get(result.getInt("id_usuario_conductor")),
-//                map_usuarios.get(result.getInt("id_usuario_crea")));
-//        listSolicitudes.add(s);
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades");
+        Boolean estado = result.getBoolean("estado");        
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                hospedaje,
+                estado,
+                novedades,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor"))
+                );
+        listSolicitudes.add(s);
       }
       return listSolicitudes;
 
@@ -99,6 +114,51 @@ public class Select {
     return listSolicitudes;
   }
 
+  public static Map<Integer, Distancia> selectMappedDistancias(boolean all, Map<Integer, Integer> ids, Map<Integer, Localidad> mlocalidades) {
+    ConnectDB con = new ConnectDB();
+    Map<Integer, Distancia> response = new HashMap<Integer, Distancia>();
+    
+    String SQL = "SELECT * FROM distancia WHERE";
+    boolean ban = false;
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      if(!all){
+      Iterator iterator = ids.entrySet().iterator();
+      while (iterator.hasNext()) {
+        Map.Entry mapEntry = (Map.Entry) iterator.next();
+        if (!ban) {
+          SQL += " id=" + mapEntry.getValue();
+          ban = true;
+        } else {
+          SQL += " OR id=" + mapEntry.getValue();
+        }
+      }
+      }else{
+          SQL = "SELECT * FROM distancia";
+      }
+      
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+
+      while (res.next()) {
+        Distancia distancia = new Distancia();
+        
+        distancia.setId(res.getInt("id"));
+        distancia.setDistancia(res.getString("distancia"));
+        distancia.setLocalidadByIdOrigen(mlocalidades.get(res.getInt("id_origen")));
+        distancia.setLocalidadByIdDestino(mlocalidades.get(res.getInt("id_destino")));
+        
+        response.put(res.getInt("id"), distancia);
+      }
+      return response;
+    } catch (SQLException e) {
+    }finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+    return response;
+  }
+  
   public static Map<Integer, Localidad> selectMappedLocalidades(boolean all, Map<Integer, Integer> ids) {
     ConnectDB con = new ConnectDB();
     Map<Integer, Localidad> response = new HashMap<Integer, Localidad>();    
@@ -164,7 +224,7 @@ public class Select {
         else
           SQL = "SELECT * FROM usuario WHERE rol='admin' AND estado=1";
       }
-      SQL += " ORDER BY apellido ASC";
+      SQL += " ORDER BY PRSNAPLL ASC";
       
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
@@ -173,12 +233,14 @@ public class Select {
         Usuario usuario = new Usuario();
         
         usuario.setId(res.getInt("id"));
-        usuario.setApellido(res.getString("apellido"));
-        usuario.setNombre(res.getString("nombre"));
-        usuario.setApellido(res.getString("apellido"));
-        usuario.setCedula(res.getString("cedula"));
-        usuario.setEmail(res.getString("email"));
-        usuario.setTelefono(res.getString("telefono"));
+        usuario.setCodemp(res.getString("EMPLCDGO"));
+        usuario.setCodapr(res.getString("EMPLFAPR"));
+        usuario.setApellido(res.getString("PRSNAPLL"));
+        usuario.setNombre(res.getString("PRSNNMBR"));
+        usuario.setCedula(res.getString("PRSNCDLA"));
+        usuario.setEmail(res.getString("PRSNMAIL"));
+        usuario.setTelefono(res.getString("PRSNTLFN"));
+        usuario.setMovil(res.getString("PRSNMVIL"));
         usuario.setEstado(res.getBoolean("estado"));
         usuario.setRol(res.getString("rol"));
         
@@ -246,26 +308,30 @@ public class Select {
     String SQL = " SELECT * FROM localidad WHERE id!=" + avoidId + " ORDER BY nombre ASC";
    
     try {
-      sentence = con.getConnection().createStatement();
-      result = sentence.executeQuery(SQL);
-
       listLocalidades = new ArrayList<Localidad>();
       
       if(avoidId == 0){
-
+        sentence = con.getConnection().createStatement();
+        result = sentence.executeQuery(SQL);
         while (result.next()) {
           Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
           listLocalidades.add(s);
         }
-      return listLocalidades;
+        return listLocalidades;
       }else{
         Map<Integer, String> dist_values = selectDistanciasById(avoidId);
-        int a = 0, b;
-        b=a;
-//        while (result.next()) {
-//          Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"));
-//          listLocalidades.add(s);
-//        }
+        sentence = con.getConnection().createStatement();
+        result = sentence.executeQuery(SQL);
+        String distancia;
+        while (result.next()) {          
+          distancia = dist_values.get(result.getInt("id"));
+          if(distancia == null){
+            distancia = "0"; 
+          }
+          Localidad s = new Localidad(result.getInt("id"), result.getString("nombre"), distancia);
+          listLocalidades.add(s);
+        }
+        return listLocalidades;
       }
         
     } catch (SQLException e) {
@@ -281,12 +347,12 @@ public class Select {
     
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = "SELECT id, distancia FROM distancia WHERE id=" + id;
+      String SQL = "SELECT id_destino, distancia FROM distancia WHERE id_origen=" + id;
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
       while (result.next()) {
-        response.put(result.getInt("id"), result.getString("distancia"));        
+        response.put(result.getInt("id_destino"), result.getString("distancia"));        
       }
       return response;
     } catch (SQLException e) {

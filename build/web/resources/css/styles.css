@@ -5,9 +5,7 @@ body{
   background-color: #F7F7F7;
   font-family:  Arial,sans-serif;  
 }
-body .ui-layout-unit-header-title{
-  font-size: 25px;
-}
+
 .container{
   width: 380px;
   margin: 10% auto 0 auto;  

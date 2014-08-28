@@ -26,8 +26,14 @@
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
                   <h:outputText value="#{solicitud.id}" />
                 </p:column>
+                
+                <p:column filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
+                  <h:outputText value="#{solicitud.FCreacion}">
+                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                  </h:outputText>
+                </p:column>
 
-                <p:column filterBy="#{solicitud.localidadByOrigen.nombre}" sortBy="#{solicitud.localidadByOrigen.nombre}" headerText="Origen" filterMatchMode="contains">  
+<!--                <p:column filterBy="#{solicitud.localidadByOrigen.nombre}" sortBy="#{solicitud.localidadByOrigen.nombre}" headerText="Origen" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.localidadByOrigen.nombre}" /></f:facet>
                     <f:facet name="input">                  
@@ -47,7 +53,7 @@
                       </p:selectOneMenu>
                     </f:facet>
                   </p:cellEditor>
-                </p:column>
+                </p:column>-->
 
                 <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida">  
                   <p:cellEditor>
@@ -101,25 +107,10 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado" sortBy="#{solicitud.estado_legible}" width="60">  
+                <p:column headerText="Aprobado" sortBy="#{solicitud.estado_legible}" width="60">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
                     <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output">
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
-                      <p:spacer width="5"/>
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
-                    </f:facet>
-                    <f:facet name="input">                  
-                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
-                        <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
-                      </p:selectOneMenu>
-                    </f:facet>
                   </p:cellEditor>
                 </p:column>
 
@@ -137,11 +128,20 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioCrea.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioCrea.apellido}" headerText="Creado por:" filterMatchMode="contains">  
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.apellido}" />
-                  <p:spacer width="5"/>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioCrea.nombre}" />
+                
+                <p:column filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
+                      <p:spacer width="5"/>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
+                    </f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="solicita" value="#{solicitud.usuarioByIdUsuarioSolicita.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaUsuarios}" />                    
+                      </p:selectOneMenu>
+                    </f:facet>
+                  </p:cellEditor>
                 </p:column>
 
                 <p:column style="width:50px"> 
@@ -155,7 +155,7 @@
 
             <p:tab title="Localidades" id="tab2">
               <p:layout >
-                <p:layoutUnit position="west" size="500" header="Lista" >
+                <p:layoutUnit id="origen-wrapper" position="west" size="600" header="LISTA CIUDAD DE ORIGEN (Seleccione una ciudad dando Click en el ID)" resizable="true" >
 
                   <p:dataTable selection="#{localidadBean.localidadSeleccionada}" selectionMode="single" id="table-localidades" var="localidad" value="#{localidadBean.listaLocalidades}" rowKey="#{localidad.id}"
                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -164,7 +164,7 @@
 
                     <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" update=":form-main-data:tabview:table-localidades, :form-main-data:tabview:table-solicitudes, :form-new-solicitud"/>
                     <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" />                    
-                    <p:ajax event="rowSelect" listener="#{localidadBean.onRowSelect}"  update=""/> 
+                    <p:ajax event="rowSelect" listener="#{localidadBean.onRowSelect}"  update=":form-main-data:tabview:table-distancias"/> 
 
                     <p:column headerText="ID" sortBy="#{localidad.id}" width="50">  
                       <h:outputText value="#{localidad.id}" />
@@ -187,22 +187,28 @@
                     </p:column> 
                   </p:dataTable>  
                 </p:layoutUnit>
-                <p:layoutUnit position="center" header="Editar distancias">
+                <p:layoutUnit id="destino-wrapper" position="center" header="EDITAR DISTANCIA DESTINO (Click en la distancia actual para Editar y terminar con Enter.)">
                   <p:dataTable id="table-distancias" var="distancia" value="#{localidadBean.listaEditarDistancia}" rowKey="#{localidad.id}"
-                               editable="true" widgetVar="distanciaTable"  emptyMessage="No se encontraron datos." >
-
+                               paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                               paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
+                               editable="true" editMode="cell" widgetVar="distanciaTable"  emptyMessage="Seleccione una ciudad haciendo Click en el ID." >
+                    
+                    <p:ajax event="cellEdit" listener="#{localidadBean.onCellEdit}"/>
+                    
                     <p:column filterBy="#{distancia.nombre}" sortBy="#{distancia.nombre}"  headerText="Nombre" filterMatchMode="contains">  
+                      <h:outputText value="#{distancia.nombre}" />
+                    </p:column>
+                    
+                    <p:column headerText="Distancia" > 
                       <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{distancia.nombre}" /></f:facet>
+                        <f:facet name="output">
+                          <h:outputText value="#{distancia.distancia}" />
+                        </f:facet>
                         <f:facet name="input">
-                          <p:inputText id="loc_nombre" value="#{distancia.nombre}" style="width:100%" required="true">                        
-                            <p:ajax update="msgLoc_nombre" event="blur" />
-                          </p:inputText>                
-                          <p:message for="loc_nombre" id="msgLoc_nombre" display="icon" />
+                          <p:inputText value="#{distancia.distancia}" />                             
                         </f:facet>
                       </p:cellEditor>
                     </p:column>
-                    
                     
 
                   </p:dataTable>

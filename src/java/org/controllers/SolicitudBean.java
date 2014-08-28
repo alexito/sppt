@@ -88,7 +88,6 @@ public class SolicitudBean {
   
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
     Usuario logged_user = Select.LoggedUser();    
-    solicitud.setUsuarioByIdUsuarioCrea(logged_user);
     Insert.InsertSolicitud(solicitud); 
     solicitud = new Solicitud();
     listaSolicitudes = Select.selectSolicitudes();

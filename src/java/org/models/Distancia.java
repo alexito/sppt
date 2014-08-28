@@ -3,12 +3,12 @@ package org.models;
 public class Distancia implements java.io.Serializable {
 
   private int id;
-  private float distancia;
+  private String distancia;
   private Localidad localidadByIdOrigen;
   private Localidad localidadByIdDestino;
 
   public Distancia() {
-    this.distancia = (float) 0.0;
+    this.distancia = "0";
     this.localidadByIdOrigen = new Localidad();
     this.localidadByIdDestino = new Localidad();
   }
@@ -17,7 +17,13 @@ public class Distancia implements java.io.Serializable {
     this.id = id;
   }
 
-  public Distancia(int id, float distancia, Localidad localidadByIdOrigen, Localidad localidadByIdDestino) {
+  public Distancia(Localidad localidadByIdOrigen, Localidad localidadByIdDestino, String distancia) {
+    this.distancia = distancia;
+    this.localidadByIdOrigen = localidadByIdOrigen;
+    this.localidadByIdDestino = localidadByIdDestino;    
+  }
+  
+  public Distancia(int id, String distancia, Localidad localidadByIdOrigen, Localidad localidadByIdDestino) {
     this.id = id;
     this.distancia = distancia;
     this.localidadByIdOrigen = localidadByIdOrigen;
@@ -32,11 +38,11 @@ public class Distancia implements java.io.Serializable {
     this.id = id;
   }
 
-  public float getDistancia() {
+  public String getDistancia() {
     return distancia;
   }
 
-  public void setDistancia(float distancia) {
+  public void setDistancia(String distancia) {
     this.distancia = distancia;
   }
 

@@ -15,25 +15,22 @@ public class Solicitud implements java.io.Serializable {
   private Distancia distanciaById;
   private Usuario usuarioByIdUsuarioSolicita;
   private Usuario usuarioByIdUsuarioConductor;
-  private Usuario usuarioByIdUsuarioCrea;
   
   public Solicitud() {
     this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
     this.usuarioByIdUsuarioConductor = new Usuario();
-    this.usuarioByIdUsuarioCrea = new Usuario();
   }
 
   public Solicitud(int id) {
     this.id = id;
   }
 
-  public Solicitud(int id, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioCrea, Date FCreacion, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades) {
+  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
-    this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
     this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
@@ -72,14 +69,6 @@ public class Solicitud implements java.io.Serializable {
 
   public void setUsuarioByIdUsuarioConductor(Usuario usuarioByIdUsuarioConductor) {
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
-  }
-
-  public Usuario getUsuarioByIdUsuarioCrea() {
-    return this.usuarioByIdUsuarioCrea;
-  }
-
-  public void setUsuarioByIdUsuarioCrea(Usuario usuarioByIdUsuarioCrea) {
-    this.usuarioByIdUsuarioCrea = usuarioByIdUsuarioCrea;
   }
 
   public Date getFSalida() throws ParseException {
