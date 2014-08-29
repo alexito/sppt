@@ -33,10 +33,23 @@ public class Insert {
   
   public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
-    String SQL = "INSERT INTO solicitud (origen, destino, f_salida, f_llegada, hospedaje, estado, novedades, id_usuario_solicita, id_usuario_conductor, id_usuario_crea ) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
+            + " hospedaje, estado, novedades, id_usuario_solicita, id_usuario_conductor) "
+            + "VALUES (?,?,?,?,?,?,?,?,?)";
+    
+    int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    
+    if(dist_id == 0){
+      InsertDistanciaNoDistance(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+      dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    }
+    
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
-//    psInsert.setInt(1, solicitud.getLocalidadByOrigen().getId());
-//    psInsert.setInt(2, solicitud.getLocalidadByDestino().getId());
+    psInsert.setInt(1, dist_id);
+    psInsert.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
     psInsert.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
     psInsert.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psInsert.setString(5, solicitud.getHospedaje());
@@ -44,7 +57,6 @@ public class Insert {
     psInsert.setString(7, solicitud.getNovedades());
     psInsert.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
     psInsert.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
-//    psInsert.setInt(10, solicitud.getUsuarioByIdUsuarioCrea().getId());
         
     return RunSQL(con, psInsert);
     
@@ -60,11 +72,11 @@ public class Insert {
     
   }
   
-  public static String InsertDistancia(Distancia objDis) throws SQLException, ParseException {
+  public static void InsertDistancia(Distancia objDis) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO distancia (distancia, id_origen, id_destino) VALUES (?,?,?)";    
     
-    if(checkExistRelation(objDis.getLocalidadByIdOrigen().getId(), objDis.getLocalidadByIdDestino().getId())){
+    if(checkExistRelation(objDis.getLocalidadByIdOrigen().getId(), objDis.getLocalidadByIdDestino().getId()) != 0){
       SQL = "UPDATE distancia SET distancia=? WHERE id_origen=? AND id_destino=?";
       
       PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);    
@@ -98,26 +110,45 @@ public class Insert {
       
       RunSQL(con, psInsert2);
       
-    }
-    return "ok";    
+    }   
   }
   
-  private static Boolean checkExistRelation(int id_origen, int id_destino) throws SQLException{
+  public static void InsertDistanciaNoDistance(int id_origen, int id_destino) throws SQLException{
+    ConnectDB con = new ConnectDB();
+    String SQL = "INSERT INTO distancia (distancia, id_origen, id_destino) VALUES (?,?,?)";    
+    
+    PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);    
+    psInsert.setFloat(1, (float)0.0);
+    psInsert.setInt(2, id_origen);
+    psInsert.setInt(3, id_destino);
+
+    RunSQL(con, psInsert);
+
+    con = new ConnectDB();
+    PreparedStatement psInsert2 = con.getConnection().prepareStatement(SQL);    
+    psInsert2.setFloat(1, (float)0.0);
+    psInsert2.setInt(2, id_destino);
+    psInsert2.setInt(3, id_origen);
+
+    RunSQL(con, psInsert2);
+  }
+  
+  public static int checkExistRelation(int id_origen, int id_destino) throws SQLException{
     ConnectDB con = new ConnectDB();
     String SQL = "SELECT * FROM distancia WHERE id_origen=" + id_origen + " AND id_destino=" + id_destino;
 
     Statement sentence = con.getConnection().createStatement();
     ResultSet result = sentence.executeQuery(SQL);
     while (result.next()) {
-      return true;
+      return result.getInt("id");
     }
-    return false;
+    return 0;
   }
 
   private static String RunSQL(ConnectDB con, PreparedStatement psInsert) {
     
     try {
-      psInsert.executeUpdate();
+      String ret = String.valueOf(psInsert.executeUpdate());
       con.getConnection().commit();
       return "Los datos se guardaron Correctamente";
     } catch (SQLException ex) {

@@ -2,7 +2,10 @@ package org.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -87,8 +90,18 @@ public class SolicitudBean {
   }
   
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
-    Usuario logged_user = Select.LoggedUser();    
+    Usuario logged_user = Select.LoggedUser();
+    solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
+    int h = solicitud.getFSalida().getHours();
+    int m = solicitud.getFSalida().getMinutes();
+    if((h > 15 && m > 29) || h > 16){
+      solicitud.setEstado(false);      
+    }else{
+      solicitud.setEstado(true);
+    }
+    solicitud.setFCreacion(new Date());
     Insert.InsertSolicitud(solicitud); 
+    
     solicitud = new Solicitud();
     listaSolicitudes = Select.selectSolicitudes();
         
@@ -98,9 +111,9 @@ public class SolicitudBean {
   public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException {
     Solicitud editedUsuario = (Solicitud) event.getObject();    
     Update.UpdateSolicitud(editedUsuario);
+    
     solicitud = new Solicitud();
-    listaSolicitudes = Select.selectSolicitudes();
-        
+    listaSolicitudes = Select.selectSolicitudes();        
     return listaSolicitudes;
   }
 

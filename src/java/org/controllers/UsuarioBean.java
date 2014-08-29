@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -44,8 +42,6 @@ public class UsuarioBean {
   public void onRowEdit(RowEditEvent event) throws SQLException {
     Usuario editedUsuario = (Usuario) event.getObject();
     Update.UpdateUsuario(editedUsuario);
-//        FacesMessage msg = new FacesMessage("OQ Edited", ((OQs) event.getObject()).getDescription2());
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
   }
 
   public void onRowCancel(RowEditEvent event) {

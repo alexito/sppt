@@ -108,7 +108,7 @@ public class Solicitud implements java.io.Serializable {
   }
   
   public String getEstado_legible() {            
-    return (getEstado()) ? "Activo" : "Inactivo";
+    return (getEstado()) ? "Aprobado" : "Pendiente";
   }
 
   public void setEstado(Boolean estado) {
