@@ -23,7 +23,7 @@
                 <p:ajax event="rowEdit" listener="#{solicitudBean.onRowEdit}" update=":form-main-data:tabview:table-solicitudes"/>
                 <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" />
 
-                <p:column headerText="ID" sortBy="#{solicitud.id}" width="50">  
+                <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
                   <h:outputText value="#{solicitud.id}" />
                 </p:column>
                 
@@ -53,7 +53,8 @@
                   <h:outputText value="#{solicitud.distanciaById.distancia}" />
                 </p:column>
 
-                <p:column width="75" filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida">  
+                <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida"> 
+                  
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FSalida}">
@@ -66,7 +67,8 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column width="75" filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
+                <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
+                  
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FLlegada}">
@@ -105,7 +107,14 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado" sortBy="#{solicitud.estado_legible}" width="60">  
+                <p:column headerText="Estado" filterBy="#{solicitud.estado}" >  
+                  <f:facet name="filter">
+                    <p:selectOneButton onchange="PF('solicitudTable').filter()">
+                        <f:converter converterId="javax.faces.Boolean" />
+                        <f:selectItem itemLabel="Ap" itemValue="true" />
+                        <f:selectItem itemLabel="Pe" itemValue="false" />
+                    </p:selectOneButton>                    
+                  </f:facet>
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
                     <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
