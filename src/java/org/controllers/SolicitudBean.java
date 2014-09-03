@@ -92,7 +92,7 @@ public class SolicitudBean {
     Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
     Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
 
-    solicitud = new Solicitud();
+    solicitud = new Solicitud();    
 
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
@@ -157,9 +157,20 @@ public class SolicitudBean {
     if ("admin".equals(usuario.getRol())) {
       listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId());
       listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId());
-    } else if ("super".equals(usuario.getRol())) {
+    } 
+    else if ("super".equals(usuario.getRol())) {
       listaSolicitudesAprobadas = Select.selectSolicitudes(1, 0);
       listaSolicitudesPendientes = Select.selectSolicitudes(0, 0);
+    }
+  }
+  
+  
+  public void filterConductor() throws ParseException{
+    Date fs = solicitud.getFSalida();
+    Date fl = solicitud.getFLlegada();
+    if(fs != null && fl != null){
+      Map<Integer, Usuario> cond = Select.selectMappedConductoresByDate(fs, fl);
+      listaConductores = mapUsuario(cond);
     }
   }
 

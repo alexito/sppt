@@ -305,11 +305,18 @@
 
                   <h:outputLabel for="fsalida" value="Fecha Salida: *" />
                   <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
-                  <br></br>
+                  <br></br>                  
+<!--                  <h:outputLabel for="fsalida" value="Fecha Salida: *" />
+                  <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" onblur="filterConductores()" />
+                  <br></br>-->
 
                   <h:outputLabel for="fllegada" value="Fecha Llegada: *" />
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
                   <br></br>
+<!--                  <h:outputLabel for="fllegada" value="Fecha Llegada: *" />
+                  <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" onblur="filterConductores()" />
+                  <p:remoteCommand name="filterConductores" actionListener="#{solicitudBean.filterConductor()}" update="conductor"/>-->
+
 
                   <h:outputLabel for="hospedaje" value="Hospedaje: " />
                   <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">

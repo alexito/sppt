@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -193,6 +194,65 @@ public class Select {
       while (res.next()) {
         Localidad localidad = new Localidad(res.getInt("id"), res.getString("nombre"));
         response.put(res.getInt("id"), localidad);
+      }
+      return response;
+    } catch (SQLException e) {
+    }finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+    return response;
+  }
+  
+  public static Map<Integer, Usuario> selectMappedConductoresByDate(Date fs, Date fl) {
+    ConnectDB con = new ConnectDB();
+    Map<Integer, Usuario> response = new HashMap<Integer, Usuario>();
+    Timestamp f_salida = new java.sql.Timestamp(fs.getTime());
+    Timestamp f_llegada = new java.sql.Timestamp(fl.getTime());
+    
+    String SQL = "SELECT id_usuario_conductor FROM solicitud WHERE "
+            + "f_salida NOT BETWEEN '" + f_salida + "' AND '" + f_llegada + "' AND "
+            + "f_llegada NOT BETWEEN '" + f_salida + "' AND '" + f_llegada + "' AND ("
+            + "(f_salida < '" + f_salida + "' AND f_llegada < '" + f_salida + "') OR "
+            + "(f_salida > '" + f_llegada + "' AND f_llegada > '" + f_llegada + "'))";
+    
+    boolean ban = false;
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+      String where = "";
+      if(res.next()){
+        where += " id=" + res.getInt("id_usuario_conductor");      
+        while (res.next()) {
+          where += " OR id=" + res.getInt("id_usuario_conductor");
+        }
+      }
+      else{
+        return response;
+      }
+            
+      SQL = "SELECT * FROM usuario WHERE rol='conductor' AND estado=1 AND (" + where + ")";
+      con = new ConnectDB();
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+
+      while (res.next()) {
+        Usuario usuario = new Usuario();
+        
+        usuario.setId(res.getInt("id"));
+        usuario.setCodemp(res.getString("EMPLCDGO"));
+        usuario.setCodapr(res.getString("EMPLFAPR"));
+        usuario.setApellido(res.getString("PRSNAPLL"));
+        usuario.setNombre(res.getString("PRSNNMBR"));
+        usuario.setCedula(res.getString("PRSNCDLA"));
+        usuario.setEmail(res.getString("PRSNMAIL"));
+        usuario.setTelefono(res.getString("PRSNTLFN"));
+        usuario.setMovil(res.getString("PRSNMVIL"));
+        usuario.setEstado(res.getBoolean("estado"));
+        usuario.setRol(res.getString("rol"));
+        
+        response.put(res.getInt("id"), usuario);
       }
       return response;
     } catch (SQLException e) {
