@@ -32,9 +32,10 @@
               <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
               <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUsuario').show();" style="margin-left: 15px;" />
               <p:menuitem icon="ui-icon-copy" value="Nuevo Conductor"  onclick="PF('newConductor').show();" style="margin-left: 15px;" />            
-              <p:menuitem icon="ui-icon-refresh" value="Refrescar Página" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-main-data:tabview" style="margin-left: 15px; font-weight: bold;" />
+              <p:menuitem icon="ui-icon-refresh" value="Refrescar Página" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-main-data:tabview, :form-main-data:tabview:table-distancias, :form-main-data:tabview:table-localidades, :form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-new-localidad" style="margin-left: 15px; font-weight: bold;" />
               <f:facet name="options">
                 <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+                <p:remoteCommand name="cmdRefreshSolicitudes" actionListener="#{solicitudBean.refreshAll()}" update=":form-main-data:tabview, :form-main-data:tabview:table-distancias, :form-main-data:tabview:table-localidades, :form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-new-localidad"/>
               </f:facet>
             </p:menubar>
             <p:growl id="messages"/>            

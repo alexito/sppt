@@ -57,17 +57,14 @@ public class AuthBean {
             extContext.getSessionMap().put(USER_KEY, usuario);
         extContext.redirect(url);
         return;
-
       }
-//        if("Administrador".equals(Datos[1]))
-//        {
-//            url = extContext.encodeActionURL(
-//                    context.getApplication().getViewHandler().getActionURL
-//                    (context, "/superadmin/General/ListaOQs"));
-//            extContext.getSessionMap().put(USER_KEY, new UserBean(Datos[2],"superadmin", Datos[3],Integer.parseInt(Datos[0]),Datos[4],Datos[5]));
-//            extContext.redirect(url);
-//            return;
-//        }
+      else if ("admin".equals(usuario.getRol())) {
+        url = extContext.encodeActionURL(
+                context.getApplication().getViewHandler().getActionURL(context, "/views/admin/index.xhtml"));
+            extContext.getSessionMap().put(USER_KEY, usuario);
+        extContext.redirect(url);
+        return;
+      }
     } catch (IOException ex) {}
     message = "Usuario y/o clave invalida";
 

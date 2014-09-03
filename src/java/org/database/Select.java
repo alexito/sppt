@@ -50,11 +50,15 @@ public class Select {
     return usuario;
   }
 
-  public static List<Solicitud> selectSolicitudes() {
+  public static List<Solicitud> selectSolicitudes(int estadoSolicitud, int uid) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = " SELECT * FROM solicitud";
+      String SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud;
+      if(uid != 0){
+        SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid;
+      }
+      SQL += " ORDER BY id DESC";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
@@ -253,18 +257,7 @@ public class Select {
     }
     return response;
   }
-    
-  public static Usuario LoggedUser() throws IOException {
-    Usuario logged_user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USER_KEY);
-    if(logged_user == null){    
-      String url = " ";
-      FacesContext context = FacesContext.getCurrentInstance();
-      ExternalContext extContext = context.getExternalContext();
-      url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, "/index.xhtml"));            
-      extContext.redirect(url);
-    }
-    return logged_user;
-  }
+  
   public static List<Usuario> selectUsuarios(String filtro) {
     List<Usuario> listUsuarios = null;
     ConnectDB con = new ConnectDB();
@@ -363,6 +356,17 @@ public class Select {
     return response;
   }
   
+  public static Usuario LoggedUser() throws IOException {
+    Usuario logged_user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USER_KEY);
+    if(logged_user == null){    
+      String url = " ";
+      FacesContext context = FacesContext.getCurrentInstance();
+      ExternalContext extContext = context.getExternalContext();
+      url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, "/index.xhtml"));            
+      extContext.redirect(url);
+    }
+    return logged_user;
+  }
   
   public static void CloseCurrentConnection(Statement sentence, ResultSet result, ConnectDB con) {
     if (result != null) {
