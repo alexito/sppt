@@ -198,6 +198,7 @@ public class Select {
                 map_usuarios.get(res.getInt("id_usuario_solicita")),
                 map_usuarios.get(res.getInt("id_usuario_conductor"))
                 );
+        s.setListaAprobador(true);
         listSolicitudes.add(s);
       }
       return listSolicitudes;

@@ -142,16 +142,18 @@ public class SolicitudBean {
     int h = editedSolicitud.getFSalida().getHours();
     int m = editedSolicitud.getFSalida().getMinutes();
     
-    if ((h > 15 && m > 29) || h >= 16) {
-      editedSolicitud.setEstado(false);
-    } else {
-      editedSolicitud.setEstado(true);
+    //Check if the current solicitud is updated by an Aprobador
+    if(!editedSolicitud.getListaAprobador()){
+      if ((h > 15 && m > 29) || h >= 16) {
+        editedSolicitud.setEstado(false);
+      } else {
+        editedSolicitud.setEstado(true);
+      }
     }
-    
     Update.UpdateSolicitud(editedSolicitud);
     solicitud = new Solicitud();
     updateInfoSolicitudes();
-    return listaSolicitudesAprobadas;
+    return listaSolicitudes;
   }
 
   public void onRowCancel(RowEditEvent event) {
@@ -184,7 +186,7 @@ public class SolicitudBean {
     if ("admin".equals(usuario.getRol())) {
       listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId(), false);
       listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId(), false);
-      listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);
+      listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);      
     } 
     else if ("super".equals(usuario.getRol())) {
       listaSolicitudes = Select.selectSolicitudes(1, 0, true);

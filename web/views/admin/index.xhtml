@@ -55,10 +55,7 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                        <f:validateLength minimum="7" />
-                        <p:ajax update="msgHospedaje" event="blur" />
                       </p:inputTextarea>                
-                      <p:message for="hospedaje" id="msgHospedaje" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
@@ -68,10 +65,7 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
-                        <f:validateLength minimum="7" />
-                        <p:ajax update="msgNovedades" event="blur" />
                       </p:inputTextarea>                
-                      <p:message for="novedades" id="msgNovedades" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>

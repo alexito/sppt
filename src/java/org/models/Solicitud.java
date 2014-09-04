@@ -11,6 +11,7 @@ public class Solicitud implements java.io.Serializable {
   private Date FLlegada;
   private String hospedaje;
   private Boolean estado;
+  private Boolean listaAprobador;
   private String novedades;
   private Distancia distanciaById;
   private Usuario usuarioByIdUsuarioSolicita;
@@ -20,6 +21,7 @@ public class Solicitud implements java.io.Serializable {
     this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
     this.usuarioByIdUsuarioConductor = new Usuario();
+    this.listaAprobador = false;
   }
 
   public Solicitud(int id) {
@@ -37,6 +39,7 @@ public class Solicitud implements java.io.Serializable {
     this.hospedaje = hospedaje;
     this.estado = estado;
     this.novedades = novedades;
+    this.listaAprobador = false;
   }
 
   public int getId() {
@@ -103,17 +106,27 @@ public class Solicitud implements java.io.Serializable {
     this.hospedaje = hospedaje;
   }
 
+  public Boolean getListaAprobador() {
+    return this.listaAprobador;
+  }
+  
+  public void setListaAprobador(Boolean listaAprobador) {
+    this.listaAprobador = listaAprobador;
+  }
+  
   public Boolean getEstado() {
     return this.estado;
+  }
+  
+  public void setEstado(Boolean estado) {
+    this.estado = estado;
   }
   
   public String getEstado_legible() {            
     return (getEstado()) ? "Aprobado" : "Pendiente";
   }
 
-  public void setEstado(Boolean estado) {
-    this.estado = estado;
-  }
+  
 
   public String getNovedades() {
     return this.novedades;
