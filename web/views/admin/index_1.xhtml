@@ -12,103 +12,8 @@
         <h:form id="form-main-data">          
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast">
-            <p:tab title="Solicitudes Por Aprobar" id="tab1">
 
-              <p:dataTable id="table-solicitudes-por-aprobar" var="solicitud" value="#{solicitudBean.listaSolicitudesXAprobar}" rowKey="#{solicitud}"
-                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                           editable="true"  paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
-                           widgetVar="solicitudPendienteTable"  emptyMessage="No se encontraron solicitudes pendientes." >
-
-                <p:ajax oncomplete="cmdRefreshSolicitudes()" event="rowEdit" listener="#{solicitudBean.onRowEdit}"/>
-                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" />
-
-                <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
-                  <h:outputText value="#{solicitud.id}" />
-                </p:column>
-                
-                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains">  
-                  <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />
-                </p:column>
-
-                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" headerText="Destino" filterMatchMode="contains">  
-                  <h:outputText value="#{solicitud.distanciaById.localidadByIdDestino.nombre}" />
-                </p:column>
-                
-                <p:column headerText="Distancia" width="70">  
-                  <h:outputText value="#{solicitud.distanciaById.distancia}" />
-                </p:column>
-
-                <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida"> 
-                  <h:outputText value="#{solicitud.FSalida}">
-                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                  </h:outputText>
-                </p:column>
-
-                <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
-                  <h:outputText value="#{solicitud.FLlegada}">
-                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                  </h:outputText>                    
-                </p:column>
-
-                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                        <f:validateLength minimum="7" />
-                        <p:ajax update="msgHospedaje" event="blur" />
-                      </p:inputTextarea>                
-                      <p:message for="hospedaje" id="msgHospedaje" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
-                        <f:validateLength minimum="7" />
-                        <p:ajax update="msgNovedades" event="blur" />
-                      </p:inputTextarea>                
-                      <p:message for="novedades" id="msgNovedades" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column headerText="Estado" filterBy="#{solicitud.estado}" >                    
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
-                    <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">                    
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.apellido}" />
-                  <p:spacer width="5"/>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />                    
-                </p:column>
-                
-                <p:column width="75" filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
-                      <p:spacer width="5"/>
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
-                </p:column>
-                
-                <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
-                  <h:outputText value="#{solicitud.FCreacion}">
-                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                  </h:outputText>
-                </p:column>
-
-                <p:column style="width:50px"> 
-                  <p:rowEditor id="editrow" /> 
-                </p:column> 
-              </p:dataTable>  
-
-            </p:tab>
-            
-            <p:tab title="Mis Solicitudes Pendientes" id="tab2">
+            <p:tab title="Solicitudes Pendientes" id="tab1">
 
               <p:dataTable id="table-solicitudes-pendientes" var="solicitud" value="#{solicitudBean.listaSolicitudesPendientes}" rowKey="#{solicitud}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -181,7 +86,10 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgHospedaje" event="blur" />
                       </p:inputTextarea>                
+                      <p:message for="hospedaje" id="msgHospedaje" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
@@ -191,7 +99,10 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgNovedades" event="blur" />
                       </p:inputTextarea>                
+                      <p:message for="novedades" id="msgNovedades" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
@@ -215,6 +126,12 @@
                   </p:cellEditor>
                 </p:column>
                 
+                <p:column width="75" filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
+                      <p:spacer width="5"/>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
+                </p:column>
+                
                 <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
                   <h:outputText value="#{solicitud.FCreacion}">
                     <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -230,7 +147,7 @@
             
             <!-- __________TAB 2__________ -->
             
-            <p:tab title="Mis Solicitudes Aprobadas" id="tab3">
+            <p:tab title="Solicitudes Aprobadas" id="tab2">
 
               <p:dataTable id="table-solicitudes-aprobadas" var="solicitud" value="#{solicitudBean.listaSolicitudesAprobadas}" rowKey="#{solicitud}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -303,7 +220,10 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgHospedaje" event="blur" />
                       </p:inputTextarea>                
+                      <p:message for="hospedaje" id="msgHospedaje" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
@@ -313,7 +233,10 @@
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
                     <f:facet name="input">
                       <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                        <f:validateLength minimum="7" />
+                        <p:ajax update="msgNovedades" event="blur" />
                       </p:inputTextarea>                
+                      <p:message for="novedades" id="msgNovedades" display="icon" />
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
@@ -336,7 +259,13 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                                
+                
+                <p:column width="75" filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
+                      <p:spacer width="5"/>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
+                </p:column>
+                
                 <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
                   <h:outputText value="#{solicitud.FCreacion}">
                     <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />

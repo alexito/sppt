@@ -28,7 +28,7 @@ public class Select {
     Usuario usuario = new Usuario();
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = "SELECT id, EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, rol FROM usuario WHERE PRSNCDLA=" + user + " and clave=" + password + " and estado=1";
+      String SQL = "SELECT id, EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, rol FROM usuario WHERE PRSNCDLA='" + user + "' and clave='" + password + "' and estado=1";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
@@ -51,13 +51,18 @@ public class Select {
     return usuario;
   }
 
-  public static List<Solicitud> selectSolicitudes(int estadoSolicitud, int uid) {
+  public static List<Solicitud> selectSolicitudes(int estadoSolicitud, int uid, boolean all) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();
     try {
-      String SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud;
-      if(uid != 0){
-        SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid;
+      
+      String SQL = " SELECT * FROM solicitud";
+      if(!all){
+        if(uid != 0){
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid;
+        }else{
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud;
+        }
       }
       SQL += " ORDER BY id DESC";
 
@@ -118,7 +123,93 @@ public class Select {
 
     return listSolicitudes;
   }
+  
+  public static List<Solicitud> selectSolicitudesXAprobar(Usuario usuario) {
+    List<Solicitud> listSolicitudes = null;
+    ConnectDB con = new ConnectDB();
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      
+      String SQL = " SELECT id FROM usuario WHERE EMPLFAPR='" +usuario.getCodemp()+ "'";
+      
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+      
+      String where = "";
+      if(res.next()){
+        where += " id_usuario_solicita=" + res.getInt("id");      
+        while (res.next()) {
+          where += " OR id_usuario_solicita=" + res.getInt("id");
+        }
+      }
+      else{
+        return listSolicitudes;
+      }
+      
+      SQL = " SELECT * FROM solicitud WHERE estado=0 AND (" + where + ")";
 
+      SQL += " ORDER BY id DESC";
+      con = new ConnectDB();
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      listSolicitudes = new ArrayList<Solicitud>();
+      while (res.next()) {
+        id_usuarios.put(res.getInt("id_usuario_solicita"), res.getInt("id_usuario_solicita"));
+        id_usuarios.put(res.getInt("id_usuario_conductor"), res.getInt("id_usuario_conductor"));
+        id_distancias.put(res.getInt("id_distancia"), res.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      con = new ConnectDB();
+      sent = con.getConnection().createStatement(); 
+      res = sent.executeQuery(SQL);
+
+      while (res.next()) {
+        int id = res.getInt("id");
+        Timestamp 
+                f_creacion = res.getTimestamp("f_creacion"),
+                f_salida = res.getTimestamp("f_salida"),
+                f_llegada = res.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = res.getString("hospedaje"),
+                novedades = res.getString("novedades");
+        Boolean estado = res.getBoolean("estado");        
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                hospedaje,
+                estado,
+                novedades,
+                map_distancias.get(res.getInt("id_distancia")),                 
+                map_usuarios.get(res.getInt("id_usuario_solicita")),
+                map_usuarios.get(res.getInt("id_usuario_conductor"))
+                );
+        listSolicitudes.add(s);
+      }
+      return listSolicitudes;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+
+    return listSolicitudes;
+  }
+  
   public static Map<Integer, Distancia> selectMappedDistancias(boolean all, Map<Integer, Integer> ids, Map<Integer, Localidad> mlocalidades) {
     ConnectDB con = new ConnectDB();
     Map<Integer, Distancia> response = new HashMap<Integer, Distancia>();
@@ -215,7 +306,6 @@ public class Select {
             + "(f_salida < '" + f_salida + "' AND f_llegada < '" + f_salida + "') OR "
             + "(f_salida > '" + f_llegada + "' AND f_llegada > '" + f_llegada + "'))";
     
-    boolean ban = false;
     ResultSet res = null;
     Statement sent = null;
     try {

@@ -23,9 +23,11 @@ import org.primefaces.event.RowEditEvent;
 @ManagedBean
 @Dependent
 public class SolicitudBean {
-
+  
+  private List<Solicitud> listaSolicitudes;
   private List<Solicitud> listaSolicitudesAprobadas;
   private List<Solicitud> listaSolicitudesPendientes;
+  private List<Solicitud> listaSolicitudesXAprobar;
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
   private Map<String, Integer> listaConductores;
@@ -69,6 +71,22 @@ public class SolicitudBean {
     this.solicitud = solicitud;
   }
 
+  public List<Solicitud> getListaSolicitudes() {
+    return listaSolicitudes;
+  }
+
+  public void setListaSolicitudes(List<Solicitud> listaSolicitudes) {
+    this.listaSolicitudes = listaSolicitudes;
+  }
+  
+  public List<Solicitud> getListaSolicitudesXAprobar() {
+    return listaSolicitudesXAprobar;
+  }
+
+  public void setListaSolicitudesXAprobar(List<Solicitud> listaSolicitudesXAprobar) {
+    this.listaSolicitudesXAprobar = listaSolicitudesXAprobar;
+  }
+  
   public List<Solicitud> getListaSolicitudesAprobadas() {
     return listaSolicitudesAprobadas;
   }
@@ -119,9 +137,18 @@ public class SolicitudBean {
   }
 
   public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException {
-    Solicitud editedUsuario = (Solicitud) event.getObject();
-    Update.UpdateSolicitud(editedUsuario);
-
+    Solicitud editedSolicitud = (Solicitud) event.getObject();
+    
+    int h = editedSolicitud.getFSalida().getHours();
+    int m = editedSolicitud.getFSalida().getMinutes();
+    
+    if ((h > 15 && m > 29) || h >= 16) {
+      editedSolicitud.setEstado(false);
+    } else {
+      editedSolicitud.setEstado(true);
+    }
+    
+    Update.UpdateSolicitud(editedSolicitud);
     solicitud = new Solicitud();
     updateInfoSolicitudes();
     return listaSolicitudesAprobadas;
@@ -155,12 +182,13 @@ public class SolicitudBean {
 
   private void updateInfoSolicitudes() {
     if ("admin".equals(usuario.getRol())) {
-      listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId());
-      listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId());
+      listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId(), false);
+      listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId(), false);
+      listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);
     } 
     else if ("super".equals(usuario.getRol())) {
-      listaSolicitudesAprobadas = Select.selectSolicitudes(1, 0);
-      listaSolicitudesPendientes = Select.selectSolicitudes(0, 0);
+      listaSolicitudes = Select.selectSolicitudes(1, 0, true);
+      listaSolicitudes = Select.selectSolicitudes(0, 0, true);
     }
   }
   
