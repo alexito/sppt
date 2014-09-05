@@ -97,7 +97,9 @@ public class Select {
         
         String 
                 hospedaje = result.getString("hospedaje"),
-                novedades = result.getString("novedades");
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
         Boolean estado = result.getBoolean("estado");        
         
         Solicitud s = new Solicitud(
@@ -105,6 +107,8 @@ public class Select {
                 f_creacion,
                 f_salida,
                 f_llegada, 
+                direccionOrigen,
+                direccionDestino,
                 hospedaje,
                 estado,
                 novedades,
@@ -183,7 +187,9 @@ public class Select {
         
         String 
                 hospedaje = res.getString("hospedaje"),
-                novedades = res.getString("novedades");
+                novedades = res.getString("novedades"),
+                direccionOrigen = res.getString("direccion_origen"),
+                direccionDestino = res.getString("direccion_destino");
         Boolean estado = res.getBoolean("estado");        
         
         Solicitud s = new Solicitud(
@@ -191,6 +197,8 @@ public class Select {
                 f_creacion,
                 f_salida,
                 f_llegada, 
+                direccionOrigen,
+                direccionDestino,
                 hospedaje,
                 estado,
                 novedades,
@@ -302,27 +310,20 @@ public class Select {
     Timestamp f_llegada = new java.sql.Timestamp(fl.getTime());
     
     String SQL = "SELECT id_usuario_conductor FROM solicitud WHERE "
-            + "f_salida NOT BETWEEN '" + f_salida + "' AND '" + f_llegada + "' AND "
-            + "f_llegada NOT BETWEEN '" + f_salida + "' AND '" + f_llegada + "' AND ("
-            + "(f_salida < '" + f_salida + "' AND f_llegada < '" + f_salida + "') OR "
-            + "(f_salida > '" + f_llegada + "' AND f_llegada > '" + f_llegada + "'))";
+            + "f_salida BETWEEN '" + f_salida + "' AND '" + f_llegada + "' OR "
+            + "f_llegada BETWEEN '" + f_salida + "' AND '" + f_llegada + "' OR ("
+            + "(f_salida < '" + f_salida + "'  AND f_llegada > '" + f_llegada + "'))";
     
     ResultSet res = null;
     Statement sent = null;
     try {
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
-      String where = "";
-      if(res.next()){
-        where += " id=" + res.getInt("id_usuario_conductor");      
-        while (res.next()) {
-          where += " OR id=" + res.getInt("id_usuario_conductor");
-        }
+      String where = " id!=0";      
+      while (res.next()) {
+        where += " AND id!=" + res.getInt("id_usuario_conductor");
       }
-      else{
-        return response;
-      }
-            
+      
       SQL = "SELECT * FROM usuario WHERE rol='conductor' AND estado=1 AND (" + where + ")";
       con = new ConnectDB();
       sent = con.getConnection().createStatement();

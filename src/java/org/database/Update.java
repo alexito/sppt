@@ -57,7 +57,7 @@ public class Update {
   public static String UpdateSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
-            + " hospedaje=?, estado=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=? WHERE id=?";
+            + " direccion_origen=?, direccion_destino=?, hospedaje=?, estado=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=? WHERE id=?";
     
     int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -67,12 +67,14 @@ public class Update {
     psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
     psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
     psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
-    psUpdate.setString(5, solicitud.getHospedaje());
-    psUpdate.setBoolean(6, solicitud.getEstado());
-    psUpdate.setString(7, solicitud.getNovedades());
-    psUpdate.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psUpdate.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
-    psUpdate.setInt(10, solicitud.getId());
+    psUpdate.setString(5, solicitud.getDireccionOrigen());
+    psUpdate.setString(6, solicitud.getDireccionDestino());
+    psUpdate.setString(7, solicitud.getHospedaje());
+    psUpdate.setBoolean(8, solicitud.getEstado());
+    psUpdate.setString(9, solicitud.getNovedades());
+    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(11, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(12, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     

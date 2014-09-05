@@ -34,7 +34,7 @@ public class SolicitudBean {
   private Solicitud solicitud;
   private int loc_origen;
   private Usuario usuario;
-
+  private Date currentDate = new Date();
   public int getLoc_origen() {
     return loc_origen;
   }
@@ -205,6 +205,10 @@ public class SolicitudBean {
   }
 
   public void refreshAll() {
+  }
+  
+  public Date getCurrentDate() {
+      return currentDate;
   }
 
 }

@@ -13,6 +13,8 @@ public class Solicitud implements java.io.Serializable {
   private Boolean estado;
   private Boolean listaAprobador;
   private String novedades;
+  private String direccionOrigen;
+  private String direccionDestino;
   private Distancia distanciaById;
   private Usuario usuarioByIdUsuarioSolicita;
   private Usuario usuarioByIdUsuarioConductor;
@@ -28,7 +30,7 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String hospedaje, Boolean estado, String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor) {
+  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
@@ -36,6 +38,8 @@ public class Solicitud implements java.io.Serializable {
     this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
+    this.direccionOrigen = direccionOrigen;
+    this.direccionDestino = direccionDestino;
     this.hospedaje = hospedaje;
     this.estado = estado;
     this.novedades = novedades;
@@ -105,7 +109,23 @@ public class Solicitud implements java.io.Serializable {
   public void setHospedaje(String hospedaje) {
     this.hospedaje = hospedaje;
   }
+  
+  public String getDireccionOrigen() {
+    return this.direccionOrigen;
+  }
 
+  public void setDireccionOrigen(String direccionOrigen) {
+    this.direccionOrigen = direccionOrigen;
+  }
+
+  public String getDireccionDestino() {
+    return this.direccionDestino;
+  }
+
+  public void setDireccionDestino(String direccionDestino) {
+    this.direccionDestino = direccionDestino;
+  }
+  
   public Boolean getListaAprobador() {
     return this.listaAprobador;
   }

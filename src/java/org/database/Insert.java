@@ -34,7 +34,7 @@ public class Insert {
   public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
-            + " hospedaje, estado, novedades, id_usuario_solicita, id_usuario_conductor) "
+            + " direccion_origen, direccion_destino, estado, novedades, id_usuario_solicita) "
             + "VALUES (?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
@@ -52,11 +52,11 @@ public class Insert {
     psInsert.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
     psInsert.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
     psInsert.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
-    psInsert.setString(5, solicitud.getHospedaje());
-    psInsert.setBoolean(6, solicitud.getEstado());
-    psInsert.setString(7, solicitud.getNovedades());
-    psInsert.setInt(8, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psInsert.setInt(9, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psInsert.setString(5, solicitud.getDireccionOrigen());
+    psInsert.setString(6, solicitud.getDireccionDestino());
+    psInsert.setBoolean(7, solicitud.getEstado());
+    psInsert.setString(8, solicitud.getNovedades());
+    psInsert.setInt(9, solicitud.getUsuarioByIdUsuarioSolicita().getId());
         
     return RunSQL(con, psInsert);
     
