@@ -114,7 +114,9 @@ public class Select {
                 novedades,
                 map_distancias.get(result.getInt("id_distancia")),                 
                 map_usuarios.get(result.getInt("id_usuario_solicita")),
-                map_usuarios.get(result.getInt("id_usuario_conductor"))
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero"))
                 );
         listSolicitudes.add(s);
       }
@@ -134,26 +136,30 @@ public class Select {
     ResultSet res = null;
     Statement sent = null;
     try {
-      
-      String SQL = " SELECT id FROM usuario WHERE EMPLFAPR='" +usuario.getCodemp()+ "'";
-      
-      sent = con.getConnection().createStatement();
-      res = sent.executeQuery(SQL);
-      
-      String where = "";
-      if(res.next()){
-        where += " id_usuario_solicita=" + res.getInt("id");      
-        while (res.next()) {
-          where += " OR id_usuario_solicita=" + res.getInt("id");
-        }
+      String SQL = "";
+      if("enfermero".equals(usuario.getRol())){
+        SQL = " SELECT * FROM solicitud WHERE estado_enfermeria=0 ORDER BY id ASC";
       }
       else{
-        return listSolicitudes;
-      }
-      
-      SQL = " SELECT * FROM solicitud WHERE estado=0 AND (" + where + ")";
+        SQL = " SELECT id FROM usuario WHERE EMPLFAPR='" +usuario.getCodemp()+ "'";
 
-      SQL += " ORDER BY id DESC";
+        sent = con.getConnection().createStatement();
+        res = sent.executeQuery(SQL);
+
+        String where = "";
+        if(res.next()){
+          where += " id_usuario_solicita=" + res.getInt("id");      
+          while (res.next()) {
+            where += " OR id_usuario_solicita=" + res.getInt("id");
+          }
+        }
+        else{
+          return listSolicitudes;
+        }
+
+        SQL = " SELECT * FROM solicitud WHERE estado=0 AND (" + where + ")";
+        SQL += " ORDER BY id DESC";
+      }      
       con = new ConnectDB();
       sent = con.getConnection().createStatement();
       res = sent.executeQuery(SQL);
@@ -168,6 +174,8 @@ public class Select {
       while (res.next()) {
         id_usuarios.put(res.getInt("id_usuario_solicita"), res.getInt("id_usuario_solicita"));
         id_usuarios.put(res.getInt("id_usuario_conductor"), res.getInt("id_usuario_conductor"));
+        id_usuarios.put(res.getInt("id_usuario_aprobador"), res.getInt("id_usuario_aprobador"));
+        id_usuarios.put(res.getInt("id_usuario_enfermero"), res.getInt("id_usuario_enfermero"));
         id_distancias.put(res.getInt("id_distancia"), res.getInt("id_distancia"));
       }
 
@@ -204,7 +212,9 @@ public class Select {
                 novedades,
                 map_distancias.get(res.getInt("id_distancia")),                 
                 map_usuarios.get(res.getInt("id_usuario_solicita")),
-                map_usuarios.get(res.getInt("id_usuario_conductor"))
+                map_usuarios.get(res.getInt("id_usuario_conductor")),
+                map_usuarios.get(res.getInt("id_usuario_aprobador")),
+                map_usuarios.get(res.getInt("id_usuario_enfermero"))
                 );
         s.setListaAprobador(true);
         listSolicitudes.add(s);
@@ -415,7 +425,9 @@ public class Select {
     ConnectDB con = new ConnectDB();
     String SQL = "";
     String fields = "";
-    if (filtro.equals("conductores")) {
+    if (filtro.equals("enfermeros")) {
+      SQL = " SELECT * FROM usuario WHERE rol = 'enfermero' ORDER BY PRSNAPLL ASC";
+    }else if (filtro.equals("conductores")) {
       SQL = " SELECT * FROM usuario WHERE rol = 'conductor' ORDER BY PRSNAPLL ASC";
     } else {
       SQL = " SELECT * FROM usuario WHERE rol = 'super' OR rol = 'admin' ORDER BY PRSNAPLL ASC";
@@ -429,7 +441,8 @@ public class Select {
       while (result.next()) {
         Usuario s = new Usuario(result.getInt("id"), result.getString("PRSNNMBR"), result.getString("PRSNAPLL"),
                 result.getString("PRSNCDLA"), result.getString("clave"), result.getString("PRSNMAIL"), result.getString("PRSNTLFN"),
-                result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"));
+                result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getBoolean("esInterno"), result.getString("observacion"),
+                result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"), result.getTimestamp("f_disponible"));
         listUsuarios.add(s);
       }
       return listUsuarios;

@@ -14,7 +14,9 @@ public class Insert {
 
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
-    String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL, PRSNTLFN, estado, rol) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL,"
+            + " PRSNTLFN, estado, rol, f_disponible, observacion, es_interno)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
     psInsert.setString(1, usuario.getCodemp());
     psInsert.setString(2, usuario.getCodapr());
@@ -26,6 +28,9 @@ public class Insert {
     psInsert.setString(8, usuario.getTelefono());
     psInsert.setBoolean(9, usuario.getEstado());
     psInsert.setString(10, usuario.getRol());
+    psInsert.setTimestamp(11, new java.sql.Timestamp(usuario.getFDisponible().getTime()));
+    psInsert.setString(12, usuario.getObservacion());
+    psInsert.setBoolean(13, usuario.getEsInterno());
     
     return RunSQL(con, psInsert);
     
@@ -34,8 +39,9 @@ public class Insert {
   public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
-            + " direccion_origen, direccion_destino, estado, novedades, id_usuario_solicita) "
-            + "VALUES (?,?,?,?,?,?,?,?,?)";
+            + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
+            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador, id_usuario_enfermero)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -55,8 +61,13 @@ public class Insert {
     psInsert.setString(5, solicitud.getDireccionOrigen());
     psInsert.setString(6, solicitud.getDireccionDestino());
     psInsert.setBoolean(7, solicitud.getEstado());
-    psInsert.setString(8, solicitud.getNovedades());
-    psInsert.setInt(9, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psInsert.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psInsert.setBoolean(9, solicitud.getEmergencia());    
+    psInsert.setString(10, solicitud.getEmergenciaRazon());
+    psInsert.setString(11, solicitud.getNovedades()); 
+    psInsert.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psInsert.setInt(13, solicitud.getUsuarioByIdUsuarioAprobador().getId());
+    psInsert.setInt(14, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
         
     return RunSQL(con, psInsert);
     

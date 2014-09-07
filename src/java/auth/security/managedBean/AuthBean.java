@@ -65,6 +65,13 @@ public class AuthBean {
         extContext.redirect(url);
         return;
       }
+      else if ("enfermero".equals(usuario.getRol())) {
+        url = extContext.encodeActionURL(
+                context.getApplication().getViewHandler().getActionURL(context, "/views/enfermeria/index.xhtml"));
+            extContext.getSessionMap().put(USER_KEY, usuario);
+        extContext.redirect(url);
+        return;
+      }
     } catch (IOException ex) {}
     message = "Usuario y/o clave invalida";
 

@@ -19,10 +19,12 @@ public class UsuarioBean {
 
   private List<Usuario> listaUsuarios;
   private List<Usuario> listaConductores;
+  private List<Usuario> listaEnfermeros;
 
   private Map<String, String> tipos_rol = new HashMap<String, String>();
   private Usuario usuario;
   private Usuario conductor;
+  private Usuario enfermero;
 
   public List<Usuario> saveUsuario() throws IOException, SQLException {
     Insert.InsertUsuario(usuario); 
@@ -37,6 +39,14 @@ public class UsuarioBean {
     conductor.setRol("conductor");
     listaConductores = Select.selectUsuarios("conductores");
     return listaConductores;
+  }
+  
+  public List<Usuario> saveEnfermero() throws IOException, SQLException {
+    Insert.InsertUsuario(enfermero); 
+    enfermero = new Usuario();
+    enfermero.setRol("enfermero");
+    listaEnfermeros = Select.selectUsuarios("enfermeros");
+    return listaEnfermeros;
   }
 
   public void onRowEdit(RowEditEvent event) throws SQLException {
@@ -63,6 +73,14 @@ public class UsuarioBean {
   public void setConductor(Usuario conductor) {
     this.conductor = conductor;
   }
+  
+  public Usuario getEnfermero() {
+    return enfermero;
+  }
+
+  public void setEnfermero(Usuario enfermero) {
+    this.enfermero = enfermero;
+  }
 
   public List<Usuario> getListaUsuarios() {
     return listaUsuarios;
@@ -79,6 +97,14 @@ public class UsuarioBean {
   public void setListaConductores(List<Usuario> listaConductores) {
     this.listaConductores = listaConductores;
   }
+  
+  public List<Usuario> getListaEnfermeros() {
+    return listaEnfermeros;
+  }
+
+  public void setListaEnfermeros(List<Usuario> listaEnfermeros) {
+    this.listaEnfermeros = listaEnfermeros;
+  }
 
   public UsuarioBean() {
     usuario = new Usuario();   
@@ -87,6 +113,10 @@ public class UsuarioBean {
     conductor = new Usuario();
     conductor.setRol("conductor");
     listaConductores = Select.selectUsuarios("conductores");
+    
+    enfermero = new Usuario();
+    enfermero.setRol("enfermero");
+    listaEnfermeros = Select.selectUsuarios("enfermeros");
     
     tipos_rol.put("Administrador", "super");
     tipos_rol.put("Usuario", "admin");

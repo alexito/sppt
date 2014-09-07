@@ -11,6 +11,9 @@ public class Solicitud implements java.io.Serializable {
   private Date FLlegada;
   private String hospedaje;
   private Boolean estado;
+  private Boolean estadoEnfermeria;
+  private Boolean emergencia;
+  private String emergenciaRazon;
   private Boolean listaAprobador;
   private String novedades;
   private String direccionOrigen;
@@ -18,11 +21,15 @@ public class Solicitud implements java.io.Serializable {
   private Distancia distanciaById;
   private Usuario usuarioByIdUsuarioSolicita;
   private Usuario usuarioByIdUsuarioConductor;
+  private Usuario usuarioByIdUsuarioAprobador;
+  private Usuario usuarioByIdUsuarioEnfermero;
   
   public Solicitud() {
     this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
     this.usuarioByIdUsuarioConductor = new Usuario();
+    this.usuarioByIdUsuarioAprobador = new Usuario();
+    this.usuarioByIdUsuarioEnfermero = new Usuario();
     this.listaAprobador = false;
   }
 
@@ -30,11 +37,14 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor) {
+  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado,
+          String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
+    this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
+    this.usuarioByIdUsuarioEnfermero = usuarioByIdUsuarioEnfermero;
     this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
@@ -62,7 +72,7 @@ public class Solicitud implements java.io.Serializable {
     this.distanciaById = distanciaById;
   }
 
-  public Usuario getUsuarioByIdUsuarioSolicita() {
+  public Usuario getUsuarioByIdUsuarioSolicita() {    
     return this.usuarioByIdUsuarioSolicita;
   }
 
@@ -71,11 +81,29 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public Usuario getUsuarioByIdUsuarioConductor() {
+    if(this.usuarioByIdUsuarioConductor == null)
+      this.usuarioByIdUsuarioConductor = new Usuario();  
     return this.usuarioByIdUsuarioConductor;
   }
 
   public void setUsuarioByIdUsuarioConductor(Usuario usuarioByIdUsuarioConductor) {
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
+  }
+  
+  public Usuario getUsuarioByIdUsuarioAprobador() {    
+    return this.usuarioByIdUsuarioAprobador;
+  }
+
+  public void setUsuarioByIdUsuarioAprobador(Usuario usuarioByIdUsuarioAprobador) {
+    this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
+  }
+  
+  public Usuario getUsuarioByIdUsuarioEnfermero() {    
+    return this.usuarioByIdUsuarioEnfermero;
+  }
+
+  public void setUsuarioByIdUsuarioEnfermero(Usuario usuarioByIdUsuarioEnfermero) {
+    this.usuarioByIdUsuarioEnfermero = usuarioByIdUsuarioEnfermero;
   }
 
   public Date getFSalida() throws ParseException {
@@ -145,8 +173,34 @@ public class Solicitud implements java.io.Serializable {
   public String getEstado_legible() {            
     return (getEstado()) ? "Aprobado" : "Pendiente";
   }
-
   
+  public String getEstadoEnfermeria_legible() {            
+    return (getEstadoEnfermeria()) ? "Aprobado" : "Pendiente";
+  }
+
+  public Boolean getEstadoEnfermeria() {
+    return estadoEnfermeria;
+  }
+
+  public void setEstadoEnfermeria(Boolean estadoEnfermeria) {
+    this.estadoEnfermeria = estadoEnfermeria;
+  }
+
+  public Boolean getEmergencia() {
+    return emergencia;
+  }
+
+  public void setEmergencia(Boolean emergencia) {
+    this.emergencia = emergencia;
+  }
+
+  public String getEmergenciaRazon() {
+    return emergenciaRazon;
+  }
+
+  public void setEmergenciaRazon(String emergenciaRazon) {
+    this.emergenciaRazon = emergenciaRazon;
+  }
 
   public String getNovedades() {
     return this.novedades;

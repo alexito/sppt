@@ -1,5 +1,8 @@
 package org.models;
 
+import java.text.ParseException;
+import java.util.Date;
+
 public class Usuario implements java.io.Serializable {
 
   private int id;
@@ -13,7 +16,10 @@ public class Usuario implements java.io.Serializable {
   private String telefono;
   private String movil;
   private Boolean estado;
+  private Boolean esInterno;
+  private String observacion;
   private String rol;
+  private Date FDisponible;
 
   public Usuario() {
   }
@@ -27,7 +33,7 @@ public class Usuario implements java.io.Serializable {
     this.rol = rol;
   }
 
-  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, String movil, Boolean estado, String rol, String codemp, String codapr) {
+  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, String movil, Boolean estado, Boolean esInterno, String observacion, String rol, String codemp, String codapr, Date FDisponible) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -37,9 +43,12 @@ public class Usuario implements java.io.Serializable {
     this.telefono = telefono;
     this.movil = movil;
     this.estado = estado;
+    this.esInterno = esInterno;
+    this.observacion = observacion;
     this.rol = rol;
     this.codemp = codemp;
     this.codapr = codapr;
+    this.FDisponible = FDisponible;
   }
 
   public int getId() {
@@ -121,6 +130,14 @@ public class Usuario implements java.io.Serializable {
   public void setMovil(String movil) {
     this.movil = movil;
   }
+  
+  public String getObservacion() {
+    return this.observacion;
+  }
+
+  public void setObservacion(String observacion) {
+    this.observacion = observacion;
+  }
 
   public Boolean getEstado() {
     return this.estado;
@@ -128,6 +145,14 @@ public class Usuario implements java.io.Serializable {
 
   public void setEstado(Boolean estado) {
     this.estado = estado;
+  }
+  
+  public Boolean getEsInterno() {
+    return this.esInterno;
+  }
+
+  public void setEsInterno(Boolean esInterno) {
+    this.esInterno = esInterno;
   }
 
   public String getEstado_legible() {
@@ -144,6 +169,14 @@ public class Usuario implements java.io.Serializable {
 
   public void setRol(String rol) {
     this.rol = rol;
+  }
+  
+  public Date getFDisponible() {
+    return FDisponible;
+  }
+
+  public void setFDisponible(Date FDisponible) {
+    this.FDisponible = FDisponible;
   }
 
   @Override

@@ -28,6 +28,8 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudesAprobadas;
   private List<Solicitud> listaSolicitudesPendientes;
   private List<Solicitud> listaSolicitudesXAprobar;
+  private List<Solicitud> listaSolicitudesEnfermeriaXAprobar;
+  private List<Solicitud> listaSolicitudesEnfermeriaAprobadas;
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
   private Map<String, Integer> listaConductores;
@@ -85,6 +87,22 @@ public class SolicitudBean {
 
   public void setListaSolicitudesXAprobar(List<Solicitud> listaSolicitudesXAprobar) {
     this.listaSolicitudesXAprobar = listaSolicitudesXAprobar;
+  }
+  
+  public List<Solicitud> getListaSolicitudesEnfermeriaXAprobar() {
+    return listaSolicitudesEnfermeriaXAprobar;
+  }
+
+  public void setListaSolicitudesEnfermeriaXAprobar(List<Solicitud> listaSolicitudesEnfermeriaXAprobar) {
+    this.listaSolicitudesEnfermeriaXAprobar = listaSolicitudesEnfermeriaXAprobar;
+  }
+  
+  public List<Solicitud> getListaSolicitudesEnfermeriaAprobadas() {
+    return listaSolicitudesEnfermeriaXAprobar;
+  }
+
+  public void setListaSolicitudesEnfermeriaAprobadas(List<Solicitud> listaSolicitudesEnfermeriaAprobadas) {
+    this.listaSolicitudesEnfermeriaAprobadas = listaSolicitudesEnfermeriaAprobadas;
   }
   
   public List<Solicitud> getListaSolicitudesAprobadas() {
@@ -187,6 +205,7 @@ public class SolicitudBean {
       listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId(), false);
       listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId(), false);
       listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);      
+      listaSolicitudesEnfermeriaXAprobar = Select.selectSolicitudesXAprobar(usuario);      
     } 
     else if ("super".equals(usuario.getRol())) {
       listaSolicitudes = Select.selectSolicitudes(1, 0, true);

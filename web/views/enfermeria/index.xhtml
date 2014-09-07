@@ -7,7 +7,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:body>
-    <ui:composition template="../templates/super_template.xhtml">
+    <ui:composition template="../templates/enfermeria_template.xhtml">
       <ui:define name="main-body">
         <h:form id="form-main-data">          
 
@@ -15,7 +15,7 @@
 
             <p:tab title="Solicitudes" id="tab1">
 
-              <p:dataTable id="table-solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudes}" rowKey="#{solicitud}"
+              <p:dataTable id="table-solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudesEnfermeriaXAprobar}" rowKey="#{solicitud}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                            editable="true"  paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
                            widgetVar="solicitudTable"  emptyMessage="No se encontraron solicitudes pendientes." >
@@ -89,16 +89,6 @@
                   </p:cellEditor>
                 </p:column>
 
-<!--                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                      </p:inputTextarea>                
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>-->
-
                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
@@ -109,16 +99,13 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado (Aprobador)" filterBy="#{solicitud.estado}" >  
-                  <f:facet name="filter">
-                    <p:selectOneButton onchange="PF('solicitudTable').filter()">
-                        <f:converter converterId="javax.faces.Boolean" />
-                        <f:selectItem itemLabel="Ap" itemValue="true" />
-                        <f:selectItem itemLabel="Pe" itemValue="false" />
-                    </p:selectOneButton>                    
-                  </f:facet>
+                <p:column headerText="Estado (Aprobador)" >
+                  <h:outputText value="#{solicitud.estado_legible}" />
+                </p:column>
+                
+                <p:column headerText="Estado (Enfermeria)" >
                   <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
+                    <f:facet name="output"><h:outputText value="#{solicitud.estado }" /></f:facet>
                     <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
                   </p:cellEditor>
                 </p:column>

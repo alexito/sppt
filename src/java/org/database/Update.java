@@ -23,7 +23,8 @@ public class Update {
   public static String UpdateUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE usuario SET EMPLCDGO=?, EMPLFAPR=?, PRSNNMBR=?, PRSNAPLL=?,"
-            + " PRSNCDLA=?, PRSNMAIL=?, PRSNTLFN=?, PRSNMVIL=?, clave=?, estado=?, rol=?  WHERE id=?";
+            + " PRSNCDLA=?, PRSNMAIL=?, PRSNTLFN=?, PRSNMVIL=?, clave=?, estado=?, rol=?,"
+            + " f_disponible=?, observacion=?, es_interno=?  WHERE id=?";
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
     psUpdate.setString(1, usuario.getCodemp());
     psUpdate.setString(2, usuario.getCodapr());
@@ -36,7 +37,10 @@ public class Update {
     psUpdate.setString(9, usuario.getClave());
     psUpdate.setBoolean(10, usuario.getEstado());
     psUpdate.setString(11, usuario.getRol());
-    psUpdate.setInt(12, usuario.getId());
+    psUpdate.setTimestamp(12, new java.sql.Timestamp(usuario.getFDisponible().getTime()));
+    psUpdate.setString(13, usuario.getObservacion());
+    psUpdate.setBoolean(14, usuario.getEsInterno());
+    psUpdate.setInt(15, usuario.getId());
     
     return RunSQL(con, psUpdate);
     
@@ -57,7 +61,9 @@ public class Update {
   public static String UpdateSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
-            + " direccion_origen=?, direccion_destino=?, hospedaje=?, estado=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=? WHERE id=?";
+            + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?, emergencia=?,"
+            + " emergencia_razon=? novedades=?, id_usuario_solicita=?, id_usuario_conductor=?,"
+            + " id_usuario_aprobador=?, id_usuario_enfermero=? WHERE id=?";
     
     int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -69,12 +75,16 @@ public class Update {
     psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psUpdate.setString(5, solicitud.getDireccionOrigen());
     psUpdate.setString(6, solicitud.getDireccionDestino());
-    psUpdate.setString(7, solicitud.getHospedaje());
-    psUpdate.setBoolean(8, solicitud.getEstado());
-    psUpdate.setString(9, solicitud.getNovedades());
-    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psUpdate.setInt(11, solicitud.getUsuarioByIdUsuarioConductor().getId());
-    psUpdate.setInt(12, solicitud.getId());
+    psUpdate.setBoolean(7, solicitud.getEstado());
+    psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psUpdate.setBoolean(9, solicitud.getEmergencia());
+    psUpdate.setString(10, solicitud.getEmergenciaRazon());
+    psUpdate.setString(11, solicitud.getNovedades());
+    psUpdate.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(13, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(14, solicitud.getUsuarioByIdUsuarioAprobador().getId());
+    psUpdate.setInt(15, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
+    psUpdate.setInt(16, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     
