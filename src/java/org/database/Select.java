@@ -100,7 +100,12 @@ public class Select {
                 novedades = result.getString("novedades"),
                 direccionOrigen = result.getString("direccion_origen"),
                 direccionDestino = result.getString("direccion_destino");
-        Boolean estado = result.getBoolean("estado");        
+        Boolean estado = result.getBoolean("estado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false;
+        
+        if(uid != 0)
+          es_creador = true;
         
         Solicitud s = new Solicitud(
                 id, 
@@ -111,7 +116,9 @@ public class Select {
                 direccionDestino,
                 hospedaje,
                 estado,
+                estado_enfermeria,
                 novedades,
+                es_creador,
                 map_distancias.get(result.getInt("id_distancia")),                 
                 map_usuarios.get(result.getInt("id_usuario_solicita")),
                 map_usuarios.get(result.getInt("id_usuario_conductor")),
@@ -198,7 +205,11 @@ public class Select {
                 novedades = res.getString("novedades"),
                 direccionOrigen = res.getString("direccion_origen"),
                 direccionDestino = res.getString("direccion_destino");
-        Boolean estado = res.getBoolean("estado");        
+        Boolean estado = res.getBoolean("estado"),
+          estado_enfermeria = res.getBoolean("estado_enfermeria"),
+          es_creador = false;
+        
+        
         
         Solicitud s = new Solicitud(
                 id, 
@@ -209,7 +220,9 @@ public class Select {
                 direccionDestino,
                 hospedaje,
                 estado,
+                estado_enfermeria,
                 novedades,
+                es_creador,
                 map_distancias.get(res.getInt("id_distancia")),                 
                 map_usuarios.get(res.getInt("id_usuario_solicita")),
                 map_usuarios.get(res.getInt("id_usuario_conductor")),
@@ -519,6 +532,27 @@ public class Select {
     }
     
     return response;
+  }
+  
+  public static Integer selectUsuarioIDByEMPLFAPR(String emplcdgo){
+    
+    ConnectDB con = new ConnectDB();
+    int id = 0;
+    try {
+      String SQL = "SELECT id FROM usuario WHERE EMPLCDGO='" + emplcdgo + "'";
+      
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+      while (result.next()) {
+         id = result.getInt("id");        
+      }
+      return id;
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+    
+    return id;
   }
   
   public static Usuario LoggedUser() throws IOException {

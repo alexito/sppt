@@ -168,7 +168,20 @@ public class SolicitudBean {
         editedSolicitud.setEstado(true);
       }
     }
-    Update.UpdateSolicitud(editedSolicitud);
+    if("enfermero".equals(usuario.getRol())){
+      if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
+          editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
+      }else{
+        return listaSolicitudes;
+      }
+    }
+    if(editedSolicitud.getEs_creador() || editedSolicitud.getListaAprobador()){
+      Update.UpdateSolicitudOwner(editedSolicitud);      
+    }
+    else{
+      Update.UpdateSolicitud(editedSolicitud);      
+    }
+    
     solicitud = new Solicitud();
     updateInfoSolicitudes();
     return listaSolicitudes;
@@ -204,9 +217,11 @@ public class SolicitudBean {
     if ("admin".equals(usuario.getRol())) {
       listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId(), false);
       listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId(), false);
-      listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);      
-      listaSolicitudesEnfermeriaXAprobar = Select.selectSolicitudesXAprobar(usuario);      
+      listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);             
     } 
+    else if ("enfermero".equals(usuario.getRol())) {
+      listaSolicitudesEnfermeriaXAprobar = Select.selectSolicitudesXAprobar(usuario);
+    }
     else if ("super".equals(usuario.getRol())) {
       listaSolicitudes = Select.selectSolicitudes(1, 0, true);
       listaSolicitudes = Select.selectSolicitudes(0, 0, true);

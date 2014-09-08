@@ -122,6 +122,10 @@
                     <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
                   </p:cellEditor>
                 </p:column>
+                
+                <p:column headerText="Estado (Enfermeria)" >
+                  <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
+                </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">  
                   <p:cellEditor>

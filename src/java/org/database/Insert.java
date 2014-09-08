@@ -40,8 +40,8 @@ public class Insert {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
-            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador, id_usuario_enfermero)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -51,6 +51,17 @@ public class Insert {
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
       dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    }
+    
+    int id_aprobador = 0;
+    if(solicitud.getUsuarioByIdUsuarioAprobador() == null || solicitud.getUsuarioByIdUsuarioAprobador().getId() == 0){
+      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      if(id_aprobador == 0){
+        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
+      }
+    }
+    else{
+      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
     }
     
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
@@ -66,8 +77,7 @@ public class Insert {
     psInsert.setString(10, solicitud.getEmergenciaRazon());
     psInsert.setString(11, solicitud.getNovedades()); 
     psInsert.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psInsert.setInt(13, solicitud.getUsuarioByIdUsuarioAprobador().getId());
-    psInsert.setInt(14, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
+    psInsert.setInt(13, id_aprobador);
         
     return RunSQL(con, psInsert);
     

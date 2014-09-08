@@ -25,7 +25,7 @@
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
                   <h:outputText value="#{solicitud.id}" />
                 </p:column>
-                
+
                 <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains" style="vertical-align: top;">  
                   <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
@@ -37,7 +37,7 @@
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.direccionDestino}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
                 </p:column>
-                
+
                 <p:column headerText="Distancia" width="70">  
                   <h:outputText value="#{solicitud.distanciaById.distancia}" />
                 </p:column>
@@ -54,16 +54,6 @@
                   </h:outputText>                    
                 </p:column>
 
-<!--                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                      </p:inputTextarea>                
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>-->
-
                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
@@ -74,11 +64,15 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado" filterBy="#{solicitud.estado}" >                    
+                <p:column headerText="Estado (Aprobador)" >                    
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.estado_legible}" /></f:facet>
                     <f:facet name="input"><p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" /></f:facet>
                   </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Estado (Enfermeria)" >
+                  <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                 </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">                    
@@ -86,13 +80,13 @@
                   <p:spacer width="5"/>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />                    
                 </p:column>
-                
+
                 <p:column width="75" filterBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" headerText="Solicitado por:" filterMatchMode="contains">  
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.apellido}" />
-                      <p:spacer width="5"/>
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
+                  <p:spacer width="5"/>
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombre}" />
                 </p:column>
-                
+
                 <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
                   <h:outputText value="#{solicitud.FCreacion}">
                     <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -105,9 +99,9 @@
               </p:dataTable>  
 
             </p:tab>
-            
+
             <!-- ______________________MIS SOLICITUDES PENDIENTES_______________________ -->
-            
+
             <p:tab title="Mis Solicitudes Pendientes" id="tab2">
 
               <p:dataTable id="table-solicitudes-pendientes" var="solicitud" value="#{solicitudBean.listaSolicitudesPendientes}" rowKey="#{solicitud}"
@@ -121,7 +115,7 @@
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
                   <h:outputText value="#{solicitud.id}" />
                 </p:column>
-                
+
                 <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains" style="vertical-align: top;">  
                   <p:cellEditor>
                     <f:facet name="output">
@@ -153,13 +147,13 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
+
                 <p:column headerText="Distancia" width="70">  
                   <h:outputText value="#{solicitud.distanciaById.distancia}" />
                 </p:column>
 
                 <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida"> 
-                  
+
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FSalida}">
@@ -173,7 +167,7 @@
                 </p:column>
 
                 <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
-                  
+
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FLlegada}">
@@ -186,16 +180,6 @@
                   </p:cellEditor>
                 </p:column>
 
-<!--                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                      </p:inputTextarea>                
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>-->
-
                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
@@ -206,8 +190,12 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado" >  
+                <p:column headerText="Estado (Aprobador)" >  
                   <h:outputText value="#{solicitud.estado_legible}" />
+                </p:column>
+
+                <p:column headerText="Estado (Enfermeria)" >
+                  <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                 </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">  
@@ -215,7 +203,7 @@
                   <p:spacer width="5"/>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />  
                 </p:column>
-                
+
                 <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
                   <h:outputText value="#{solicitud.FCreacion}">
                     <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -228,9 +216,9 @@
               </p:dataTable>  
 
             </p:tab>
-            
+
             <!-- _________________________MIS SOLICITUDES APROBADAS________________ -->
-            
+
             <p:tab title="Mis Solicitudes Aprobadas" id="tab3">
 
               <p:dataTable id="table-solicitudes-aprobadas" var="solicitud" value="#{solicitudBean.listaSolicitudesAprobadas}" rowKey="#{solicitud}"
@@ -244,7 +232,7 @@
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
                   <h:outputText value="#{solicitud.id}" />
                 </p:column>
-                
+
                 <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains" style="vertical-align: top;">  
                   <p:cellEditor>
                     <f:facet name="output">
@@ -276,13 +264,13 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
+
                 <p:column headerText="Distancia" width="70">  
                   <h:outputText value="#{solicitud.distanciaById.distancia}" />
                 </p:column>
 
                 <p:column filterBy="#{solicitud.FSalida}" sortBy="#{solicitud.FSalida}" headerText="F Salida"> 
-                  
+
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FSalida}">
@@ -296,7 +284,7 @@
                 </p:column>
 
                 <p:column filterBy="#{solicitud.FLlegada}" sortBy="#{solicitud.FLlegada}" headerText="F Llegada">  
-                  
+
                   <p:cellEditor>
                     <f:facet name="output">
                       <h:outputText value="#{solicitud.FLlegada}">
@@ -309,16 +297,6 @@
                   </p:cellEditor>
                 </p:column>
 
-<!--                <p:column filterBy="#{solicitud.hospedaje}"  headerText="Hospedaje" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{solicitud.hospedaje}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="hospedaje" value="#{solicitud.hospedaje}" style="width:100%">
-                      </p:inputTextarea>                
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>-->
-
                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{solicitud.novedades}" /></f:facet>
@@ -329,8 +307,12 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Estado" >  
+                <p:column headerText="Estado (Aprobador)" >  
                   <h:outputText value="#{solicitud.estado_legible}" />
+                </p:column>
+
+                <p:column headerText="Estado (Enfermeria)" >
+                  <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                 </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains">  
@@ -338,7 +320,7 @@
                   <p:spacer width="5"/>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombre}" />  
                 </p:column>
-                                
+
                 <p:column width="75" filterBy="#{solicitud.FCreacion}" sortBy="#{solicitud.FCreacion}" headerText="F Creado">  
                   <h:outputText value="#{solicitud.FCreacion}">
                     <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -369,7 +351,7 @@
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="dorigen" value="Dirección origen: " />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
@@ -380,7 +362,7 @@
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="ddestino" value="Dirección destino: " />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
                   </p:inputTextarea>                
@@ -393,24 +375,32 @@
                   <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
                   <br></br>
-                  <!--<p:remoteCommand name="filterConductores" actionListener="#{solicitudBean.filterConductor()}" update="conductor"/>-->
 
+<!--                  <p:outputLabel value="Acompañantes Internos:" />
+                  <p:autoComplete id="themes" multiple="true" value="#{solicitudBean.selectedThemes}" completeMethod="#{solicitudBean.completeInternos}"
+                                  var="interno" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true">
+                    <p:column>
+                      <h:outputText value="#{interno.nombre}" />
+                    </p:column>
+                  </p:autoComplete>
+                  
+                  <p:outputLabel value="Acompañantes Externos:" />
+                  <p:autoComplete id="themes" multiple="true" value="#{autoCompleteView.selectedThemes}" completeMethod="#{autoCompleteView.completeTheme}"
+                                  var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" converter="themeConverter" forceSelection="true">
+                    <p:column style="width:10%">
+                      <h:outputText styleClass="ui-theme ui-theme-#{theme.name}" />
+                    </p:column>
 
-<!--                  <h:outputLabel for="hospedaje" value="Hospedaje: " />
-                  <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">
-                  </p:inputTextarea>                
-                  <p:message for="hospedaje" id="msgHospedaje" display="icon" />-->
+                    <p:column>
+                      <h:outputText value="#{theme.displayName}" />
+                    </p:column>
+                  </p:autoComplete>-->
 
                   <h:outputLabel for="novedades" value="Novedades: " />
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width:100%">
                   </p:inputTextarea>                
                   <p:message for="novedades" id="msgNovedades" display="icon" />
 
-<!--                  <h:outputLabel for="conductor" value="Conductor: *" />
-                  <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaConductores}" />
-                  </p:selectOneMenu>
-                  <br></br>-->
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
                 </h:panelGrid>
                 <f:facet name="footer">
@@ -422,7 +412,7 @@
             </center>
           </h:form>
         </p:dialog>
-        
+
       </ui:define>
     </ui:composition>
   </h:body>

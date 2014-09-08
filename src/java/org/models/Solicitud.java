@@ -11,10 +11,11 @@ public class Solicitud implements java.io.Serializable {
   private Date FLlegada;
   private String hospedaje;
   private Boolean estado;
-  private Boolean estadoEnfermeria;
-  private Boolean emergencia;
-  private String emergenciaRazon;
+  private Boolean estadoEnfermeria = false;
+  private Boolean emergencia = false;
+  private String emergenciaRazon = "";
   private Boolean listaAprobador;
+  private Boolean es_creador;
   private String novedades;
   private String direccionOrigen;
   private String direccionDestino;
@@ -37,8 +38,8 @@ public class Solicitud implements java.io.Serializable {
     this.id = id;
   }
 
-  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado,
-          String novedades, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero) {
+  public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, Boolean estadoEnfermeria,
+          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
@@ -52,7 +53,9 @@ public class Solicitud implements java.io.Serializable {
     this.direccionDestino = direccionDestino;
     this.hospedaje = hospedaje;
     this.estado = estado;
+    this.estadoEnfermeria = estadoEnfermeria;
     this.novedades = novedades;
+    this.es_creador = es_creador;
     this.listaAprobador = false;
   }
 
@@ -208,6 +211,14 @@ public class Solicitud implements java.io.Serializable {
 
   public void setNovedades(String novedades) {
     this.novedades = novedades;
+  }
+  
+  public Boolean getEs_creador() {
+    return es_creador;
+  }
+
+  public void setEs_creador(Boolean es_creador) {
+    this.es_creador = es_creador;
   }
 
   public String getNombre_solicita() {
