@@ -454,7 +454,7 @@ public class Select {
       while (result.next()) {
         Usuario s = new Usuario(result.getInt("id"), result.getString("PRSNNMBR"), result.getString("PRSNAPLL"),
                 result.getString("PRSNCDLA"), result.getString("clave"), result.getString("PRSNMAIL"), result.getString("PRSNTLFN"),
-                result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getBoolean("esInterno"), result.getString("observacion"),
+                result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getBoolean("es_interno"), result.getString("observacion"),
                 result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"), result.getTimestamp("f_disponible"));
         listUsuarios.add(s);
       }
