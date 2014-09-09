@@ -376,15 +376,15 @@
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
                   <br></br>
 
-<!--                  <p:outputLabel value="Acompañantes Internos:" />
-                  <p:autoComplete id="themes" multiple="true" value="#{solicitudBean.selectedThemes}" completeMethod="#{solicitudBean.completeInternos}"
-                                  var="interno" itemLabel="#{theme.displayName}" itemValue="#{theme}" forceSelection="true">
+                  <p:outputLabel value="Acompañantes Internos:" />
+                  <p:autoComplete id="themes" multiple="true" value="#{solicitudBean.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario.id}" forceSelection="true">
                     <p:column>
-                      <h:outputText value="#{interno.nombre}" />
+                      <h:outputText value="#{usuario.nombrecompleto}" />
                     </p:column>
                   </p:autoComplete>
                   
-                  <p:outputLabel value="Acompañantes Externos:" />
+<!--                  <p:outputLabel value="Acompañantes Externos:" />
                   <p:autoComplete id="themes" multiple="true" value="#{autoCompleteView.selectedThemes}" completeMethod="#{autoCompleteView.completeTheme}"
                                   var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" converter="themeConverter" forceSelection="true">
                     <p:column style="width:10%">

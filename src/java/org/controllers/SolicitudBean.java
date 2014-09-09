@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +34,10 @@ public class SolicitudBean {
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
   private Map<String, Integer> listaConductores;
+  private List<Usuario> listaInternos;
+  private List<Usuario> listaExternos;
+  private List<Usuario> listaInternosSeleccionados;
+  private List<Usuario> listaExternosSeleccionados;
   private Solicitud solicitud;
   private int loc_origen;
   private Usuario usuario;
@@ -59,6 +64,22 @@ public class SolicitudBean {
 
   public void setListaUsuarios(Map<String, Integer> listaUsuarios) {
     this.listaUsuarios = listaUsuarios;
+  }
+  
+  public List<Usuario> getListaInternosSeleccionados() {
+    return listaInternosSeleccionados;
+  }
+
+  public void setListaInternosSeleccionados(List<Usuario> listaInternosSeleccionados) {
+    this.listaInternosSeleccionados = listaInternosSeleccionados;
+  }
+
+  public List<Usuario> getListaExternosSeleccionados() {
+    return listaExternosSeleccionados;
+  }
+
+  public void setListaExternosSeleccionados(List<Usuario> listaExternosSeleccionados) {
+    this.listaExternosSeleccionados = listaExternosSeleccionados;
   }
 
   public Map<String, Integer> getListaLocalidades() {
@@ -127,12 +148,41 @@ public class SolicitudBean {
     Map<Integer, Localidad> locs = Select.selectMappedLocalidades(true, null);
     Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
     Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
-
+    
     solicitud = new Solicitud();    
-
+    listaInternos = Select.selectMappedUsuariosExtInt(1);
+    listaExternos = Select.selectMappedUsuariosExtInt(0);
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
-    listaConductores = mapUsuario(cond);
+    listaConductores = mapUsuario(cond);    
+  }
+  
+  public List<Usuario> completeUsuarioInterno(String query){
+    
+    List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
+
+    for (int i = 0; i < listaInternos.size(); i++) {
+      Usuario user = listaInternos.get(i);
+      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)) {
+        usuariosFiltrados.add(user);
+      }
+    }
+
+    return usuariosFiltrados;
+  }
+  
+  public List<Usuario> completeUsuarioExterno(String query){
+    
+    List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
+
+    for (int i = 0; i < listaExternos.size(); i++) {
+      Usuario user = listaExternos.get(i);
+      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)) {
+        usuariosFiltrados.add(user);
+      }
+    }
+
+    return usuariosFiltrados;
   }
 
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {

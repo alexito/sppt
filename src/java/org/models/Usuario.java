@@ -20,6 +20,7 @@ public class Usuario implements java.io.Serializable {
   private String observacion;
   private String rol;
   private Date FDisponible;
+  private String nombrecompleto;
 
   public Usuario() {
   }
@@ -177,6 +178,14 @@ public class Usuario implements java.io.Serializable {
 
   public void setFDisponible(Date FDisponible) {
     this.FDisponible = FDisponible;
+  }
+  
+  public String getNombrecompleto() {
+    return this.apellido + " " + this.nombre;
+  }
+
+  public void setNombrecompleto(String nombrecompleto) {
+    this.nombrecompleto = nombrecompleto;
   }
 
   @Override

@@ -399,9 +399,9 @@ public class Select {
       }
       }else{
         if(isConductor)
-          SQL = "SELECT * FROM usuario WHERE rol='conductor' AND estado=1";
+          SQL = "SELECT * FROM usuario WHERE rol='conductor' AND estado=1 AND es_interno=1";
         else
-          SQL = "SELECT * FROM usuario WHERE rol='admin' AND estado=1";
+          SQL = "SELECT * FROM usuario WHERE rol='admin' AND estado=1 AND es_interno=1";
       }
       SQL += " ORDER BY PRSNAPLL ASC";
       
@@ -421,6 +421,7 @@ public class Select {
         usuario.setTelefono(res.getString("PRSNTLFN"));
         usuario.setMovil(res.getString("PRSNMVIL"));
         usuario.setEstado(res.getBoolean("estado"));
+        usuario.setEsInterno(res.getBoolean("es_interno"));
         usuario.setRol(res.getString("rol"));
         
         response.put(res.getInt("id"), usuario);
@@ -431,6 +432,35 @@ public class Select {
       CloseCurrentConnection(sent, res, con);
     }
     return response;
+  }
+    
+  public static List<Usuario> selectMappedUsuariosExtInt(int es_interno) {
+    ConnectDB con = new ConnectDB();
+    List<Usuario> listUsuarios = null;
+    
+    String SQL = "SELECT * FROM usuario WHERE es_interno=" + es_interno;
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      
+      SQL += " ORDER BY PRSNAPLL ASC";
+      
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+      listUsuarios = new ArrayList<Usuario>();
+      while (res.next()) {
+        Usuario s = new Usuario(res.getInt("id"), res.getString("PRSNNMBR"), res.getString("PRSNAPLL"),
+                res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
+                res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
+                res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"), res.getTimestamp("f_disponible"));
+        listUsuarios.add(s);
+      }
+      return listUsuarios;
+    } catch (SQLException e) {
+    }finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+    return listUsuarios;
   }
   
   public static List<Usuario> selectUsuarios(String filtro) {
