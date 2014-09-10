@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -22,7 +23,7 @@ import org.models.Usuario;
 import org.primefaces.event.RowEditEvent;
 
 @ManagedBean
-@Dependent
+@RequestScoped
 public class SolicitudBean {
   
   private List<Solicitud> listaSolicitudes;
@@ -152,6 +153,7 @@ public class SolicitudBean {
     solicitud = new Solicitud();    
     listaInternos = Select.selectMappedUsuariosExtInt(1);
     listaExternos = Select.selectMappedUsuariosExtInt(0);
+    listaInternosSeleccionados = new ArrayList<Usuario>();
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
     listaConductores = mapUsuario(cond);    
@@ -160,31 +162,33 @@ public class SolicitudBean {
   public List<Usuario> completeUsuarioInterno(String query){
     
     List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
-
-    for (int i = 0; i < listaInternos.size(); i++) {
-      Usuario user = listaInternos.get(i);
-      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)) {
+    for (Usuario user : listaInternos) {
+      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)
+              || (user.getApellido() + " " + user.getNombre()).toLowerCase().startsWith(query)) {
         usuariosFiltrados.add(user);
+        if(usuariosFiltrados.size() == 10){
+          break;
+        }
       }
-    }
-
+    }    
     return usuariosFiltrados;
   }
   
   public List<Usuario> completeUsuarioExterno(String query){
     
     List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
-
-    for (int i = 0; i < listaExternos.size(); i++) {
-      Usuario user = listaExternos.get(i);
-      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)) {
+    for (Usuario user : listaExternos) {
+      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)
+              || (user.getApellido() + " " + user.getNombre()).toLowerCase().startsWith(query)) {
         usuariosFiltrados.add(user);
+        if(usuariosFiltrados.size() == 10){
+          break;
+        }
       }
-    }
-
+    }    
     return usuariosFiltrados;
   }
-
+  
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
     Usuario logged_user = Select.LoggedUser();
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);

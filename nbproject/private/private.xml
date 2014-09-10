@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/auth/security/managedBean/AuthBean.java</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Solicitud.java</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/admin_template.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/SolicitudBean.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/super_template.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Update.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/enfermeria_template.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Select.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/super/index.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/admin/index.xhtml</file>
@@ -16,6 +13,8 @@
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Insert.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/UsuarioBean.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/models/Usuario.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/templates/admin_template.xhtml</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/SolicitudBean.java</file>
         </group>
     </open-files>
 </project-private>

@@ -8,7 +8,7 @@
 
   <h:body>
     <ui:composition template="../templates/admin_template.xhtml">
-      <ui:define name="main-body">
+      <ui:define name="main-body" >
         <h:form id="form-main-data">          
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast">
@@ -339,68 +339,66 @@
 
         <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
 
-        <p:dialog dynamic="true" widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+        <p:dialog dynamic="true" closable="true" widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-solicitud">          
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
                 <p:messages id="messages" />
-                <h:panelGrid id="grid" columns="3" cellpadding="5">
+                <h:panelGrid id="grid" columns="4" cellpadding="5">
 
                   <h:outputLabel for="origen" value="Origen: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitudBean.solicitud.distanciaById.localidadByIdOrigen.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-                  <br></br>
+
 
                   <h:outputLabel for="dorigen" value="Dirección origen: " />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
-                  <p:message for="dorigen" id="msgDorigen" display="icon" />                  
+
 
                   <h:outputLabel for="destino" value="Destino: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitud.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-                  <br></br>
+
 
                   <h:outputLabel for="ddestino" value="Dirección destino: " />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
                   </p:inputTextarea>                
-                  <p:message for="ddestino" id="msgDdestino" display="icon" />
+
 
                   <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
                   <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-                  <br></br>
+                  
 
                   <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-                  <br></br>
+
 
                   <p:outputLabel value="Acompañantes Internos:" />
-                  <p:autoComplete id="themes" multiple="true" value="#{solicitudBean.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
-                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario.id}" forceSelection="true">
-                    <p:column>
-                      <h:outputText value="#{usuario.nombrecompleto}" />
-                    </p:column>
-                  </p:autoComplete>
+                  <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                  maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
+                                  converter="usuarioInternoConverter" />
                   
-<!--                  <p:outputLabel value="Acompañantes Externos:" />
-                  <p:autoComplete id="themes" multiple="true" value="#{autoCompleteView.selectedThemes}" completeMethod="#{autoCompleteView.completeTheme}"
-                                  var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" converter="themeConverter" forceSelection="true">
-                    <p:column style="width:10%">
-                      <h:outputText styleClass="ui-theme ui-theme-#{theme.name}" />
-                    </p:column>
-
-                    <p:column>
-                      <h:outputText value="#{theme.displayName}" />
-                    </p:column>
-                  </p:autoComplete>-->
-
+                  <p:outputLabel value="Acompañantes Externos:" />
+                  <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                  maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
+                                  converter="usuarioExternoConverter" />
+                  
+                  <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
+                  <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.emergenciaRazon}" style="width: 100%;"
+                                   placeholder="Si no encontró el acompañante externo en la lista, ingrese aquí el nombre completo para mostrar en las próximas solicitudes. En caso de ser varios acompañantes, separe los nombres usando una coma." />
+                  
                   <h:outputLabel for="novedades" value="Novedades: " />
-                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width:100%">
+                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" >
                   </p:inputTextarea>                
-                  <p:message for="novedades" id="msgNovedades" display="icon" />
 
+                  <br></br>
+                  <br></br>
+                  <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
                 </h:panelGrid>
                 <f:facet name="footer">
