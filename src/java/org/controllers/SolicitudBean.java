@@ -36,9 +36,7 @@ public class SolicitudBean {
   private Map<String, Integer> listaUsuarios;
   private Map<String, Integer> listaConductores;
   private List<Usuario> listaInternos;
-  private List<Usuario> listaExternos;
-  private List<Usuario> listaInternosSeleccionados;
-  private List<Usuario> listaExternosSeleccionados;
+  private List<Usuario> listaExternos;  
   private Solicitud solicitud;
   private int loc_origen;
   private Usuario usuario;
@@ -67,22 +65,6 @@ public class SolicitudBean {
     this.listaUsuarios = listaUsuarios;
   }
   
-  public List<Usuario> getListaInternosSeleccionados() {
-    return listaInternosSeleccionados;
-  }
-
-  public void setListaInternosSeleccionados(List<Usuario> listaInternosSeleccionados) {
-    this.listaInternosSeleccionados = listaInternosSeleccionados;
-  }
-
-  public List<Usuario> getListaExternosSeleccionados() {
-    return listaExternosSeleccionados;
-  }
-
-  public void setListaExternosSeleccionados(List<Usuario> listaExternosSeleccionados) {
-    this.listaExternosSeleccionados = listaExternosSeleccionados;
-  }
-
   public Map<String, Integer> getListaLocalidades() {
     return listaLocalidades;
   }
@@ -152,8 +134,7 @@ public class SolicitudBean {
     
     solicitud = new Solicitud();    
     listaInternos = Select.selectMappedUsuariosExtInt(1);
-    listaExternos = Select.selectMappedUsuariosExtInt(0);
-    listaInternosSeleccionados = new ArrayList<Usuario>();
+    listaExternos = Select.selectMappedUsuariosExtInt(0);    
     listaLocalidades = mapLocalidad(locs);
     listaUsuarios = mapUsuario(usus);
     listaConductores = mapUsuario(cond);    
@@ -170,7 +151,7 @@ public class SolicitudBean {
           break;
         }
       }
-    }    
+    }
     return usuariosFiltrados;
   }
   
@@ -189,6 +170,35 @@ public class SolicitudBean {
     return usuariosFiltrados;
   }
   
+  private String pickUsuarioInternoIds(List<Usuario> lista){
+    String uids = "" + usuario.getId();
+    for (Usuario user : lista) {
+        if(!"".equals(uids))
+          uids += ",";
+        uids += user.getId();
+    }
+    return uids;
+  }
+  
+  private String pickUsuarioExternoIds(List<Usuario> lista) throws SQLException{
+    String uids = "";
+    for (Usuario user : lista) {
+        if(!"".equals(uids))
+          uids += ",";
+        uids += user.getId();
+    }
+    String[] nombres = solicitud.getNuevoUsuarioExterno().split(",");
+    String nombre;
+    for(int i = 0; i < nombres.length; i++){
+      if(!"".equals(uids))
+          uids += ",";      
+      nombre = nombres[i].trim().toUpperCase();
+      uids += Insert.InsertNewUsuarioExterno(nombre);
+    }
+    
+    return uids;
+  }
+  
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
     Usuario logged_user = Select.LoggedUser();
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
@@ -200,6 +210,10 @@ public class SolicitudBean {
       solicitud.setEstado(true);
     }
     solicitud.setFCreacion(new Date());
+    
+    solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados()));
+    solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados()));
+    
     Insert.InsertSolicitud(solicitud);
 
     solicitud = new Solicitud();
@@ -222,6 +236,10 @@ public class SolicitudBean {
         editedSolicitud.setEstado(true);
       }
     }
+    
+    editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados()));
+    editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados()));
+    
     if("enfermero".equals(usuario.getRol())){
       if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
           editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);

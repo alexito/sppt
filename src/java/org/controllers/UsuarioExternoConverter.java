@@ -12,12 +12,12 @@ import org.models.Usuario;
 @FacesConverter("usuarioExternoConverter")
 public class UsuarioExternoConverter implements Converter {
   
-  private List<Usuario> listaInternos;
+  private List<Usuario> listaExternos;
  
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if(value != null && value.trim().length() > 0) {
-            listaInternos = Select.selectMappedUsuariosExtInt(1);            
-            return listaInternos.get(Integer.parseInt(value));
+            listaExternos = Select.selectMappedUsuariosExtInt(0);            
+            return listaExternos.get(Integer.parseInt(value));
         }
         else {
             return null;

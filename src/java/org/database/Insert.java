@@ -5,13 +5,41 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.util.Date;
+import static org.database.Select.CloseCurrentConnection;
+import static org.database.Select.sentence;
 import org.models.Distancia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
 
 public class Insert {
-
+  
+  public static String InsertNewUsuarioExterno(String nombre) throws SQLException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "INSERT INTO usuario (PRSNNMBR, es_interno) VALUES (?,?)";
+    PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
+    psInsert.setString(1, nombre);
+    psInsert.setBoolean(2, false);
+    
+    RunSQL(con, psInsert);
+    
+    Statement sentence = null;
+    ResultSet result = null;
+    con = new ConnectDB();
+    try {
+      SQL = "SELECT id WHERE PRSNNMBR='" + nombre + "'";
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+      result.next();
+      return result.getInt("id") + "";
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+    return "";
+  }
+  
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL,"
@@ -28,7 +56,7 @@ public class Insert {
     psInsert.setString(8, usuario.getTelefono());
     psInsert.setBoolean(9, usuario.getEstado());
     psInsert.setString(10, usuario.getRol());
-    psInsert.setTimestamp(11, new java.sql.Timestamp(usuario.getFDisponible().getTime()));
+    psInsert.setTimestamp(11, new java.sql.Timestamp(new Date().getTime()));
     psInsert.setString(12, usuario.getObservacion());
     psInsert.setBoolean(13, usuario.getEsInterno());
     
@@ -40,8 +68,9 @@ public class Insert {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
-            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador,"
+            + " ids_interno, ids_externo)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -78,6 +107,8 @@ public class Insert {
     psInsert.setString(11, solicitud.getNovedades()); 
     psInsert.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
     psInsert.setInt(13, id_aprobador);
+    psInsert.setString(14, solicitud.getIds_interno()); 
+    psInsert.setString(15, solicitud.getIds_externo()); 
         
     return RunSQL(con, psInsert);
     

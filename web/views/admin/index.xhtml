@@ -377,19 +377,19 @@
 
 
                   <p:outputLabel value="Acompañantes Internos:" />
-                  <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                  <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                   maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
                                   converter="usuarioInternoConverter" />
                   
                   <p:outputLabel value="Acompañantes Externos:" />
-                  <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                  <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                   maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
                                   converter="usuarioExternoConverter" />
                   
                   <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
-                  <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.emergenciaRazon}" style="width: 100%;"
+                  <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
                                    placeholder="Si no encontró el acompañante externo en la lista, ingrese aquí el nombre completo para mostrar en las próximas solicitudes. En caso de ser varios acompañantes, separe los nombres usando una coma." />
                   
                   <h:outputLabel for="novedades" value="Novedades: " />

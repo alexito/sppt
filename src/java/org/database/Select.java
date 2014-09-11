@@ -56,15 +56,14 @@ public class Select {
     ConnectDB con = new ConnectDB();
     try {
       
-      String SQL = " SELECT * FROM solicitud";
+      String SQL = " SELECT * FROM solicitud  ORDER BY id DESC";
       if(!all){
         if(uid != 0){
-          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid;
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
         }else{
-          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud;
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " ORDER BY id ASC";
         }
       }
-      SQL += " ORDER BY id DESC";
 
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
@@ -123,8 +122,21 @@ public class Select {
                 map_usuarios.get(result.getInt("id_usuario_solicita")),
                 map_usuarios.get(result.getInt("id_usuario_conductor")),
                 map_usuarios.get(result.getInt("id_usuario_aprobador")),
-                map_usuarios.get(result.getInt("id_usuario_enfermero"))
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_iexterno")
                 );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
         listSolicitudes.add(s);
       }
       return listSolicitudes;
@@ -207,9 +219,7 @@ public class Select {
                 direccionDestino = res.getString("direccion_destino");
         Boolean estado = res.getBoolean("estado"),
           estado_enfermeria = res.getBoolean("estado_enfermeria"),
-          es_creador = false;
-        
-        
+          es_creador = false;        
         
         Solicitud s = new Solicitud(
                 id, 
@@ -227,9 +237,22 @@ public class Select {
                 map_usuarios.get(res.getInt("id_usuario_solicita")),
                 map_usuarios.get(res.getInt("id_usuario_conductor")),
                 map_usuarios.get(res.getInt("id_usuario_aprobador")),
-                map_usuarios.get(res.getInt("id_usuario_enfermero"))
+                map_usuarios.get(res.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo")
                 );
         s.setListaAprobador(true);
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
         listSolicitudes.add(s);
       }
       return listSolicitudes;
@@ -433,7 +456,50 @@ public class Select {
     }
     return response;
   }
+  
+  /**
+   * Ids can be separated by comma. Eg 24,39,14
+   * @param ids
+   * @return 
+   */
+  public static List<Usuario> selectUsuariosById(String ids) {
+    ConnectDB con = new ConnectDB();
+    List<Usuario> listUsuarios = null;
     
+    String[] tem_ids = ids.split(",");
+    String where = "";
+    for (String id : tem_ids) {
+      if(!"".equals(where))
+        where += " OR ";
+      where += "id=" + id;
+    }
+    
+    String SQL = "SELECT * FROM usuario WHERE " + where;
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      
+      SQL += " ORDER BY PRSNAPLL ASC";
+      
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+      listUsuarios = new ArrayList<Usuario>();
+      while (res.next()) {
+        Usuario s = new Usuario(res.getInt("id"), res.getString("PRSNNMBR"), res.getString("PRSNAPLL"),
+                res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
+                res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
+                res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"), res.getTimestamp("f_disponible"));
+        listUsuarios.add(s);
+      }
+      return listUsuarios;
+    } catch (SQLException e) {
+    }finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+    return listUsuarios;
+  }
+  
+  
   public static List<Usuario> selectMappedUsuariosExtInt(int es_interno) {
     ConnectDB con = new ConnectDB();
     List<Usuario> listUsuarios = null;

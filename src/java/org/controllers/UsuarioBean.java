@@ -107,7 +107,8 @@ public class UsuarioBean {
   }
 
   public UsuarioBean() {
-    usuario = new Usuario();   
+    usuario = new Usuario();
+    usuario.setEsInterno(true);
     listaUsuarios = Select.selectUsuarios("usuarios");
     
     conductor = new Usuario();

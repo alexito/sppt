@@ -1,7 +1,9 @@
 package org.models;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Solicitud implements java.io.Serializable {
 
@@ -24,7 +26,14 @@ public class Solicitud implements java.io.Serializable {
   private Usuario usuarioByIdUsuarioConductor;
   private Usuario usuarioByIdUsuarioAprobador;
   private Usuario usuarioByIdUsuarioEnfermero;
-  
+  private String nuevoUsuarioExterno;
+  private String ids_interno;
+  private String ids_externo;
+  private String nombres_interno;
+  private String nombres_externo;
+  private List<Usuario> listaInternosSeleccionados;
+  private List<Usuario> listaExternosSeleccionados;
+
   public Solicitud() {
     this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
@@ -32,6 +41,8 @@ public class Solicitud implements java.io.Serializable {
     this.usuarioByIdUsuarioAprobador = new Usuario();
     this.usuarioByIdUsuarioEnfermero = new Usuario();
     this.listaAprobador = false;
+    this.listaInternosSeleccionados = new ArrayList<Usuario>();
+    this.listaExternosSeleccionados = new ArrayList<Usuario>();
   }
 
   public Solicitud(int id) {
@@ -39,7 +50,8 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, Boolean estadoEnfermeria,
-          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero) {
+          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
+          String ids_interno, String ids_externo) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
@@ -57,6 +69,9 @@ public class Solicitud implements java.io.Serializable {
     this.novedades = novedades;
     this.es_creador = es_creador;
     this.listaAprobador = false;
+    this.ids_interno = ids_interno;
+    this.ids_externo = ids_externo;
+    
   }
 
   public int getId() {
@@ -219,6 +234,74 @@ public class Solicitud implements java.io.Serializable {
 
   public void setEs_creador(Boolean es_creador) {
     this.es_creador = es_creador;
+  }
+  
+  public List<Usuario> getListaInternosSeleccionados() {
+    return listaInternosSeleccionados;
+  }
+
+  public void setListaInternosSeleccionados(List<Usuario> listaInternosSeleccionados) {
+    this.listaInternosSeleccionados = listaInternosSeleccionados;
+  }
+
+  public List<Usuario> getListaExternosSeleccionados() {
+    return listaExternosSeleccionados;
+  }
+
+  public void setListaExternosSeleccionados(List<Usuario> listaExternosSeleccionados) {
+    this.listaExternosSeleccionados = listaExternosSeleccionados;
+  }
+  
+  public String getNuevoUsuarioExterno() {
+    return nuevoUsuarioExterno;
+  }
+
+  public void setNuevoUsuarioExterno(String nuevoUsuarioExterno) {
+    this.nuevoUsuarioExterno = nuevoUsuarioExterno;
+  }
+  
+  public String getIds_interno() {
+    return ids_interno;
+  }
+
+  public void setIds_interno(String ids_interno) {
+    this.ids_interno = ids_interno;
+  }
+
+  public String getIds_externo() {
+    return ids_externo;
+  }
+
+  public void setIds_externo(String ids_externo) {
+    this.ids_externo = ids_externo;
+  }
+  
+  public String getNombres_interno() {
+    String names = "";
+    for (Usuario user : listaInternosSeleccionados) {
+        if(!"".equals(names))
+          names += ", ";
+        names += user.getNombrecompleto();
+    }
+    return names;
+  }
+
+  public void setNombres_interno(String nombres_interno) {
+    this.nombres_interno = nombres_interno;
+  }
+
+  public String getNombres_externo() {
+    String names = "";
+    for (Usuario user : listaExternosSeleccionados) {
+        if(!"".equals(names))
+          names += ", ";
+        names += user.getNombrecompleto();
+    }
+    return names;
+  }
+
+  public void setNombres_externo(String nombres_externo) {
+    this.nombres_externo = nombres_externo;
   }
 
   public String getNombre_solicita() {
