@@ -124,7 +124,7 @@ public class Select {
                 map_usuarios.get(result.getInt("id_usuario_aprobador")),
                 map_usuarios.get(result.getInt("id_usuario_enfermero")),
                 result.getString("ids_interno"),
-                result.getString("ids_iexterno")
+                result.getString("ids_externo")
                 );
         
         if(result.getString("ids_interno") != null)

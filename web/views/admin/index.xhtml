@@ -350,18 +350,18 @@
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitudBean.solicitud.distanciaById.localidadByIdOrigen.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-
+                  
 
                   <h:outputLabel for="dorigen" value="Dirección origen: " />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
-
+                  
 
                   <h:outputLabel for="destino" value="Destino: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitud.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-
+                  
 
                   <h:outputLabel for="ddestino" value="Dirección destino: " />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
@@ -370,22 +370,22 @@
 
                   <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
                   <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-                  
+
 
                   <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
 
-
+                  
                   <p:outputLabel value="Acompañantes Internos:" />
                   <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
-                                  maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
+                                  maxResults="10" minQueryLength="2" queryDelay="500" 
                                   converter="usuarioInternoConverter" />
                   
                   <p:outputLabel value="Acompañantes Externos:" />
                   <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
-                                  maxResults="10" minQueryLength="2" queryDelay="500" required="true" 
+                                  maxResults="10" minQueryLength="2" queryDelay="500" 
                                   converter="usuarioExternoConverter" />
                   
                   <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />

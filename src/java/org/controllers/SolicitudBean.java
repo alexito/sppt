@@ -159,8 +159,7 @@ public class SolicitudBean {
     
     List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
     for (Usuario user : listaExternos) {
-      if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)
-              || (user.getApellido() + " " + user.getNombre()).toLowerCase().startsWith(query)) {
+      if (user.getNombre().toLowerCase().startsWith(query)) {
         usuariosFiltrados.add(user);
         if(usuariosFiltrados.size() == 10){
           break;
@@ -187,7 +186,9 @@ public class SolicitudBean {
           uids += ",";
         uids += user.getId();
     }
-    String[] nombres = solicitud.getNuevoUsuarioExterno().split(",");
+    String[] nombres;
+    String algo = solicitud.getNuevoUsuarioExterno();
+    nombres = solicitud.getNuevoUsuarioExterno().split(",");
     String nombre;
     for(int i = 0; i < nombres.length; i++){
       if(!"".equals(uids))

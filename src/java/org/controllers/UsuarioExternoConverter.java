@@ -12,16 +12,20 @@ import org.models.Usuario;
 @FacesConverter("usuarioExternoConverter")
 public class UsuarioExternoConverter implements Converter {
   
-  private List<Usuario> listaExternos;
+  private List<Usuario> listaExternos = Select.selectMappedUsuariosExtInt(0);
  
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if(value != null && value.trim().length() > 0) {
-            listaExternos = Select.selectMappedUsuariosExtInt(0);            
-            return listaExternos.get(Integer.parseInt(value));
+        if(value != null && value.trim().length() > 0) {           
+          for (Usuario user : listaExternos) {
+            if (user.getId() == Integer.parseInt(value)) {
+              return user;
+            }
+          }
         }
         else {
             return null;
         }
+        return null;
     }
  
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {

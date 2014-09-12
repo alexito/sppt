@@ -237,6 +237,8 @@ public class Solicitud implements java.io.Serializable {
   }
   
   public List<Usuario> getListaInternosSeleccionados() {
+    if(listaInternosSeleccionados == null)
+      listaInternosSeleccionados = new ArrayList<Usuario>();
     return listaInternosSeleccionados;
   }
 
@@ -245,6 +247,8 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public List<Usuario> getListaExternosSeleccionados() {
+    if(listaExternosSeleccionados == null)
+      listaExternosSeleccionados = new ArrayList<Usuario>();
     return listaExternosSeleccionados;
   }
 

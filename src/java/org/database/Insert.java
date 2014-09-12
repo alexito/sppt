@@ -28,7 +28,7 @@ public class Insert {
     ResultSet result = null;
     con = new ConnectDB();
     try {
-      SQL = "SELECT id WHERE PRSNNMBR='" + nombre + "'";
+      SQL = "SELECT id FROM usuario WHERE PRSNNMBR='" + nombre + "'";
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
       result.next();

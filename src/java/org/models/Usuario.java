@@ -77,6 +77,8 @@ public class Usuario implements java.io.Serializable {
   }
   
   public String getNombre() {
+    if(this.nombre == null)
+      this.nombre = "";
     return this.nombre;
   }
 
@@ -85,6 +87,8 @@ public class Usuario implements java.io.Serializable {
   }
 
   public String getApellido() {
+    if(this.apellido == null)
+      this.apellido = "";
     return this.apellido;
   }
 
@@ -181,6 +185,8 @@ public class Usuario implements java.io.Serializable {
   }
   
   public String getNombrecompleto() {
+    if(this.apellido == null)
+      this.apellido = "";
     return this.apellido + " " + this.nombre;
   }
 
