@@ -831,7 +831,7 @@
                   <p:message for="cedula" id="msgCedula" display="icon" />
                   
                   <h:outputLabel for="clave" value="Clave: *" />
-                  <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
+                  <p:inputText id="clave" value="#{usuarioBean.enfermero.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
                     <f:validateLength minimum="5" />
                     <p:ajax update="msgClave" event="blur" />
                   </p:inputText>                

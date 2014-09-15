@@ -14,8 +14,7 @@ public class Solicitud implements java.io.Serializable {
   private String hospedaje;
   private Boolean estado;
   private Boolean estadoEnfermeria = false;
-  private Boolean emergencia = false;
-  private String emergenciaRazon = "";
+  private Boolean emergencia = false;  
   private Boolean listaAprobador;
   private Boolean es_creador;
   private String novedades;
@@ -24,6 +23,7 @@ public class Solicitud implements java.io.Serializable {
   private Distancia distanciaById;
   private Usuario usuarioByIdUsuarioSolicita;
   private Usuario usuarioByIdUsuarioConductor;
+  private Usuario usuarioByIdUsuarioConductor2;
   private Usuario usuarioByIdUsuarioAprobador;
   private Usuario usuarioByIdUsuarioEnfermero;
   private String nuevoUsuarioExterno;
@@ -33,14 +33,20 @@ public class Solicitud implements java.io.Serializable {
   private String nombres_externo;
   private List<Usuario> listaInternosSeleccionados;
   private List<Usuario> listaExternosSeleccionados;
+  private Boolean cancelado;
+  private Emergencia emergenciaById;
+  private String id_solicitud_relacion;
 
   public Solicitud() {
     this.distanciaById = new Distancia();
     this.usuarioByIdUsuarioSolicita = new Usuario();
     this.usuarioByIdUsuarioConductor = new Usuario();
+    this.usuarioByIdUsuarioConductor2 = new Usuario();
     this.usuarioByIdUsuarioAprobador = new Usuario();
     this.usuarioByIdUsuarioEnfermero = new Usuario();
+    this.emergenciaById = new Emergencia();
     this.listaAprobador = false;
+    this.cancelado = false;
     this.listaInternosSeleccionados = new ArrayList<Usuario>();
     this.listaExternosSeleccionados = new ArrayList<Usuario>();
   }
@@ -50,14 +56,16 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, Boolean estadoEnfermeria,
-          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
-          String ids_interno, String ids_externo) {
+          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioConductor2, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
+          String ids_interno, String ids_externo, Emergencia emergenciaById, Boolean cancelado, String id_solicitud_relacion) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
     this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
+    this.usuarioByIdUsuarioConductor2 = usuarioByIdUsuarioConductor2;
     this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
     this.usuarioByIdUsuarioEnfermero = usuarioByIdUsuarioEnfermero;
+    this.emergenciaById = emergenciaById;
     this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
@@ -69,9 +77,10 @@ public class Solicitud implements java.io.Serializable {
     this.novedades = novedades;
     this.es_creador = es_creador;
     this.listaAprobador = false;
+    this.cancelado = cancelado;
     this.ids_interno = ids_interno;
     this.ids_externo = ids_externo;
-    
+    this.id_solicitud_relacion = id_solicitud_relacion;
   }
 
   public int getId() {
@@ -212,13 +221,7 @@ public class Solicitud implements java.io.Serializable {
     this.emergencia = emergencia;
   }
 
-  public String getEmergenciaRazon() {
-    return emergenciaRazon;
-  }
-
-  public void setEmergenciaRazon(String emergenciaRazon) {
-    this.emergenciaRazon = emergenciaRazon;
-  }
+  
 
   public String getNovedades() {
     return this.novedades;
@@ -312,5 +315,39 @@ public class Solicitud implements java.io.Serializable {
     return "";
   }
   
+  public Usuario getUsuarioByIdUsuarioConductor2() {
+    return usuarioByIdUsuarioConductor2;
+  }
+
+  public void setUsuarioByIdUsuarioConductor2(Usuario usuarioByIdUsuarioConductor2) {
+    this.usuarioByIdUsuarioConductor2 = usuarioByIdUsuarioConductor2;
+  }
+
+  public Boolean getCancelado() {
+    return cancelado;
+  }
+
+  public void setCancelado(Boolean cancelado) {
+    this.cancelado = cancelado;
+  }
+
+  public Emergencia getEmergenciaById() {
+    return emergenciaById;
+  }
+
+  public void setEmergenciaById(Emergencia emergenciaById) {
+    this.emergenciaById = emergenciaById;
+  }
+  
+  public String getId_solicitud_relacion() {
+    if(id_solicitud_relacion == null)
+      id_solicitud_relacion = "";
+    return id_solicitud_relacion;
+  }
+
+  public void setId_solicitud_relacion(String id_solicitud_relacion) {
+    this.id_solicitud_relacion = id_solicitud_relacion;
+  }
 
 }
+

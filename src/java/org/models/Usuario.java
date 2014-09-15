@@ -18,8 +18,10 @@ public class Usuario implements java.io.Serializable {
   private Boolean estado;
   private Boolean esInterno;
   private String observacion;
+  private String observacion2;
   private String rol;
   private Date FDisponible;
+  private Date FDisponible2;
   private String nombrecompleto;
 
   public Usuario() {
@@ -34,7 +36,8 @@ public class Usuario implements java.io.Serializable {
     this.rol = rol;
   }
 
-  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono, String movil, Boolean estado, Boolean esInterno, String observacion, String rol, String codemp, String codapr, Date FDisponible) {
+  public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono,
+          String movil, Boolean estado, Boolean esInterno, String observacion, String observacion2, String rol, String codemp, String codapr, Date FDisponible, Date FDisponible2) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -46,10 +49,12 @@ public class Usuario implements java.io.Serializable {
     this.estado = estado;
     this.esInterno = esInterno;
     this.observacion = observacion;
+    this.observacion2 = observacion2;
     this.rol = rol;
     this.codemp = codemp;
     this.codapr = codapr;
     this.FDisponible = FDisponible;
+    this.FDisponible2 = FDisponible2;
   }
 
   public int getId() {
@@ -192,6 +197,23 @@ public class Usuario implements java.io.Serializable {
 
   public void setNombrecompleto(String nombrecompleto) {
     this.nombrecompleto = nombrecompleto;
+  }
+  
+  
+  public String getObservacion2() {
+    return observacion2;
+  }
+
+  public void setObservacion2(String observacion2) {
+    this.observacion2 = observacion2;
+  }
+
+  public Date getFDisponible2() {
+    return FDisponible2;
+  }
+
+  public void setFDisponible2(Date FDisponible2) {
+    this.FDisponible2 = FDisponible2;
   }
 
   @Override

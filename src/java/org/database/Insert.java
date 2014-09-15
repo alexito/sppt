@@ -9,6 +9,7 @@ import java.util.Date;
 import static org.database.Select.CloseCurrentConnection;
 import static org.database.Select.sentence;
 import org.models.Distancia;
+import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -43,7 +44,7 @@ public class Insert {
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL,"
-            + " PRSNTLFN, estado, rol, f_disponible, observacion, es_interno)"
+            + " PRSNTLFN, estado, rol, f_disponible, f_disponible2, observacion, observacion2, es_interno)"
             + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
     psInsert.setString(1, usuario.getCodemp());
@@ -57,8 +58,10 @@ public class Insert {
     psInsert.setBoolean(9, usuario.getEstado());
     psInsert.setString(10, usuario.getRol());
     psInsert.setTimestamp(11, new java.sql.Timestamp(new Date().getTime()));
-    psInsert.setString(12, usuario.getObservacion());
-    psInsert.setBoolean(13, usuario.getEsInterno());
+    psInsert.setTimestamp(12, new java.sql.Timestamp(new Date().getTime()));
+    psInsert.setString(13, usuario.getObservacion());
+    psInsert.setString(14, "");
+    psInsert.setBoolean(15, usuario.getEsInterno());
     
     return RunSQL(con, psInsert);
     
@@ -67,8 +70,58 @@ public class Insert {
   public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
+            + " direccion_origen, direccion_destino, estado, estado_enfermeria,"
+            + " novedades, id_usuario_solicita, id_usuario_aprobador,"
+            + " ids_interno, ids_externo)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    
+    int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    
+    if(dist_id == 0){
+      InsertDistanciaNoDistance(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+      dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    }
+    
+    int id_aprobador = 0;
+    if(solicitud.getUsuarioByIdUsuarioAprobador() == null || solicitud.getUsuarioByIdUsuarioAprobador().getId() == 0){
+      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      if(id_aprobador == 0){
+        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
+      }
+    }
+    else{
+      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
+    }
+    
+    PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
+    psInsert.setInt(1, dist_id);
+    psInsert.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
+    psInsert.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psInsert.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psInsert.setString(5, solicitud.getDireccionOrigen());
+    psInsert.setString(6, solicitud.getDireccionDestino());
+    psInsert.setBoolean(7, solicitud.getEstado());
+    psInsert.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psInsert.setString(9, solicitud.getNovedades()); 
+    psInsert.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psInsert.setInt(11, id_aprobador);
+    psInsert.setString(12, solicitud.getIds_interno()); 
+    psInsert.setString(13, solicitud.getIds_externo()); 
+        
+    return RunSQL(con, psInsert);
+    
+  }
+  
+  
+  
+  public static String InsertSolicitudEmergencia(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
-            + " emergencia_razon, novedades, id_usuario_solicita, id_usuario_aprobador,"
+            + " id_tipo_emergencia, novedades, id_usuario_solicita, id_usuario_aprobador,"
             + " ids_interno, ids_externo)"
             + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
@@ -103,7 +156,7 @@ public class Insert {
     psInsert.setBoolean(7, solicitud.getEstado());
     psInsert.setBoolean(8, solicitud.getEstadoEnfermeria());
     psInsert.setBoolean(9, solicitud.getEmergencia());    
-    psInsert.setString(10, solicitud.getEmergenciaRazon());
+    psInsert.setInt(10, solicitud.getEmergenciaById().getId());
     psInsert.setString(11, solicitud.getNovedades()); 
     psInsert.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
     psInsert.setInt(13, id_aprobador);
@@ -114,11 +167,23 @@ public class Insert {
     
   }
   
+  
   public static String InsertLocalidad(Localidad localidad) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO localidad (nombre ) VALUES (?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);    
     psInsert.setString(1, localidad.getNombre());        
+    
+    return RunSQL(con, psInsert);
+    
+  }
+  
+  public static String InsertEmergencia(Emergencia emergencia) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "INSERT INTO emergencia (nombre, estado) VALUES (?,?)";
+    PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);    
+    psInsert.setString(1, emergencia.getNombre());
+    psInsert.setBoolean(2, true);
     
     return RunSQL(con, psInsert);
     

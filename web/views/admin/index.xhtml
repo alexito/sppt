@@ -396,8 +396,11 @@
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" >
                   </p:inputTextarea>                
 
-                  <br></br>
-                  <br></br>
+                  <h:outputLabel for="relacion" value="Relacionar con la solicitud Nro:" />
+                  <p:inputTextarea id="relacion" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
+                                   placeholder="Si no encontró el acompañante externo en la lista, ingrese aquí el nombre completo para mostrar en las próximas solicitudes. En caso de ser varios acompañantes, separe los nombres usando una coma." />
+                  
+                  
                   <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
                 </h:panelGrid>

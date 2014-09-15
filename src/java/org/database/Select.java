@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.models.Distancia;
+import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -78,6 +79,7 @@ public class Select {
       while (result.next()) {
         id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
         id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
         id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
       }
 
@@ -100,8 +102,12 @@ public class Select {
                 direccionOrigen = result.getString("direccion_origen"),
                 direccionDestino = result.getString("direccion_destino");
         Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
                 es_creador = false;
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -121,10 +127,14 @@ public class Select {
                 map_distancias.get(result.getInt("id_distancia")),                 
                 map_usuarios.get(result.getInt("id_usuario_solicita")),
                 map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
                 map_usuarios.get(result.getInt("id_usuario_aprobador")),
                 map_usuarios.get(result.getInt("id_usuario_enfermero")),
                 result.getString("ids_interno"),
-                result.getString("ids_externo")
+                result.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
                 );
         
         if(result.getString("ids_interno") != null)
@@ -193,6 +203,7 @@ public class Select {
       while (res.next()) {
         id_usuarios.put(res.getInt("id_usuario_solicita"), res.getInt("id_usuario_solicita"));
         id_usuarios.put(res.getInt("id_usuario_conductor"), res.getInt("id_usuario_conductor"));
+        id_usuarios.put(res.getInt("id_usuario_conductor2"), res.getInt("id_usuario_conductor2"));
         id_usuarios.put(res.getInt("id_usuario_aprobador"), res.getInt("id_usuario_aprobador"));
         id_usuarios.put(res.getInt("id_usuario_enfermero"), res.getInt("id_usuario_enfermero"));
         id_distancias.put(res.getInt("id_distancia"), res.getInt("id_distancia"));
@@ -219,7 +230,11 @@ public class Select {
                 direccionDestino = res.getString("direccion_destino");
         Boolean estado = res.getBoolean("estado"),
           estado_enfermeria = res.getBoolean("estado_enfermeria"),
-          es_creador = false;        
+          es_creador = false,
+          cancelado = res.getBoolean("cancelado");
+        
+        int eid = res.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         Solicitud s = new Solicitud(
                 id, 
@@ -236,20 +251,24 @@ public class Select {
                 map_distancias.get(res.getInt("id_distancia")),                 
                 map_usuarios.get(res.getInt("id_usuario_solicita")),
                 map_usuarios.get(res.getInt("id_usuario_conductor")),
+                map_usuarios.get(res.getInt("id_usuario_conductor2")),
                 map_usuarios.get(res.getInt("id_usuario_aprobador")),
                 map_usuarios.get(res.getInt("id_usuario_enfermero")),
-                result.getString("ids_interno"),
-                result.getString("ids_externo")
+                res.getString("ids_interno"),
+                res.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
                 );
         s.setListaAprobador(true);
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(res.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(res.getString("ids_interno")));
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(res.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(res.getString("ids_interno")));
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
@@ -457,6 +476,45 @@ public class Select {
     return response;
   }
   
+   /**
+   * Id = 0 for all
+   * Id = >0 for specific type
+   * @param ids
+   * @return 
+   */
+  public static List<Emergencia> selectEmergenciaById(int id) {
+    ConnectDB con = new ConnectDB();
+    List<Emergencia> listEmergencia = null;
+    String SQL = "SELECT * FROM emergencia";
+    String where = "";
+    if(id != 0){
+      where = " WHERE id=" + id;
+    }
+    
+    SQL += where;    
+    
+    ResultSet res = null;
+    Statement sent = null;
+    try {
+      
+      SQL += " ORDER BY nombre ASC";
+      
+      sent = con.getConnection().createStatement();
+      res = sent.executeQuery(SQL);
+      listEmergencia = new ArrayList<Emergencia>();
+      while (res.next()) {
+        Emergencia s = new Emergencia(res.getInt("id"), res.getString("nombre"), res.getBoolean("estado"));
+        listEmergencia.add(s);
+      }
+      return listEmergencia;
+    } catch (SQLException e) {
+    }finally {
+      CloseCurrentConnection(sent, res, con);
+    }
+    return listEmergencia;
+  }
+  
+    
   /**
    * Ids can be separated by comma. Eg 24,39,14
    * @param ids
@@ -488,7 +546,8 @@ public class Select {
         Usuario s = new Usuario(res.getInt("id"), res.getString("PRSNNMBR"), res.getString("PRSNAPLL"),
                 res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
                 res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
-                res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"), res.getTimestamp("f_disponible"));
+                res.getString("observacion2"), res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"),
+                res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"));
         listUsuarios.add(s);
       }
       return listUsuarios;
@@ -518,7 +577,8 @@ public class Select {
         Usuario s = new Usuario(res.getInt("id"), res.getString("PRSNNMBR"), res.getString("PRSNAPLL"),
                 res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
                 res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
-                res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"), res.getTimestamp("f_disponible"));
+                res.getString("observacion2"), res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"),
+                res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"));
         listUsuarios.add(s);
       }
       return listUsuarios;
@@ -551,7 +611,8 @@ public class Select {
         Usuario s = new Usuario(result.getInt("id"), result.getString("PRSNNMBR"), result.getString("PRSNAPLL"),
                 result.getString("PRSNCDLA"), result.getString("clave"), result.getString("PRSNMAIL"), result.getString("PRSNTLFN"),
                 result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getBoolean("es_interno"), result.getString("observacion"),
-                result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"), result.getTimestamp("f_disponible"));
+                result.getString("observacion2"), result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"),
+                result.getTimestamp("f_disponible"), result.getTimestamp("f_disponible2"));
         listUsuarios.add(s);
       }
       return listUsuarios;

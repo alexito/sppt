@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -46,6 +47,18 @@ public class Update {
     
   }
   
+  public static String UpdateUsuarioConductor2(Usuario usuario) throws SQLException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE usuario SET f_disponible2=?, observacion2=?  WHERE id=?";
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);    
+    psUpdate.setTimestamp(1, new java.sql.Timestamp(usuario.getFDisponible2().getTime()));
+    psUpdate.setString(2, usuario.getObservacion2());
+    psUpdate.setInt(3, usuario.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
   public static String UpdateLocalidad(Localidad localidad) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE localidad SET nombre=? WHERE id=?";
@@ -58,53 +71,65 @@ public class Update {
     
   }
   
-  public static String UpdateSolicitudOwner(Solicitud solicitud) throws SQLException, ParseException {
+  public static String UpdateEmergencia(Emergencia emergencia) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
-    String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
-            + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?, emergencia=?,"
-            + " emergencia_razon=?, novedades=?, id_usuario_solicita=?,"
-            + " id_usuario_aprobador=? WHERE id=?";
-    
-    int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
-            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
-    
-    int id_aprobador = 0;
-    if(solicitud.getUsuarioByIdUsuarioAprobador() == null){
-      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
-      if(id_aprobador == 0){
-        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
-      }
-    }
-    else{
-      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
-    }
-    
+    String SQL = "UPDATE emergencia SET nombre=? WHERE id=?";
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
-    psUpdate.setInt(1, dist_id);
-    psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
-    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
-    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
-    psUpdate.setString(5, solicitud.getDireccionOrigen());
-    psUpdate.setString(6, solicitud.getDireccionDestino());
-    psUpdate.setBoolean(7, solicitud.getEstado());
-    psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
-    psUpdate.setBoolean(9, solicitud.getEmergencia());
-    psUpdate.setString(10, solicitud.getEmergenciaRazon());
-    psUpdate.setString(11, solicitud.getNovedades());
-    psUpdate.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psUpdate.setInt(13, id_aprobador);
-    psUpdate.setInt(14, solicitud.getId());
+    
+    psUpdate.setString(1, emergencia.getNombre());
+    psUpdate.setInt(2, emergencia.getId());
     
     return RunSQL(con, psUpdate);
     
   }
   
-  public static String UpdateSolicitud(Solicitud solicitud) throws SQLException, ParseException {
+  public static String UpdateSolicitudOwner(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
+            + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?,"
+            + " novedades=?, id_usuario_solicita=?, id_usuario_aprobador=?, id_solicitud_relacion=?"
+            + " WHERE id=?";
+    
+    int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    
+    int id_aprobador = 0;
+    if(solicitud.getUsuarioByIdUsuarioAprobador() == null){
+      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      if(id_aprobador == 0){
+        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
+      }
+    }
+    else{
+      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
+    }
+    
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    psUpdate.setInt(1, dist_id);
+    psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
+    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psUpdate.setString(5, solicitud.getDireccionOrigen());
+    psUpdate.setString(6, solicitud.getDireccionDestino());
+    psUpdate.setBoolean(7, solicitud.getEstado());
+    psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psUpdate.setString(9, solicitud.getNovedades());
+    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(11, id_aprobador);
+    psUpdate.setString(12, solicitud.getId_solicitud_relacion());
+    psUpdate.setInt(13, solicitud.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  
+  public static String UpdateSolicitudEmergenciaOwner(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
             + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?, emergencia=?,"
-            + " emergencia_razon=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=?,"
-            + " id_usuario_aprobador=?, id_usuario_enfermero=? WHERE id=?";
+            + " id_tipo_emergencia=?, novedades=?, id_usuario_solicita=?,"
+            + " id_usuario_aprobador=?, id_solicitud_relacion=? WHERE id=?";
     
     int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -130,17 +155,118 @@ public class Update {
     psUpdate.setBoolean(7, solicitud.getEstado());
     psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
     psUpdate.setBoolean(9, solicitud.getEmergencia());
-    psUpdate.setString(10, solicitud.getEmergenciaRazon());
+    psUpdate.setInt(10, solicitud.getEmergenciaById().getId());
     psUpdate.setString(11, solicitud.getNovedades());
     psUpdate.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
-    psUpdate.setInt(13, solicitud.getUsuarioByIdUsuarioConductor().getId());
-    psUpdate.setInt(14, id_aprobador);
-    psUpdate.setInt(15, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
+    psUpdate.setInt(13, id_aprobador);
+    psUpdate.setString(14, solicitud.getId_solicitud_relacion());
+    psUpdate.setInt(15, solicitud.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  
+  public static String UpdateSolicitud(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
+            + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?,"
+            + " novedades=?, id_usuario_solicita=?, id_usuario_conductor=?"
+            + " id_usuario_aprobador=?, id_usuario_enfermero=?, cancelado=?, id_solicitud_relacion=? WHERE id=?";
+    
+    int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    
+    int id_aprobador = 0;
+    if(solicitud.getUsuarioByIdUsuarioAprobador() == null){
+      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      if(id_aprobador == 0){
+        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
+      }
+    }
+    else{
+      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
+    }
+    
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    psUpdate.setInt(1, dist_id);
+    psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
+    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psUpdate.setString(5, solicitud.getDireccionOrigen());
+    psUpdate.setString(6, solicitud.getDireccionDestino());
+    psUpdate.setBoolean(7, solicitud.getEstado());
+    psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psUpdate.setString(9, solicitud.getNovedades());
+    psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(11, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(12, id_aprobador);
+    psUpdate.setInt(13, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
+    psUpdate.setBoolean(14, solicitud.getCancelado());
+    psUpdate.setString(15, solicitud.getId_solicitud_relacion());
     psUpdate.setInt(16, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     
   }
+  
+  public static String UpdateSolicitudConductor2(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET id_usuario_conductor2=? WHERE id=?";
+       
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
+    psUpdate.setInt(1, solicitud.getUsuarioByIdUsuarioConductor2().getId());
+    psUpdate.setInt(2, solicitud.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  
+  public static String UpdateSolicitudEmergencia(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
+            + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?, emergencia=?,"
+            + " id_tipo_emergencia=?, novedades=?, id_usuario_solicita=?, id_usuario_conductor=?,"
+            + " id_usuario_aprobador=?, id_usuario_enfermero=?, cancelado=?, id_solicitud_relacion=? WHERE id=?";
+    
+    int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
+            solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+    
+    int id_aprobador = 0;
+    if(solicitud.getUsuarioByIdUsuarioAprobador() == null){
+      id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      if(id_aprobador == 0){
+        id_aprobador = solicitud.getUsuarioByIdUsuarioSolicita().getId();
+      }
+    }
+    else{
+      id_aprobador = solicitud.getUsuarioByIdUsuarioAprobador().getId();
+    }
+    
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);
+    psUpdate.setInt(1, dist_id);
+    psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFCreacion().getTime()));
+    psUpdate.setTimestamp(3, new java.sql.Timestamp(solicitud.getFSalida().getTime()));
+    psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
+    psUpdate.setString(5, solicitud.getDireccionOrigen());
+    psUpdate.setString(6, solicitud.getDireccionDestino());
+    psUpdate.setBoolean(7, solicitud.getEstado());
+    psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
+    psUpdate.setBoolean(9, solicitud.getEmergencia());
+    psUpdate.setInt(10, solicitud.getEmergenciaById().getId());
+    psUpdate.setString(11, solicitud.getNovedades());
+    psUpdate.setInt(12, solicitud.getUsuarioByIdUsuarioSolicita().getId());
+    psUpdate.setInt(13, solicitud.getUsuarioByIdUsuarioConductor().getId());
+    psUpdate.setInt(14, id_aprobador);
+    psUpdate.setInt(15, solicitud.getUsuarioByIdUsuarioEnfermero().getId());
+    psUpdate.setBoolean(16, solicitud.getCancelado());
+    psUpdate.setString(17, solicitud.getId_solicitud_relacion());
+    psUpdate.setInt(18, solicitud.getId());
+    return RunSQL(con, psUpdate);
+    
+  }
+  
   
   private static String RunSQL(ConnectDB con, PreparedStatement psUpdate) {
     
