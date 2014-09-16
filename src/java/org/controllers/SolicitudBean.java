@@ -29,6 +29,7 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudes;
   private List<Solicitud> listaSolicitudesAprobadas;
   private List<Solicitud> listaSolicitudesPendientes;
+  private List<Solicitud> listaSolicitudesCanceladas;
   private List<Solicitud> listaSolicitudesXAprobar;
   private List<Solicitud> listaSolicitudesEnfermeriaXAprobar;
   private List<Solicitud> listaSolicitudesEnfermeriaAprobadas;
@@ -124,6 +125,14 @@ public class SolicitudBean {
   public void setListaSolicitudesPendientes(List<Solicitud> listaSolicitudesPendientes) {
     this.listaSolicitudesPendientes = listaSolicitudesPendientes;
   }
+  
+  public List<Solicitud> getListaSolicitudesCanceladas() {
+    return listaSolicitudesCanceladas;
+  }
+
+  public void setListaSolicitudesCanceladas(List<Solicitud> listaSolicitudesCanceladas) {
+    this.listaSolicitudesCanceladas = listaSolicitudesCanceladas;
+  }
 
   public SolicitudBean() throws IOException {
     usuario = Select.LoggedUser();
@@ -179,24 +188,25 @@ public class SolicitudBean {
     return uids;
   }
   
-  private String pickUsuarioExternoIds(List<Usuario> lista) throws SQLException{
+  private String pickUsuarioExternoIds(List<Usuario> lista, boolean is_insert) throws SQLException{
     String uids = "";
     for (Usuario user : lista) {
         if(!"".equals(uids))
           uids += ",";
         uids += user.getId();
     }
-    String[] nombres;
-    String algo = solicitud.getNuevoUsuarioExterno();
-    nombres = solicitud.getNuevoUsuarioExterno().split(",");
-    String nombre;
-    for(int i = 0; i < nombres.length; i++){
-      if(!"".equals(uids))
-          uids += ",";      
-      nombre = nombres[i].trim().toUpperCase();
-      uids += Insert.InsertNewUsuarioExterno(nombre);
+    if(is_insert){
+      String[] nombres;
+      String algo = solicitud.getNuevoUsuarioExterno();
+      nombres = solicitud.getNuevoUsuarioExterno().split(",");
+      String nombre;
+      for(int i = 0; i < nombres.length; i++){
+        if(!"".equals(uids))
+            uids += ",";      
+        nombre = nombres[i].trim().toUpperCase();
+        uids += Insert.InsertNewUsuarioExterno(nombre);
+      }
     }
-    
     return uids;
   }
   
@@ -211,9 +221,9 @@ public class SolicitudBean {
       solicitud.setEstado(true);
     }
     solicitud.setFCreacion(new Date());
-    
+    solicitud.setCancelado(false);
     solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados()));
-    solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados()));
+    solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true));
     
     Insert.InsertSolicitud(solicitud);
 
@@ -239,7 +249,7 @@ public class SolicitudBean {
     }
     
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados()));
-    editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados()));
+    editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false));
     
     if("enfermero".equals(usuario.getRol())){
       if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
@@ -288,8 +298,9 @@ public class SolicitudBean {
 
   private void updateInfoSolicitudes() {
     if ("admin".equals(usuario.getRol())) {
-      listaSolicitudesAprobadas = Select.selectSolicitudes(1, usuario.getId(), false);
-      listaSolicitudesPendientes = Select.selectSolicitudes(0, usuario.getId(), false);
+      listaSolicitudesAprobadas = Select.selectMisSolicitudesAprobadas(usuario.getId());
+      listaSolicitudesPendientes = Select.selectMisSolicitudesPendientes(usuario.getId());
+      listaSolicitudesCanceladas = Select.selectMisSolicitudesCanceladas(usuario.getId());
       listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);             
     } 
     else if ("enfermero".equals(usuario.getRol())) {

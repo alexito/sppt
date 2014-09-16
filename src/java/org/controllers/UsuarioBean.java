@@ -119,8 +119,8 @@ public class UsuarioBean {
     enfermero.setRol("enfermero");
     listaEnfermeros = Select.selectUsuarios("enfermeros");
     
-    tipos_rol.put("Administrador", "super");
-    tipos_rol.put("Usuario", "admin");
+    tipos_rol.put("Superadmin", "super");
+    tipos_rol.put("Administrador", "admin");
     
     
   }

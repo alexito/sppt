@@ -45,7 +45,8 @@ public class Insert {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL,"
             + " PRSNTLFN, estado, rol, f_disponible, f_disponible2, observacion, observacion2, es_interno)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    java.sql.Timestamp currentDate = new java.sql.Timestamp(new Date().getTime());
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
     psInsert.setString(1, usuario.getCodemp());
     psInsert.setString(2, usuario.getCodapr());
@@ -57,8 +58,8 @@ public class Insert {
     psInsert.setString(8, usuario.getTelefono());
     psInsert.setBoolean(9, usuario.getEstado());
     psInsert.setString(10, usuario.getRol());
-    psInsert.setTimestamp(11, new java.sql.Timestamp(new Date().getTime()));
-    psInsert.setTimestamp(12, new java.sql.Timestamp(new Date().getTime()));
+    psInsert.setTimestamp(11, currentDate);
+    psInsert.setTimestamp(12, currentDate);
     psInsert.setString(13, usuario.getObservacion());
     psInsert.setString(14, "");
     psInsert.setBoolean(15, usuario.getEsInterno());
@@ -73,7 +74,7 @@ public class Insert {
             + " direccion_origen, direccion_destino, estado, estado_enfermeria,"
             + " novedades, id_usuario_solicita, id_usuario_aprobador,"
             + " ids_interno, ids_externo)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());

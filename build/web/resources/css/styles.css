@@ -44,3 +44,10 @@ body{
   width: 120px;
   height: auto;
 }
+
+.ui-autocomplete-multiple ul{
+  width: 200px !important;
+}
+.ui-autocomplete-multiple ul li{
+  float: none !important;
+}

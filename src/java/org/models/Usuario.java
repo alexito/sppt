@@ -142,6 +142,8 @@ public class Usuario implements java.io.Serializable {
   }
   
   public String getObservacion() {
+    if(this.observacion2 == null)
+      this.observacion2 = "";
     return this.observacion;
   }
 
@@ -201,6 +203,8 @@ public class Usuario implements java.io.Serializable {
   
   
   public String getObservacion2() {
+    if(this.observacion2 == null)
+      this.observacion2 = "";
     return observacion2;
   }
 

@@ -52,6 +52,314 @@ public class Select {
     return usuario;
   }
 
+   public static List<Solicitud> selectMisSolicitudesCanceladas(int uid) {
+    List<Solicitud> listSolicitudes = null;
+    ConnectDB con = new ConnectDB();
+    try {
+      
+      String SQL = " SELECT * FROM solicitud  ORDER BY id DESC";
+      SQL = " SELECT * FROM solicitud WHERE cancelado=1 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      listSolicitudes = new ArrayList<Solicitud>();
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+
+      while (result.next()) {
+        int id = result.getInt("id");
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
+        Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false;
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        
+        if(uid != 0)
+          es_creador = true;
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                direccionOrigen,
+                direccionDestino,
+                hospedaje,
+                estado,
+                estado_enfermeria,
+                novedades,
+                es_creador,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
+                );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        listSolicitudes.add(s);
+      }
+      return listSolicitudes;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listSolicitudes;
+  }
+  
+    
+  public static List<Solicitud> selectMisSolicitudesAprobadas(int uid) {
+    List<Solicitud> listSolicitudes = null;
+    ConnectDB con = new ConnectDB();
+    try {
+      
+      String SQL = " SELECT * FROM solicitud  ORDER BY id DESC";
+      SQL = " SELECT * FROM solicitud WHERE estado=1 AND estado_enfermeria=1 AND cancelado=0 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      listSolicitudes = new ArrayList<Solicitud>();
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+
+      while (result.next()) {
+        int id = result.getInt("id");
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
+        Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false;
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        
+        if(uid != 0)
+          es_creador = true;
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                direccionOrigen,
+                direccionDestino,
+                hospedaje,
+                estado,
+                estado_enfermeria,
+                novedades,
+                es_creador,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
+                );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        listSolicitudes.add(s);
+      }
+      return listSolicitudes;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listSolicitudes;
+  }
+  
+  
+  public static List<Solicitud> selectMisSolicitudesPendientes(int uid) {
+    List<Solicitud> listSolicitudes = null;
+    ConnectDB con = new ConnectDB();
+    try {
+      
+      String SQL = " SELECT * FROM solicitud WHERE (estado=0 OR estado_enfermeria=0) AND cancelado=0 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      listSolicitudes = new ArrayList<Solicitud>();
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+
+      while (result.next()) {
+        int id = result.getInt("id");
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
+        Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false;
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        
+        if(uid != 0)
+          es_creador = true;
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                direccionOrigen,
+                direccionDestino,
+                hospedaje,
+                estado,
+                estado_enfermeria,
+                novedades,
+                es_creador,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
+                );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        listSolicitudes.add(s);
+      }
+      return listSolicitudes;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listSolicitudes;
+  }
+  
+  
   public static List<Solicitud> selectSolicitudes(int estadoSolicitud, int uid, boolean all) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();
@@ -60,9 +368,9 @@ public class Select {
       String SQL = " SELECT * FROM solicitud  ORDER BY id DESC";
       if(!all){
         if(uid != 0){
-          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND estado_enfermeria=" + estadoSolicitud + " AND cancelado=0 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
         }else{
-          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " ORDER BY id ASC";
+          SQL = " SELECT * FROM solicitud WHERE estado=" + estadoSolicitud + " AND estado_enfermeria=" + estadoSolicitud + " AND cancelado=0 ORDER BY id ASC";
         }
       }
 

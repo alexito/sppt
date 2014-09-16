@@ -190,6 +190,8 @@ public class Solicitud implements java.io.Serializable {
   }
   
   public Boolean getEstado() {
+    if(this.estado == null)
+      this.estado = false;
     return this.estado;
   }
   
@@ -204,8 +206,14 @@ public class Solicitud implements java.io.Serializable {
   public String getEstadoEnfermeria_legible() {            
     return (getEstadoEnfermeria()) ? "Aprobado" : "Pendiente";
   }
+  
+  public String getEstadoCancelado_legible() {            
+    return (getCancelado()) ? "Cancelado" : "Activo";
+  }
 
   public Boolean getEstadoEnfermeria() {
+    if(this.estadoEnfermeria == null)
+      this.estadoEnfermeria = false;
     return estadoEnfermeria;
   }
 
@@ -214,14 +222,14 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public Boolean getEmergencia() {
+    if(this.emergencia == null)
+      this.emergencia = false;
     return emergencia;
   }
 
   public void setEmergencia(Boolean emergencia) {
     this.emergencia = emergencia;
   }
-
-  
 
   public String getNovedades() {
     return this.novedades;
@@ -232,6 +240,8 @@ public class Solicitud implements java.io.Serializable {
   }
   
   public Boolean getEs_creador() {
+    if(this.es_creador == null)
+      this.es_creador = false;
     return es_creador;
   }
 
