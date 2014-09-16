@@ -17,6 +17,7 @@ import javax.faces.bean.RequestScoped;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
+import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
@@ -30,6 +31,7 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudesAprobadas;
   private List<Solicitud> listaSolicitudesPendientes;
   private List<Solicitud> listaSolicitudesCanceladas;
+  private List<Solicitud> listaSolicitudesEmergencias;
   private List<Solicitud> listaSolicitudesXAprobar;
   private List<Solicitud> listaSolicitudesEnfermeriaXAprobar;
   private List<Solicitud> listaSolicitudesEnfermeriaAprobadas;
@@ -39,9 +41,13 @@ public class SolicitudBean {
   private List<Usuario> listaInternos;
   private List<Usuario> listaExternos;  
   private Solicitud solicitud;
+  private Solicitud solicitudEmergencia;
   private int loc_origen;
   private Usuario usuario;
-  private Date currentDate = new Date();
+  private Date currentDate = new Date();  
+  private Map<String, Integer> listaEmergencia;
+
+    
   public int getLoc_origen() {
     return loc_origen;
   }
@@ -78,6 +84,14 @@ public class SolicitudBean {
     this.solicitud = solicitud;
   }
 
+  public Solicitud getSolicitudEmergencia() {
+    return solicitudEmergencia;
+  }
+
+  public void setSolicitudEmergencia(Solicitud solicitudEmergencia) {
+    this.solicitudEmergencia = solicitudEmergencia;
+  }
+  
   public List<Solicitud> getListaSolicitudes() {
     return listaSolicitudes;
   }
@@ -133,6 +147,22 @@ public class SolicitudBean {
   public void setListaSolicitudesCanceladas(List<Solicitud> listaSolicitudesCanceladas) {
     this.listaSolicitudesCanceladas = listaSolicitudesCanceladas;
   }
+  
+  public List<Solicitud> getListaSolicitudesEmergencias() {
+    return listaSolicitudesEmergencias;
+  }
+
+  public void setListaSolicitudesEmergencias(List<Solicitud> listaSolicitudesEmergencias) {
+    this.listaSolicitudesEmergencias = listaSolicitudesEmergencias;
+  }
+  
+  public Map<String, Integer> getListaEmergencia() {
+    return listaEmergencia;
+  }
+
+  public void setListaEmergencia(Map<String, Integer> listaEmergencia) {
+    this.listaEmergencia = listaEmergencia;
+  }
 
   public SolicitudBean() throws IOException {
     usuario = Select.LoggedUser();
@@ -141,7 +171,11 @@ public class SolicitudBean {
     Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
     Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
     
+    Map<Integer, Emergencia> emer = Select.selectMappedEmergencia();
+    listaEmergencia = mapEmergencias(emer);
+    
     solicitud = new Solicitud();    
+    solicitudEmergencia = new Solicitud();    
     listaInternos = Select.selectMappedUsuariosExtInt(1);
     listaExternos = Select.selectMappedUsuariosExtInt(0);    
     listaLocalidades = mapLocalidad(locs);
@@ -188,7 +222,7 @@ public class SolicitudBean {
     return uids;
   }
   
-  private String pickUsuarioExternoIds(List<Usuario> lista, boolean is_insert) throws SQLException{
+  private String pickUsuarioExternoIds(List<Usuario> lista, boolean is_insert, Solicitud solic) throws SQLException{
     String uids = "";
     for (Usuario user : lista) {
         if(!"".equals(uids))
@@ -197,8 +231,7 @@ public class SolicitudBean {
     }
     if(is_insert){
       String[] nombres;
-      String algo = solicitud.getNuevoUsuarioExterno();
-      nombres = solicitud.getNuevoUsuarioExterno().split(",");
+      nombres = solic.getNuevoUsuarioExterno().split(",");
       String nombre;
       for(int i = 0; i < nombres.length; i++){
         if(!"".equals(uids))
@@ -211,7 +244,7 @@ public class SolicitudBean {
   }
   
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
-    Usuario logged_user = Select.LoggedUser();
+    Usuario logged_user = Select.LoggedUser();       
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
     int h = solicitud.getFSalida().getHours();
     int m = solicitud.getFSalida().getMinutes();
@@ -223,11 +256,31 @@ public class SolicitudBean {
     solicitud.setFCreacion(new Date());
     solicitud.setCancelado(false);
     solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados()));
-    solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true));
+    solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true, solicitud));
     
     Insert.InsertSolicitud(solicitud);
 
     solicitud = new Solicitud();
+    updateInfoSolicitudes();
+
+    return listaSolicitudesAprobadas;
+  }
+  
+  public List<Solicitud> saveSolicitudEmergencia() throws IOException, SQLException, ParseException {
+    Usuario logged_user = Select.LoggedUser();       
+    solicitudEmergencia.setUsuarioByIdUsuarioSolicita(logged_user);
+    int h = solicitudEmergencia.getFSalida().getHours();
+    int m = solicitudEmergencia.getFSalida().getMinutes();
+    solicitudEmergencia.setEstado(true);
+    solicitudEmergencia.setFCreacion(new Date());
+    solicitudEmergencia.setCancelado(false);
+    solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados()));
+    solicitudEmergencia.setIds_externo(pickUsuarioExternoIds(solicitudEmergencia.getListaExternosSeleccionados(), true, solicitudEmergencia));
+    
+    Insert.InsertSolicitudEmergencia(solicitudEmergencia);
+
+    solicitudEmergencia = new Solicitud();
+    solicitudEmergencia.setEmergencia(true);
     updateInfoSolicitudes();
 
     return listaSolicitudesAprobadas;
@@ -249,7 +302,7 @@ public class SolicitudBean {
     }
     
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados()));
-    editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false));
+    editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));
     
     if("enfermero".equals(usuario.getRol())){
       if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
@@ -259,13 +312,24 @@ public class SolicitudBean {
       }
     }
     if(editedSolicitud.getEs_creador() || editedSolicitud.getListaAprobador()){
-      Update.UpdateSolicitudOwner(editedSolicitud);      
+      if(editedSolicitud.getEmergencia()){
+        Update.UpdateSolicitudEmergenciaOwner(editedSolicitud);      
+      }
+      else{
+        Update.UpdateSolicitudOwner(editedSolicitud);      
+      }
     }
     else{
-      Update.UpdateSolicitud(editedSolicitud);      
+      if(editedSolicitud.getEmergencia()){
+        Update.UpdateSolicitudEmergencia(editedSolicitud);      
+      }else{
+        Update.UpdateSolicitud(editedSolicitud);      
+      }
     }
     
     solicitud = new Solicitud();
+    solicitudEmergencia = new Solicitud();
+    solicitudEmergencia.setEmergencia(true);
     updateInfoSolicitudes();
     return listaSolicitudes;
   }
@@ -301,6 +365,7 @@ public class SolicitudBean {
       listaSolicitudesAprobadas = Select.selectMisSolicitudesAprobadas(usuario.getId());
       listaSolicitudesPendientes = Select.selectMisSolicitudesPendientes(usuario.getId());
       listaSolicitudesCanceladas = Select.selectMisSolicitudesCanceladas(usuario.getId());
+      listaSolicitudesEmergencias = Select.selectMisSolicitudesEmergencia(usuario.getId());
       listaSolicitudesXAprobar = Select.selectSolicitudesXAprobar(usuario);             
     } 
     else if ("enfermero".equals(usuario.getRol())) {
@@ -312,6 +377,16 @@ public class SolicitudBean {
     }
   }
   
+  public Map<String, Integer> mapEmergencias(Map<Integer, Emergencia> objs) {
+    Map<String, Integer> res = new HashMap<String, Integer>();
+    Iterator iterator = objs.entrySet().iterator();
+    while (iterator.hasNext()) {
+      Map.Entry mapEntry = (Map.Entry) iterator.next();
+      Emergencia obj = (Emergencia) mapEntry.getValue();
+      res.put(obj.getNombre(), obj.getId());
+    }
+    return res;
+  }
   
   public void filterConductor() throws ParseException{
     Date fs = solicitud.getFSalida();

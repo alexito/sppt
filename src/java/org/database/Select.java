@@ -52,6 +52,107 @@ public class Select {
     return usuario;
   }
 
+  public static List<Solicitud> selectMisSolicitudesEmergencia(int uid) {
+    List<Solicitud> listSolicitudes = null;
+    ConnectDB con = new ConnectDB();
+    try {
+      
+      String SQL = "SELECT * FROM solicitud WHERE cancelado=0 emergencia=1 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      listSolicitudes = new ArrayList<Solicitud>();
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+
+      while (result.next()) {
+        int id = result.getInt("id");
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
+        Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false;
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        
+        if(uid != 0)
+          es_creador = true;
+        
+        Solicitud s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                direccionOrigen,
+                direccionDestino,
+                hospedaje,
+                estado,
+                estado_enfermeria,
+                novedades,
+                es_creador,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo"),
+                emergencia,
+                cancelado,
+                result.getString("id_solicitud_relacion")
+                );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        listSolicitudes.add(s);
+      }
+      return listSolicitudes;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return listSolicitudes;
+  }
+  
    public static List<Solicitud> selectMisSolicitudesCanceladas(int uid) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();
@@ -153,7 +254,7 @@ public class Select {
 
     return listSolicitudes;
   }
-  
+   
     
   public static List<Solicitud> selectMisSolicitudesAprobadas(int uid) {
     List<Solicitud> listSolicitudes = null;
@@ -1019,6 +1120,34 @@ public class Select {
     
     return id;
   }
+  
+   public static Map<Integer, Emergencia> selectMappedEmergencia() {
+        ConnectDB con = new ConnectDB();
+        Map<Integer, Emergencia> response = new HashMap<Integer, Emergencia>();
+        
+        String SQL = "Select * from emergencia where estado='True'";
+        boolean ban = false;
+        ResultSet res = null;
+        Statement sent = null;
+        try {
+            sent = con.getConnection().createStatement();
+            res = sent.executeQuery(SQL);
+            
+            while (res.next()) {
+                Emergencia emergencia = new Emergencia();
+                emergencia.setId(res.getInt("id"));
+                emergencia.setEstado(true);
+                emergencia.setNombre(res.getString("nombre"));
+                response.put(res.getInt("id"), emergencia);
+            }
+            return response;
+        } catch (SQLException e) {
+        } finally {
+            CloseCurrentConnection(sent, res, con);
+        }
+        return response;
+    }
+
   
   public static Usuario LoggedUser() throws IOException {
     Usuario logged_user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USER_KEY);
