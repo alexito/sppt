@@ -194,6 +194,8 @@ public class Usuario implements java.io.Serializable {
   public String getNombrecompleto() {
     if(this.apellido == null)
       this.apellido = "";
+    if(this.nombre == null)
+      this.nombre = "";
     return this.apellido + " " + this.nombre;
   }
 

@@ -219,7 +219,38 @@ public class SolicitudBean {
           uids += ",";
         uids += user.getId();
     }
+    if(uids.length() > 2 && uids.contains(","))
+      uids = removeDuplicated(uids);
     return uids;
+  }
+  
+  private String removeDuplicated(String uids) {
+    String[] input = uids.split(",");
+    String[] response = new String[input.length];
+    int j;
+    for (j = 0; j < input.length; j++){
+      response[j] = "";  
+    }
+    
+    for (int i = 0; i < input.length; i++) {
+      for (j = 0; j < input.length; j++){
+        if(response[j].equals(input[i]))
+          break;        
+        else if(response[j].equals("")){
+          response[j] = input[i];
+          break;
+        }          
+      }
+    }
+    String new_uids = "";
+    for (j = 0; j < response.length; j++){
+      if("".equals(response[j]))
+        continue;
+      if(!"".equals(new_uids))
+          new_uids += ",";
+        new_uids += response[j];
+    }
+    return new_uids;
   }
   
   private String pickUsuarioExternoIds(List<Usuario> lista, boolean is_insert, Solicitud solic) throws SQLException{
@@ -237,9 +268,12 @@ public class SolicitudBean {
         if(!"".equals(uids))
             uids += ",";      
         nombre = nombres[i].trim().toUpperCase();
-        uids += Insert.InsertNewUsuarioExterno(nombre);
+        if(nombre.length() > 2)
+          uids += Insert.InsertNewUsuarioExterno(nombre);
       }
     }
+    if(uids.length() > 2 && uids.contains(","))
+      uids = removeDuplicated(uids);
     return uids;
   }
   
@@ -272,6 +306,7 @@ public class SolicitudBean {
     int h = solicitudEmergencia.getFSalida().getHours();
     int m = solicitudEmergencia.getFSalida().getMinutes();
     solicitudEmergencia.setEstado(true);
+    solicitudEmergencia.setEmergencia(true);
     solicitudEmergencia.setFCreacion(new Date());
     solicitudEmergencia.setCancelado(false);
     solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados()));

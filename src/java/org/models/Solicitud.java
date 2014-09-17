@@ -36,6 +36,7 @@ public class Solicitud implements java.io.Serializable {
   private Boolean cancelado;
   private Emergencia emergenciaById;
   private String id_solicitud_relacion;
+  private String tipo_solicitud_legible;
 
   public Solicitud() {
     this.distanciaById = new Distancia();
@@ -57,7 +58,7 @@ public class Solicitud implements java.io.Serializable {
 
   public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, Boolean estadoEnfermeria,
           String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioConductor2, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
-          String ids_interno, String ids_externo, Emergencia emergenciaById, Boolean cancelado, String id_solicitud_relacion) {
+          String ids_interno, String ids_externo, Boolean emergencia, Emergencia emergenciaById, Boolean cancelado, String id_solicitud_relacion) {
     this.id = id;
     this.distanciaById = distancia;
     this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
@@ -77,6 +78,7 @@ public class Solicitud implements java.io.Serializable {
     this.novedades = novedades;
     this.es_creador = es_creador;
     this.listaAprobador = false;
+    this.emergencia = emergencia;
     this.cancelado = cancelado;
     this.ids_interno = ids_interno;
     this.ids_externo = ids_externo;
@@ -357,6 +359,17 @@ public class Solicitud implements java.io.Serializable {
 
   public void setId_solicitud_relacion(String id_solicitud_relacion) {
     this.id_solicitud_relacion = id_solicitud_relacion;
+  }
+  
+  public String getTipo_solicitud_legible() {
+    if(this.emergencia)
+      return "Emerg...";
+    else
+      return "Normal";
+  }
+
+  public void setTipo_solicitud_legible(String tipo_solicitud_legible) {
+    this.tipo_solicitud_legible = tipo_solicitud_legible;
   }
 
 }

@@ -98,10 +98,11 @@ public class Select {
         Boolean estado = result.getBoolean("estado"),
                 cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
-                es_creador = false;
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
         
         int eid = result.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -127,6 +128,7 @@ public class Select {
                 result.getString("ids_interno"),
                 result.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
@@ -136,10 +138,10 @@ public class Select {
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
         else
-          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
         
         listSolicitudes.add(s);
       }
@@ -200,10 +202,11 @@ public class Select {
         Boolean estado = result.getBoolean("estado"),
                 cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
-                es_creador = false;
-        
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
+                
         int eid = result.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -229,6 +232,7 @@ public class Select {
                 result.getString("ids_interno"),
                 result.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
@@ -238,10 +242,10 @@ public class Select {
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
         else
-          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
         
         listSolicitudes.add(s);
       }
@@ -303,10 +307,11 @@ public class Select {
         Boolean estado = result.getBoolean("estado"),
                 cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
-                es_creador = false;
-        
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
+                
         int eid = result.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -332,6 +337,7 @@ public class Select {
                 result.getString("ids_interno"),
                 result.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
@@ -341,10 +347,10 @@ public class Select {
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
         else
-          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
         
         listSolicitudes.add(s);
       }
@@ -405,10 +411,12 @@ public class Select {
         Boolean estado = result.getBoolean("estado"),
                 cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
-                es_creador = false;
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
+        
         
         int eid = result.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -434,6 +442,7 @@ public class Select {
                 result.getString("ids_interno"),
                 result.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
@@ -443,10 +452,10 @@ public class Select {
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
         else
-          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
         
         listSolicitudes.add(s);
       }
@@ -513,10 +522,12 @@ public class Select {
         Boolean estado = result.getBoolean("estado"),
                 cancelado = result.getBoolean("cancelado"),
                 estado_enfermeria = result.getBoolean("estado_enfermeria"),
-                es_creador = false;
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
+        
         
         int eid = result.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         if(uid != 0)
           es_creador = true;
@@ -542,6 +553,7 @@ public class Select {
                 result.getString("ids_interno"),
                 result.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
@@ -551,10 +563,10 @@ public class Select {
         else
           s.setListaInternosSeleccionados(new ArrayList<Usuario>());
         
-        if(result.getString("ids_interno") != null)
-          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
         else
-          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
         
         listSolicitudes.add(s);
       }
@@ -640,10 +652,12 @@ public class Select {
         Boolean estado = res.getBoolean("estado"),
           estado_enfermeria = res.getBoolean("estado_enfermeria"),
           es_creador = false,
-          cancelado = res.getBoolean("cancelado");
+          cancelado = res.getBoolean("cancelado"),
+          emergencia = res.getBoolean("emergencia");
+        
         
         int eid = res.getInt("id_tipo_emergencia");
-        Emergencia emergencia = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
         
         Solicitud s = new Solicitud(
                 id, 
@@ -666,6 +680,7 @@ public class Select {
                 res.getString("ids_interno"),
                 res.getString("ids_externo"),
                 emergencia,
+                emergencia_tipo,
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );

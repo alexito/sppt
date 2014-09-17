@@ -17,6 +17,8 @@ import org.models.Usuario;
 public class Insert {
   
   public static String InsertNewUsuarioExterno(String nombre) throws SQLException {
+    if(nombre.length() < 3)
+      return "";
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO usuario (PRSNNMBR, es_interno) VALUES (?,?)";
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);

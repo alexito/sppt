@@ -87,8 +87,8 @@ public class Update {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
             + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?,"
-            + " novedades=?, id_usuario_solicita=?, id_usuario_aprobador=?, id_solicitud_relacion=?"
-            + " WHERE id=?";
+            + " novedades=?, id_usuario_solicita=?, id_usuario_aprobador=?, id_solicitud_relacion=?,"
+            + " ids_interno=?, ids_externo=? WHERE id=?";
     
     int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -117,7 +117,9 @@ public class Update {
     psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
     psUpdate.setInt(11, id_aprobador);
     psUpdate.setString(12, solicitud.getId_solicitud_relacion());
-    psUpdate.setInt(13, solicitud.getId());
+    psUpdate.setString(13, solicitud.getIds_interno());
+    psUpdate.setString(14, solicitud.getIds_externo());
+    psUpdate.setInt(15, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     
