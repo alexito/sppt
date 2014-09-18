@@ -117,7 +117,7 @@ public class SolicitudBean {
   }
   
   public List<Solicitud> getListaSolicitudesEnfermeriaAprobadas() {
-    return listaSolicitudesEnfermeriaXAprobar;
+    return listaSolicitudesEnfermeriaAprobadas;
   }
 
   public void setListaSolicitudesEnfermeriaAprobadas(List<Solicitud> listaSolicitudesEnfermeriaAprobadas) {
@@ -212,8 +212,12 @@ public class SolicitudBean {
     return usuariosFiltrados;
   }
   
-  private String pickUsuarioInternoIds(List<Usuario> lista){
-    String uids = "" + usuario.getId();
+  private String pickUsuarioInternoIds(List<Usuario> lista, boolean is_insert){
+    String uids = "";
+    
+    if(is_insert)
+      uids = "" + usuario.getId();
+    
     for (Usuario user : lista) {
         if(!"".equals(uids))
           uids += ",";
@@ -289,7 +293,7 @@ public class SolicitudBean {
     }
     solicitud.setFCreacion(new Date());
     solicitud.setCancelado(false);
-    solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados()));
+    solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados(), true));
     solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true, solicitud));
     
     Insert.InsertSolicitud(solicitud);
@@ -309,7 +313,7 @@ public class SolicitudBean {
     solicitudEmergencia.setEmergencia(true);
     solicitudEmergencia.setFCreacion(new Date());
     solicitudEmergencia.setCancelado(false);
-    solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados()));
+    solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados(), false));
     solicitudEmergencia.setIds_externo(pickUsuarioExternoIds(solicitudEmergencia.getListaExternosSeleccionados(), true, solicitudEmergencia));
     
     Insert.InsertSolicitudEmergencia(solicitudEmergencia);
@@ -328,15 +332,18 @@ public class SolicitudBean {
     int m = editedSolicitud.getFSalida().getMinutes();
     
     //Check if the current solicitud is updated by an Aprobador
-    if(!editedSolicitud.getListaAprobador()){
-      if ((h > 15 && m > 29) || h >= 16) {
-        editedSolicitud.setEstado(false);
-      } else {
-        editedSolicitud.setEstado(true);
+    //If true both conditions then is approved
+    if(!editedSolicitud.getEstado() || !editedSolicitud.getEstadoEnfermeria()){
+      if(!editedSolicitud.getListaAprobador()){
+        if ((h > 15 && m > 29) || h >= 16) {
+          editedSolicitud.setEstado(false);
+        } else {
+          editedSolicitud.setEstado(true);
+        }
       }
     }
     
-    editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados()));
+    editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados(), false));
     editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));
     
     if("enfermero".equals(usuario.getRol())){

@@ -363,7 +363,7 @@ public class Solicitud implements java.io.Serializable {
   
   public String getTipo_solicitud_legible() {
     if(this.emergencia)
-      return "Emerg...";
+      return "Emergencia";
     else
       return "Normal";
   }

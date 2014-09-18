@@ -57,7 +57,7 @@ public class Select {
     ConnectDB con = new ConnectDB();
     try {
       
-      String SQL = "SELECT * FROM solicitud WHERE cancelado=0 emergencia=1 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
+      String SQL = "SELECT * FROM solicitud WHERE emergencia=1 AND id_usuario_solicita=" + uid + " ORDER BY id DESC";
       sentence = con.getConnection().createStatement();
       result = sentence.executeQuery(SQL);
 
@@ -588,7 +588,7 @@ public class Select {
     try {
       String SQL = "";
       if("enfermero".equals(usuario.getRol())){
-        SQL = " SELECT * FROM solicitud WHERE estado_enfermeria=0 ORDER BY id ASC";
+        SQL = " SELECT * FROM solicitud WHERE estado_enfermeria=0 AND cancelado=0 ORDER BY id ASC";
       }
       else{
         SQL = " SELECT id FROM usuario WHERE EMPLFAPR='" +usuario.getCodemp()+ "'";
@@ -607,7 +607,7 @@ public class Select {
           return listSolicitudes;
         }
 
-        SQL = " SELECT * FROM solicitud WHERE estado=0 AND (" + where + ")";
+        SQL = " SELECT * FROM solicitud WHERE estado=0 AND cancelado=0 AND (" + where + ")";
         SQL += " ORDER BY id DESC";
       }      
       con = new ConnectDB();
@@ -682,7 +682,7 @@ public class Select {
                 emergencia,
                 emergencia_tipo,
                 cancelado,
-                result.getString("id_solicitud_relacion")
+                res.getString("id_solicitud_relacion")
                 );
         s.setListaAprobador(true);
         
