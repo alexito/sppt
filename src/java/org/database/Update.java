@@ -4,11 +4,8 @@
  */
 package org.database;
 
-import java.sql.CallableStatement;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import org.models.Emergencia;
 import org.models.Localidad;

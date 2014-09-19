@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
 import static org.database.Select.CloseCurrentConnection;
-import static org.database.Select.sentence;
 import org.models.Distancia;
 import org.models.Emergencia;
 import org.models.Localidad;

@@ -20,7 +20,7 @@
                            widgetVar="solicitudPorAprobarTable"  emptyMessage="No se encontraron solicitudes pendientes." >
 
                 <p:ajax oncomplete="cmdRefreshSolicitudes()" event="rowEdit" listener="#{solicitudBean.onRowEdit}"/>
-                <p:ajax event="rowEditCancel" listener="#{solicitudBean.onRowCancel}" />
+                <p:ajax event="rowEditCancel" />
 
                 <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
                   <h:outputText value="#{solicitud.id}" />                  

@@ -57,16 +57,16 @@ public class Solicitud implements java.io.Serializable {
   }
 
   public Solicitud(int id, Date FCreacion, Date FSalida, Date FLlegada, String direccionOrigen, String direccionDestino, String hospedaje, Boolean estado, Boolean estadoEnfermeria,
-          String novedades, Boolean es_creador, Distancia distancia, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioConductor2, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
+          String novedades, Boolean es_creador, Distancia distanciaById, Usuario usuarioByIdUsuarioSolicita, Usuario usuarioByIdUsuarioConductor, Usuario usuarioByIdUsuarioConductor2, Usuario usuarioByIdUsuarioAprobador, Usuario usuarioByIdUsuarioEnfermero,
           String ids_interno, String ids_externo, Boolean emergencia, Emergencia emergenciaById, Boolean cancelado, String id_solicitud_relacion) {
     this.id = id;
-    this.distanciaById = distancia;
-    this.usuarioByIdUsuarioSolicita = usuarioByIdUsuarioSolicita;
-    this.usuarioByIdUsuarioConductor = usuarioByIdUsuarioConductor;
-    this.usuarioByIdUsuarioConductor2 = usuarioByIdUsuarioConductor2;
-    this.usuarioByIdUsuarioAprobador = usuarioByIdUsuarioAprobador;
-    this.usuarioByIdUsuarioEnfermero = usuarioByIdUsuarioEnfermero;
-    this.emergenciaById = emergenciaById;
+    this.distanciaById = (distanciaById == null) ? new Distancia() : distanciaById;
+    this.usuarioByIdUsuarioSolicita = (usuarioByIdUsuarioSolicita == null) ? new Usuario() : usuarioByIdUsuarioSolicita;
+    this.usuarioByIdUsuarioConductor = (usuarioByIdUsuarioConductor == null) ? new Usuario() : usuarioByIdUsuarioConductor;
+    this.usuarioByIdUsuarioConductor2 = (usuarioByIdUsuarioConductor2 == null) ? new Usuario() : usuarioByIdUsuarioConductor2;
+    this.usuarioByIdUsuarioAprobador = (usuarioByIdUsuarioAprobador == null) ? new Usuario() : usuarioByIdUsuarioAprobador;
+    this.usuarioByIdUsuarioEnfermero = (usuarioByIdUsuarioEnfermero == null) ? new Usuario() : usuarioByIdUsuarioEnfermero;
+    this.emergenciaById = (emergenciaById == null) ? new Emergencia() : emergenciaById;
     this.FCreacion = FCreacion;
     this.FSalida = FSalida;
     this.FLlegada = FLlegada;
