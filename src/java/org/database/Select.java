@@ -684,7 +684,11 @@ public class Select {
                 cancelado,
                 res.getString("id_solicitud_relacion")
                 );
+        
         s.setListaAprobador(true);
+        
+        if("enfermero".equals(usuario.getRol()))
+          s.setListaAprobador(false);        
         
         if(res.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(res.getString("ids_interno")));
@@ -888,6 +892,10 @@ public class Select {
         usuario.setMovil(res.getString("PRSNMVIL"));
         usuario.setEstado(res.getBoolean("estado"));
         usuario.setEsInterno(res.getBoolean("es_interno"));
+        usuario.setFDisponible(res.getTimestamp("f_disponible"));
+        usuario.setFDisponible(res.getTimestamp("f_disponible2"));
+        usuario.setObservacion(res.getString("observacion"));
+        usuario.setObservacion2(res.getString("observacion2"));
         usuario.setRol(res.getString("rol"));
         
         response.put(res.getInt("id"), usuario);

@@ -46,10 +46,22 @@ public class Update {
   
   public static String UpdateUsuarioConductor2(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
-    String SQL = "UPDATE usuario SET f_disponible2=?, observacion2=?  WHERE id=?";
+    String SQL = "UPDATE usuario SET f_disponible=?, observacion=?  WHERE id=?";
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);    
     psUpdate.setTimestamp(1, new java.sql.Timestamp(usuario.getFDisponible2().getTime()));
     psUpdate.setString(2, usuario.getObservacion2());
+    psUpdate.setInt(3, usuario.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  public static String UpdateUsuarioConductor(Usuario usuario) throws SQLException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE usuario SET f_disponible=?, observacion=?  WHERE id=?";
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);    
+    psUpdate.setTimestamp(1, new java.sql.Timestamp(usuario.getFDisponible().getTime()));
+    psUpdate.setString(2, usuario.getObservacion());
     psUpdate.setInt(3, usuario.getId());
     
     return RunSQL(con, psUpdate);
@@ -170,7 +182,7 @@ public class Update {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_distancia=?, f_creacion=?, f_salida=?, f_llegada=?,"
             + " direccion_origen=?, direccion_destino=?, estado=?, estado_enfermeria=?,"
-            + " novedades=?, id_usuario_solicita=?, id_usuario_conductor=?"
+            + " novedades=?, id_usuario_solicita=?, id_usuario_conductor=?,"
             + " id_usuario_aprobador=?, id_usuario_enfermero=?, cancelado=?, id_solicitud_relacion=? WHERE id=?";
     
     int dist_id = Insert.checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
@@ -215,6 +227,18 @@ public class Update {
        
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
     psUpdate.setInt(1, solicitud.getUsuarioByIdUsuarioConductor2().getId());
+    psUpdate.setInt(2, solicitud.getId());
+    
+    return RunSQL(con, psUpdate);
+    
+  }
+  
+  public static String UpdateSolicitudCancelar(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET cancelado=? WHERE id=?";
+       
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
+    psUpdate.setBoolean(1, true);
     psUpdate.setInt(2, solicitud.getId());
     
     return RunSQL(con, psUpdate);

@@ -349,6 +349,13 @@ public class SolicitudBean {
     if("enfermero".equals(usuario.getRol())){
       if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
           editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
+          Update.UpdateUsuarioConductor(editedSolicitud.getUsuarioByIdUsuarioConductor());
+          if(editedSolicitud.getUsuarioByIdUsuarioConductor2().getId() != 0){
+            Update.UpdateSolicitudConductor2(editedSolicitud);
+            Update.UpdateUsuarioConductor2(editedSolicitud.getUsuarioByIdUsuarioConductor2());
+          }       
+      }else if(editedSolicitud.getCancelado()){
+        Update.UpdateSolicitudCancelar(editedSolicitud);
       }else{
         return listaSolicitudes;
       }

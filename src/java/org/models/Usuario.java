@@ -184,6 +184,8 @@ public class Usuario implements java.io.Serializable {
   }
   
   public Date getFDisponible() {
+    if(FDisponible == null)
+      FDisponible = new Date();
     return FDisponible;
   }
 
