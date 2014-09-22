@@ -645,11 +645,6 @@
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" >
                   </p:inputTextarea>                
 
-                  <h:outputLabel for="relacion" value="Relacionar con la solicitud Nro:" />
-                  <p:inputText id="relacion" value="#{solicitudBean.solicitud.id_solicitud_relacion}" style="width: 100%;"
-                               placeholder="" />
-
-
                   <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
                 </h:panelGrid>
@@ -663,6 +658,8 @@
           </h:form>
         </p:dialog>
 
+        <!-- ________________________   NEW SOLICITUD EMERGENCIA FORM  ________________________   -->
+        
         <p:dialog dynamic="true" widgetVar="newSolicitudEmergencia" header="Ingrese los datos de la Nueva Solicitud de Emergencia"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
           <h:form id="form-new-solicitud-emergencia">          
             <center>
@@ -719,11 +716,6 @@
                   <h:outputLabel for="novedades" value="Novedades: " />
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitudEmergencia.novedades}" style="width: 100%;" >
                   </p:inputTextarea>                
-
-                  <h:outputLabel for="relacion" value="Relacionar con la solicitud Nro:" />
-                  <p:inputText id="relacion" value="#{solicitudBean.solicitudEmergencia.id_solicitud_relacion}" style="width: 100%;"
-                               placeholder="" />
-
 
                   <h:outputLabel for="emergencia" value="Tipo de emergencia: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="emergencia" value="#{solicitudBean.solicitudEmergencia.emergenciaById.id}" style="width: 100%;">

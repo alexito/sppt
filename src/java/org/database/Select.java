@@ -469,7 +469,13 @@ public class Select {
     return listSolicitudes;
   }
   
-  
+  /**
+   *  
+   * @param estadoSolicitud
+   * @param uid
+   * @param all
+   * @return 
+   */
   public static List<Solicitud> selectSolicitudes(int estadoSolicitud, int uid, boolean all) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();
@@ -598,9 +604,9 @@ public class Select {
 
         String where = "";
         if(res.next()){
-          where += " id_usuario_solicita=" + res.getInt("id");      
+          where += " id_usuario_solicita='" + res.getInt("id") + "'";      
           while (res.next()) {
-            where += " OR id_usuario_solicita=" + res.getInt("id");
+            where += " OR id_usuario_solicita='" + res.getInt("id") + "'";
           }
         }
         else{

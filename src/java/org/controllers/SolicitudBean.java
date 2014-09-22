@@ -14,6 +14,8 @@ import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -409,7 +411,7 @@ public class SolicitudBean {
     return res;
   }
 
-  private void updateInfoSolicitudes() {
+  private void updateInfoSolicitudes() {      
     if ("admin".equals(usuario.getRol())) {
       listaSolicitudesAprobadas = Select.selectMisSolicitudesAprobadas(usuario.getId());
       listaSolicitudesPendientes = Select.selectMisSolicitudesPendientes(usuario.getId());
@@ -419,9 +421,9 @@ public class SolicitudBean {
     } 
     else if ("enfermero".equals(usuario.getRol())) {
       listaSolicitudesEnfermeriaXAprobar = Select.selectSolicitudesXAprobar(usuario);
+      listaSolicitudes = Select.selectSolicitudes(0, 0, true);
     }
-    else if ("super".equals(usuario.getRol())) {
-      listaSolicitudes = Select.selectSolicitudes(1, 0, true);
+    else if ("super".equals(usuario.getRol())) {      
       listaSolicitudes = Select.selectSolicitudes(0, 0, true);
     }
   }

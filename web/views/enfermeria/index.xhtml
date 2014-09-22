@@ -13,7 +13,7 @@
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast">
 
-            <p:tab title="Solicitudes" id="tab1">
+            <p:tab title="Solicitudes Por Aprobar" id="tab1">
 
               <p:dataTable id="table-solicitudes-por-aprobar" var="solicitud" value="#{solicitudBean.listaSolicitudesEnfermeriaXAprobar}" rowKey="#{solicitud}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -73,16 +73,16 @@
                 </p:column>
 
                 <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
-                      <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
-                        - #{usuario.nombrecompleto}
-                      </p:dataList>
-                      <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
-                        - #{usuario.nombrecompleto}
-                      </p:dataList>
+                  <span style="font-weight: 600;">Internos: </span>
+                  <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                    - #{usuario.nombrecompleto}
+                  </p:dataList>
+                  <span style="font-weight: 600;">Externos: </span>
+                  <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                    - #{usuario.nombrecompleto}
+                  </p:dataList>
                 </p:column>
-                
+
                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains" style="vertical-align: top;">  
                   <p:cellEditor>
                     <f:facet name="output">                      
@@ -124,15 +124,15 @@
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains" style="vertical-align: top;">  
                   <p:cellEditor>
                     <f:facet name="output">
-                  
+
                       <span style="font-weight: 600;">1: </span>
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />                      
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                       <span style="font-weight: 600;">2: </span>
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
-                      
-                  
-                  </f:facet>
+
+
+                    </f:facet>
                     <f:facet name="input">                      
                       <span style="font-weight: 600;">1: </span>
                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">                        
@@ -140,7 +140,7 @@
                       </p:selectOneMenu>
                       <span style="font-weight: 600;">F Disponible: </span>
                       <p:calendar id="fdisponible1" value="#{solicitud.usuarioByIdUsuarioConductor.FDisponible}" pattern="MM/dd/yyyy HH:mm" />
-                      
+
                       <span style="font-weight: 600;">2: </span>
                       <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor2" value="#{solicitud.usuarioByIdUsuarioConductor2.id}" style="width: 100%;">
                         <f:selectItem itemLabel="Opcional" itemDisabled="true" itemValue="" />
@@ -148,11 +148,11 @@
                       </p:selectOneMenu>
                       <span style="font-weight: 600;">F Disponible: </span>
                       <p:calendar id="fdisponible2" value="#{solicitud.usuarioByIdUsuarioConductor2.FDisponible2}" pattern="MM/dd/yyyy HH:mm" />
-                      
+
                     </f:facet>
                   </p:cellEditor>                  
                 </p:column>
-                
+
                 <p:column headerText="Solicitud Relacionada" style="vertical-align: top;" width="60">  
                   <p:cellEditor>
                     <f:facet name="output">
@@ -165,14 +165,210 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
+
                 <p:column style="width:50px"> 
                   <p:rowEditor id="editrow" /> 
                 </p:column> 
               </p:dataTable>  
 
             </p:tab>
-            
+
+            <!-- _____________TAB LISTA SOLICITUDES______________ -->
+
+            <p:tab title="Lista de Todas las Solicitudes" id="tab-lista-solicitudes">
+
+              <p:dataTable id="table-todas-solicitudes" var="solicitud" value="#{solicitudBean.listaSolicitudes}" rowKey="#{solicitud}"
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           editable="true"  paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
+                           widgetVar="solicitudTodasTable"  emptyMessage="No se encontraron solicitudes pendientes." >
+
+                <p:ajax oncomplete="cmdRefreshSolicitudes()" event="rowEdit" listener="#{solicitudBean.onRowEdit}"/>
+                <p:ajax event="rowEditCancel" />
+
+                <p:column headerText="ID" sortBy="#{solicitud.id}" width="40"  filterBy="#{solicitud.id}">  
+                  <h:outputText value="#{solicitud.id}" />                  
+                </p:column>
+
+                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
+                      <h:outputText value="#{solicitud.direccionOrigen}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
+                    </f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitud.distanciaById.localidadByIdOrigen.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                      </p:selectOneMenu>
+                      <p:inputTextarea id="dorigen2" value="#{solicitud.direccionOrigen}" style="width:100%" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" headerText="Destino" filterMatchMode="contains" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.distanciaById.localidadByIdDestino.nombre}" />
+                      (<h:outputText value="#{solicitud.distanciaById.distancia}" />)
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
+                      <h:outputText value="#{solicitud.direccionDestino}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
+                    </f:facet>
+                    <f:facet name="input">                  
+                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitud.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
+                        <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
+                      </p:selectOneMenu>
+                      <p:inputTextarea id="ddestino2" value="#{solicitud.direccionDestino}" style="width:100%" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Fechas" style="vertical-align: top;"> 
+
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <span style="font-weight: 600;">Salida: </span>
+                      <h:outputText value="#{solicitud.FSalida}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Llegada: </span>
+                      <h:outputText value="#{solicitud.FLlegada}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
+                      <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+
+                    </f:facet>
+                    <f:facet name="input"> 
+                      <span style="font-weight: 600;">Salida: </span>
+                      <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
+                      <span style="font-weight: 600;">Llegada: </span>
+                      <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <span style="font-weight: 600;">Internos: </span>
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                        - #{usuario.nombrecompleto}
+                      </p:dataList>
+                      <span style="font-weight: 600;">Externos: </span>
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                        - #{usuario.nombrecompleto}
+                      </p:dataList>
+                    </f:facet>
+                    <f:facet name="input"> 
+                      <span style="font-weight: 600;">Internos: </span>
+                      <p:autoComplete forceSelection="true" id="internos-in" multiple="true" value="#{solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                      var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                      maxResults="10" minQueryLength="2" queryDelay="500" 
+                                      converter="usuarioInternoConverter" />
+                      <span style="font-weight: 600;">Externos: </span>
+                      <p:autoComplete forceSelection="true" id="internos-out" multiple="true" value="#{solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                      var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                      maxResults="10" minQueryLength="2" queryDelay="500" 
+                                      converter="usuarioExternoConverter" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">                      
+                      <span style="font-weight: 600;">Tipo: </span>
+                      <h:outputText value="#{solicitud.tipo_solicitud_legible}" style="font-size: 11.5px; margin-top: 5px;" />
+                      (<h:outputText value="#{solicitud.emergenciaById.nombre}" style="font-size: 11.5px; margin-top: 5px;" />)
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>
+                      <h:outputText value="#{solicitud.novedades}" /></f:facet>
+                    <f:facet name="input">
+                      <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
+                      </p:inputTextarea>                
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Estado" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <span style="font-weight: 600;">Aprobador: </span>
+                      <h:outputText value="#{solicitud.estado_legible}" />
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
+                      <span style="font-weight: 600;">Enfermería: </span>
+                      <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
+                    </f:facet>
+                    <f:facet name="input">
+                      <div style="font-weight: 600;">Seleccione para aprobar: </div>                      
+                      <p:selectBooleanCheckbox value="#{solicitud.estadoEnfermeria}" style="margin-left: 45%" />
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
+                      <div style="font-weight: 600;">Seleccione para cancelar: </div>                      
+                      <p:selectBooleanCheckbox value="#{solicitud.cancelado}" style="margin-left: 45%" />
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Conductor" filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" filterMatchMode="contains" style="vertical-align: top;">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <span style="font-weight: 600;">1: </span>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />                      
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
+                      <span style="font-weight: 600;">2: </span>
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
+                    </f:facet>
+                    <f:facet name="input">                      
+                      <span style="font-weight: 600;">1: </span>
+                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">                        
+                        <f:selectItems value="#{solicitudBean.listaConductores}" />
+                      </p:selectOneMenu>
+                      <span style="font-weight: 600;">F Disponible: </span>
+                      <p:calendar id="fdisponible1" value="#{solicitud.usuarioByIdUsuarioConductor.FDisponible}" pattern="MM/dd/yyyy HH:mm" />
+
+                      <span style="font-weight: 600;">2: </span>
+                      <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor2" value="#{solicitud.usuarioByIdUsuarioConductor2.id}" style="width: 100%;">
+                        <f:selectItem itemLabel="Opcional" itemDisabled="true" itemValue="" />
+                        <f:selectItems value="#{solicitudBean.listaConductores}" />
+                      </p:selectOneMenu>
+                      <span style="font-weight: 600;">F Disponible: </span>
+                      <p:calendar id="fdisponible2" value="#{solicitud.usuarioByIdUsuarioConductor2.FDisponible2}" pattern="MM/dd/yyyy HH:mm" />
+
+                    </f:facet>
+                  </p:cellEditor>                  
+                </p:column>
+
+                <p:column headerText="Solicitud Relacionada" style="vertical-align: top;" width="60">  
+                  <p:cellEditor>
+                    <f:facet name="output">
+                      <h:outputText value="#{solicitud.id_solicitud_relacion}" />
+                    </f:facet>
+                    <f:facet name="input">
+                      <span style="font-weight: 600;">ID de la solicitud a relacionar: </span>
+                      <p:inputText id="relacion" value="#{solicitud.id_solicitud_relacion}" required="false" style="width:100%"/>
+                      <span style="font-size: 11.5px; color: white; margin-top: 5px;">Recuerde: si relaciona con otra solicitud, se invalidan los cambios de esta solicitud, se aprueba y se asigna el/los conductor(es) seleccionado(s) en la otra solicitud.</span>   
+                    </f:facet>
+                  </p:cellEditor>
+                </p:column>
+
+                <p:column style="width:50px"> 
+                  <p:rowEditor id="editrow" /> 
+                </p:column> 
+              </p:dataTable>  
+
+            </p:tab>
+
+
             <!-- __________TAB 2__________ -->
 
             <p:tab title="Localidades" id="tab2">
@@ -210,13 +406,13 @@
                 <p:layoutUnit id="destino-wrapper" position="center" header="EDITAR DISTANCIA DESTINO (Click en la distancia actual para Editar y terminar con Enter.)">
                   <p:dataTable id="table-distancias" var="distancia" value="#{localidadBean.listaEditarDistancia}" rowKey="#{localidad.id}"
                                editable="true" editMode="cell" widgetVar="distanciaTable"  emptyMessage="Seleccione una ciudad haciendo Click en el ID." >
-                    
+
                     <p:ajax event="cellEdit" listener="#{localidadBean.onCellEdit}"/>
-                    
+
                     <p:column headerText="Nombre">  
                       <h:outputText value="#{distancia.nombre}" />
                     </p:column>
-                    
+
                     <p:column headerText="Distancia" > 
                       <p:cellEditor>
                         <f:facet name="output">
@@ -227,14 +423,14 @@
                         </f:facet>
                       </p:cellEditor>
                     </p:column>
-                    
+
 
                   </p:dataTable>
                 </p:layoutUnit>
               </p:layout>
 
             </p:tab>
-            
+
             <!-- __________TAB 3__________ -->
 
             <p:tab title="Usuarios" id="tab3">
@@ -454,8 +650,8 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
-                
+
+
                 <p:column filterBy="#{usuario.movil}"  headerText="Movil" filterMatchMode="contains">  
                   <p:cellEditor>
                     <f:facet name="output">
@@ -468,7 +664,7 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
+
                 <p:column headerText="Estado" sortBy="#{usuario.estado_legible}">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{usuario.estado_legible}" /></f:facet>
@@ -531,7 +727,7 @@
                     </f:facet>
                   </p:cellEditor>
                 </p:column>
-                
+
                 <p:column headerText="Clave">  
                   <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{usuario.clave}" /></f:facet>
@@ -587,10 +783,10 @@
               </p:dataTable>  
             </p:tab>
 
-            
+
           </p:tabView>
         </h:form>  
-        
+
         <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
 
         <p:dialog dynamic="true" widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
@@ -605,18 +801,18 @@
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="dorigen" value="Dirección origen: " />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
                   <p:message for="dorigen" id="msgDorigen" display="icon" />
-                  
+
                   <h:outputLabel for="destino" value="Destino: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitud.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
                   <br></br>
-                  
+
                   <h:outputLabel for="ddestino" value="Dirección destino: " />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
                   </p:inputTextarea>                
@@ -630,24 +826,24 @@
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
                   <br></br>
 
-<!--                  <h:outputLabel for="hospedaje" value="Hospedaje: " />
-                  <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">
-                  </p:inputTextarea>                
-                  <p:message for="hospedaje" id="msgHospedaje" display="icon" />-->
-                  
+                  <!--                  <h:outputLabel for="hospedaje" value="Hospedaje: " />
+                                    <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">
+                                    </p:inputTextarea>                
+                                    <p:message for="hospedaje" id="msgHospedaje" display="icon" />-->
+
                   <h:outputLabel for="novedades" value="Novedades: " />
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width:100%">
                   </p:inputTextarea>                
                   <p:message for="novedades" id="msgNovedades" display="icon" />
 
-<!--                  <h:outputLabel for="conductor" value="Conductor: *" />
-                  <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaConductores}" />
-                  </p:selectOneMenu>
-                  <br></br>-->
-                  
+                  <!--                  <h:outputLabel for="conductor" value="Conductor: *" />
+                                    <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
+                                      <f:selectItems value="#{solicitudBean.listaConductores}" />
+                                    </p:selectOneMenu>
+                                    <br></br>-->
+
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
-                  
+
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>
@@ -830,7 +1026,7 @@
             </center>
           </h:form>
         </p:dialog>
-        
+
         <!-- ________________________   NEW ENFERMERO FORM  ________________________   -->
 
         <p:dialog dynamic="true" widgetVar="newEnfermero" header="Ingrese los datos del Nuevo Enfermero"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
@@ -859,7 +1055,7 @@
                     <p:ajax update="msgCedula" event="blur" />
                   </p:inputText>                
                   <p:message for="cedula" id="msgCedula" display="icon" />
-                  
+
                   <h:outputLabel for="clave" value="Clave: *" />
                   <p:inputText id="clave" value="#{usuarioBean.enfermero.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
                     <f:validateLength minimum="5" />
@@ -896,7 +1092,7 @@
             </center>
           </h:form>
         </p:dialog>        
-        
+
 
       </ui:define>
     </ui:composition>
