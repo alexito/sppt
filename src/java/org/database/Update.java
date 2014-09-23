@@ -221,6 +221,21 @@ public class Update {
     
   }
   
+  public static void UpdateSolicitudRelacion(Solicitud solicitud) throws SQLException, ParseException{
+    Solicitud s = Select.selectSolicitudById(Integer.parseInt(solicitud.getId_solicitud_relacion()));
+    
+    if(!s.getCancelado() && s.getEstado()){
+      if(s.getUsuarioByIdUsuarioConductor() != null)
+        solicitud.setUsuarioByIdUsuarioConductor(s.getUsuarioByIdUsuarioConductor());
+      if(s.getUsuarioByIdUsuarioConductor2() != null)
+        solicitud.setUsuarioByIdUsuarioConductor2(s.getUsuarioByIdUsuarioConductor2());
+      solicitud.setEstado(true);
+      solicitud.setEstadoEnfermeria(true);
+    }
+    UpdateSolicitud(solicitud);
+    UpdateSolicitud(s);
+  }
+  
   public static String UpdateSolicitudConductor2(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "UPDATE solicitud SET id_usuario_conductor2=? WHERE id=?";

@@ -51,7 +51,104 @@ public class Select {
     }
     return usuario;
   }
+  
+  public static Solicitud selectSolicitudById(int sid) {
+    ConnectDB con = new ConnectDB();
+    Solicitud s = new Solicitud();
+    try {
+      
+      String SQL = "SELECT * FROM solicitud WHERE id=" + sid;
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
 
+      Map<Integer, Localidad> map_localidades;
+      Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+      Map<Integer, Usuario> map_usuarios;
+      Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+      Map<Integer, Distancia> map_distancias;
+
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
+        id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+
+      map_localidades = selectMappedLocalidades(true, null);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+
+      while (result.next()) {
+        int id = result.getInt("id");
+        Timestamp 
+                f_creacion = result.getTimestamp("f_creacion"),
+                f_salida = result.getTimestamp("f_salida"),
+                f_llegada = result.getTimestamp("f_llegada");
+        
+        String 
+                hospedaje = result.getString("hospedaje"),
+                novedades = result.getString("novedades"),
+                direccionOrigen = result.getString("direccion_origen"),
+                direccionDestino = result.getString("direccion_destino");
+        Boolean estado = result.getBoolean("estado"),
+                cancelado = result.getBoolean("cancelado"),
+                estado_enfermeria = result.getBoolean("estado_enfermeria"),
+                es_creador = false,
+                emergencia = result.getBoolean("emergencia");
+        
+        int eid = result.getInt("id_tipo_emergencia");
+        Emergencia emergencia_tipo = (eid == 0) ? new Emergencia() : selectEmergenciaById(eid).get(0);
+        
+        s = new Solicitud(
+                id, 
+                f_creacion,
+                f_salida,
+                f_llegada, 
+                direccionOrigen,
+                direccionDestino,
+                hospedaje,
+                estado,
+                estado_enfermeria,
+                novedades,
+                es_creador,
+                map_distancias.get(result.getInt("id_distancia")),                 
+                map_usuarios.get(result.getInt("id_usuario_solicita")),
+                map_usuarios.get(result.getInt("id_usuario_conductor")),
+                map_usuarios.get(result.getInt("id_usuario_conductor2")),
+                map_usuarios.get(result.getInt("id_usuario_aprobador")),
+                map_usuarios.get(result.getInt("id_usuario_enfermero")),
+                result.getString("ids_interno"),
+                result.getString("ids_externo"),
+                emergencia,
+                emergencia_tipo,
+                cancelado,
+                result.getString("id_solicitud_relacion")
+                );
+        
+        if(result.getString("ids_interno") != null)
+          s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
+        else
+          s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+        
+        if(result.getString("ids_externo") != null)
+          s.setListaExternosSeleccionados(Select.selectUsuariosById(result.getString("ids_externo")));
+        else
+          s.setListaExternosSeleccionados(new ArrayList<Usuario>());
+        
+      }
+      return s;
+
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+    return s;
+  }
+  
   public static List<Solicitud> selectMisSolicitudesEmergencia(int uid) {
     List<Solicitud> listSolicitudes = null;
     ConnectDB con = new ConnectDB();

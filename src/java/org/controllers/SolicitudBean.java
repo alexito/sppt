@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -23,6 +25,7 @@ import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
+import org.other.emailSender;
 import org.primefaces.event.RowEditEvent;
 
 @ManagedBean
@@ -167,22 +170,27 @@ public class SolicitudBean {
   }
 
   public SolicitudBean() throws IOException {
-    usuario = Select.LoggedUser();
-    updateInfoSolicitudes();
-    Map<Integer, Localidad> locs = Select.selectMappedLocalidades(true, null);
-    Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
-    Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
     
-    Map<Integer, Emergencia> emer = Select.selectMappedEmergencia();
-    listaEmergencia = mapEmergencias(emer);
-    
-    solicitud = new Solicitud();    
-    solicitudEmergencia = new Solicitud();    
-    listaInternos = Select.selectMappedUsuariosExtInt(1);
-    listaExternos = Select.selectMappedUsuariosExtInt(0);    
-    listaLocalidades = mapLocalidad(locs);
-    listaUsuarios = mapUsuario(usus);
-    listaConductores = mapUsuario(cond);    
+    try {      
+      usuario = Select.LoggedUser();
+      updateInfoSolicitudes();
+      Map<Integer, Localidad> locs = Select.selectMappedLocalidades(true, null);
+      Map<Integer, Usuario> usus = Select.selectMappedUsuarios(true, false, null);
+      Map<Integer, Usuario> cond = Select.selectMappedUsuarios(true, true, null);
+      
+      Map<Integer, Emergencia> emer = Select.selectMappedEmergencia();
+      listaEmergencia = mapEmergencias(emer);
+      
+      solicitud = new Solicitud();
+      solicitudEmergencia = new Solicitud();
+      listaInternos = Select.selectMappedUsuariosExtInt(1);
+      listaExternos = Select.selectMappedUsuariosExtInt(0);
+      listaLocalidades = mapLocalidad(locs);
+      listaUsuarios = mapUsuario(usus);    
+      listaConductores = mapUsuario(cond);
+    } catch (Exception ex) {
+      Logger.getLogger(SolicitudBean.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
   
   public List<Usuario> completeUsuarioInterno(String query){
@@ -348,8 +356,14 @@ public class SolicitudBean {
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados(), false));
     editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));
     
+    boolean es_relacion = false;
+    
     if("enfermero".equals(usuario.getRol())){
-      if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
+      //caso q relaciona solicitud
+      if(!editedSolicitud.getId_solicitud_relacion().equals("0") || editedSolicitud.getId_solicitud_relacion() == null){        
+        editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
+        Update.UpdateSolicitudRelacion(editedSolicitud); 
+      }else if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
           editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
           Update.UpdateUsuarioConductor(editedSolicitud.getUsuarioByIdUsuarioConductor());
           if(editedSolicitud.getUsuarioByIdUsuarioConductor2().getId() != 0){
@@ -375,7 +389,7 @@ public class SolicitudBean {
         Update.UpdateSolicitudEmergencia(editedSolicitud);      
       }else{
         Update.UpdateSolicitud(editedSolicitud);      
-      }
+      }    
     }
     
     solicitud = new Solicitud();
