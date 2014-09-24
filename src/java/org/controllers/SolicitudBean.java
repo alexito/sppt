@@ -190,7 +190,7 @@ public class SolicitudBean {
   }
   
   public List<Usuario> completeUsuarioInterno(String query){
-    
+    query = query.toLowerCase();
     List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
     for (Usuario user : listaInternos) {
       if (user.getApellido().toLowerCase().startsWith(query) || user.getNombre().toLowerCase().startsWith(query)
@@ -205,7 +205,7 @@ public class SolicitudBean {
   }
   
   public List<Usuario> completeUsuarioExterno(String query){
-    
+    query = query.toLowerCase();
     List<Usuario> usuariosFiltrados = new ArrayList<Usuario>();
     for (Usuario user : listaExternos) {
       if (user.getNombre().toLowerCase().startsWith(query)) {
