@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -14,7 +14,7 @@ import org.models.Usuario;
 import org.primefaces.event.*;
 
 @ManagedBean
-@Dependent
+@RequestScoped
 public class UsuarioBean {
 
   private List<Usuario> listaUsuarios;
