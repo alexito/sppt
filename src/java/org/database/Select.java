@@ -601,6 +601,8 @@ public class Select {
         id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
         id_usuarios.put(result.getInt("id_usuario_conductor"), result.getInt("id_usuario_conductor"));
         id_usuarios.put(result.getInt("id_usuario_conductor2"), result.getInt("id_usuario_conductor2"));
+        id_usuarios.put(result.getInt("id_usuario_aprobador"), result.getInt("id_usuario_aprobador"));
+        id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
         id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
       }
 

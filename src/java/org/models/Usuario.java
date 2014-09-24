@@ -16,7 +16,7 @@ public class Usuario implements java.io.Serializable {
   private String telefono;
   private String movil;
   private Boolean estado;
-  private Boolean esInterno;
+  private Boolean esInterno = true;
   private String observacion;
   private String observacion2;
   private String rol;

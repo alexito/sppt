@@ -360,7 +360,7 @@ public class SolicitudBean {
     
     if("enfermero".equals(usuario.getRol())){
       //caso q relaciona solicitud
-      if(!editedSolicitud.getId_solicitud_relacion().equals("0") || editedSolicitud.getId_solicitud_relacion() == null){        
+      if(!editedSolicitud.getId_solicitud_relacion().equals("0") && !editedSolicitud.getId_solicitud_relacion().equals("")) {        
         editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
         Update.UpdateSolicitudRelacion(editedSolicitud); 
       }else if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
