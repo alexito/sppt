@@ -28,7 +28,7 @@
           </p:ajaxStatus>
           <h:form>  
             <p:menubar>
-              <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;" />              
+              <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;"  containerStyleClass="btn-nueva-solicitud" /> 
               <p:menuitem icon="ui-icon-circle-plus" value="Nueva Solicitud Emergencia"  onclick="PF('newSolicitudEmergencia').show();" style="margin-left: 15px;" />
               <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
               <p:menuitem icon="ui-icon-refresh" value="Refrescar Página" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-main-data:tabview, :form-new-solicitud" style="margin-left: 15px; font-weight: bold;" />
