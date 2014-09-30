@@ -9,14 +9,14 @@
     <h:head>
       <f:facet name="first">
         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>        
-        <title>SPPT</title>
+        <title>SPST</title>
       </f:facet>
     </h:head>
 
     <h:body>
 
       <p:layout fullPage="true">
-        <p:layoutUnit position="center" header="SISTEMA PARA PEDIR TRANSPORTE">
+        <p:layoutUnit position="center" header="SISTEMA PARA SOLICITAR TRANSPORTE">
           <p:ajaxStatus id="ajax-status" >  
             <f:facet name="start">  
               <h:graphicImage value="../../resources/images/loader.GIF" />  
@@ -30,6 +30,7 @@
             <p:menubar>
               <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;" />              
               <p:menuitem icon="ui-icon-circle-plus" value="Nueva Solicitud Emergencia"  onclick="PF('newSolicitudEmergencia').show();" style="margin-left: 15px;" />
+              <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
               <p:menuitem icon="ui-icon-refresh" value="Refrescar Página" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-main-data:tabview, :form-new-solicitud" style="margin-left: 15px; font-weight: bold;" />
               <f:facet name="options">
                 <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />

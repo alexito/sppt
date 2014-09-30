@@ -12,8 +12,7 @@
         <h:form id="form-main-data">          
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast" scrollable="true" >
-            <p:tab title="Solicitudes Por Aprobar" id="tab1">
-
+          <!--  <p:tab title="Solicitudes Por Aprobar" id="tab1">
               <p:dataTable id="table-solicitudes-por-aprobar" var="solicitud" value="#{solicitudBean.listaSolicitudesXAprobar}" rowKey="#{solicitud}"
                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                            editable="true"  paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
@@ -39,7 +38,7 @@
                   <h:outputText value="#{solicitud.direccionDestino}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
 
                   <p:cellEditor>
                     <f:facet name="output">
@@ -129,9 +128,8 @@
                   <p:rowEditor id="editrow" /> 
                 </p:column> 
               </p:dataTable>  
-
             </p:tab>
-
+-->
             <!-- ______________________MIS SOLICITUDES PENDIENTES_______________________ -->
 
             <p:tab title="Mis Solicitudes Pendientes" id="tab2">
@@ -181,7 +179,7 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;" > 
 
                   <p:cellEditor>
                     <f:facet name="output">
@@ -202,7 +200,9 @@
                       </h:outputText>
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
-
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                     </f:facet>
                     <f:facet name="input"> 
                       <span style="font-weight: 600;">Salida: </span>
@@ -218,11 +218,11 @@
                   <p:cellEditor>
                     <f:facet name="output">
                       <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"   var="usuario" type="definition"  emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                       <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                     </f:facet>
@@ -260,20 +260,32 @@
                   <span style="font-weight: 600;">Aprobador: </span>
                   <h:outputText value="#{solicitud.estado_legible}" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />   
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-weight: 600;">Enfermería: </span>
                   <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains" style="vertical-align: top;">  
                   <span style="font-weight: 600;">1: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-weight: 600;">2: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
 
                 <p:column style="width:50px"> 
@@ -316,7 +328,7 @@
 
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
                       <span style="font-weight: 600;">Salida: </span>
                       <h:outputText value="#{solicitud.FSalida}">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -334,15 +346,18 @@
                       </h:outputText>
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
                 
                  <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                       <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                       <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                 </p:column>
@@ -366,20 +381,32 @@
                   <span style="font-weight: 600;">Aprobador: </span>
                   <h:outputText value="#{solicitud.estado_legible}" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-weight: 600;">Enfermería: </span>
                   <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
 
                 <p:column headerText="Conductor" filterMatchMode="contains" style="vertical-align: top;">  
                   <span style="font-weight: 600;">1: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-weight: 600;">2: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
 
                 <p:column style="width:50px"> 
@@ -420,7 +447,7 @@
 
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
                       <span style="font-weight: 600;">Salida: </span>
                       <h:outputText value="#{solicitud.FSalida}">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -438,15 +465,18 @@
                       </h:outputText>
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
                 
                  <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                       <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                       <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                 </p:column>
@@ -462,13 +492,19 @@
                 <p:column headerText="Estado" style="vertical-align: top;">  
                   <span style="font-weight: 600;">Cancelado: Si </span>
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />   
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   
                   <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Aprobador: </span>
                   <h:outputText value="#{solicitud.estado_legible}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Enfermería: </span>
                   <h:outputText value="#{solicitud.estadoEnfermeria_legible }" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
@@ -488,6 +524,8 @@
 
             </p:tab>
 
+            <!-- _________________________MIS SOLICITUDES DE EMERGENCIA ________________ -->
+            
             <p:tab title="Mis Solicitudes de Emergencia" id="tab5">
 
               <p:dataTable id="table-solicitudes-emergencias" var="solicitud" value="#{solicitudBean.listaSolicitudesEmergencias}" rowKey="#{solicitud}"
@@ -516,7 +554,7 @@
 
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
                       <span style="font-weight: 600;">Salida: </span>
                       <h:outputText value="#{solicitud.FSalida}">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -534,15 +572,18 @@
                       </h:outputText>
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
                 
                  <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                       <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                       <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                 </p:column>
@@ -556,33 +597,104 @@
                 </p:column>
 
                 <p:column headerText="Estado" style="vertical-align: top;">  
-                  <span style="font-weight: 600;">Cancelado: Si </span>
-                  <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
-                  <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   
                   <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Aprobador: </span>
                   <h:outputText value="#{solicitud.estado_legible}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Enfermería: </span>
                   <h:outputText value="#{solicitud.estadoEnfermeria_legible }" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
 
                 <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains" style="vertical-align: top;">  
                   <span style="font-weight: 600;">1: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                   <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                   <span style="font-weight: 600;">2: </span>
                   <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                  <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                 </p:column>
               </p:dataTable>  
 
             </p:tab>
 
+            <!-- __________LOCALIDADES__________ -->
+
+            <p:tab title="Localidades" id="tablocalidades">
+              <p:layout  >
+                <p:layoutUnit id="origen-wrapper" position="west" size="600" header="LISTA CIUDAD DE ORIGEN (Seleccione una ciudad dando Click en el ID)" resizable="true" >
+
+                  <p:dataTable selection="#{localidadBean.localidadSeleccionada}" selectionMode="single" id="table-localidades" var="localidad" value="#{localidadBean.listaLocalidades}" rowKey="#{localidad.id}"                               
+                               editable="true" widgetVar="localidadTable"  emptyMessage="No se encontraron datos." >
+
+                    <p:ajax event="rowEdit" listener="#{localidadBean.onRowEdit}" oncomplete="cmdRefreshSolicitudes()"/>
+                    <p:ajax event="rowEditCancel" listener="#{localidadBean.onRowCancel}" />                    
+                    <p:ajax event="rowSelect" listener="#{localidadBean.onRowSelect}"  update=":form-main-data:tabview:table-distancias" /> 
+
+                    <p:column headerText="ID" width="50">  
+                      <h:outputText value="#{localidad.id}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">  
+                      <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{localidad.nombre}" /></f:facet>
+                        <f:facet name="input">
+                          <p:inputText id="loc_nombre" value="#{localidad.nombre}" style="width:100%" required="true">                        
+                            <p:ajax update="msgLoc_nombre" event="blur" />
+                          </p:inputText>                
+                          <p:message for="loc_nombre" id="msgLoc_nombre" display="icon" />
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:50px">                   
+                      <p:rowEditor id="editrow" /> 
+                    </p:column> 
+                  </p:dataTable>  
+                </p:layoutUnit>
+                <p:layoutUnit id="destino-wrapper" position="center" header="EDITAR DISTANCIA DESTINO (Click en la distancia actual para Editar y terminar con Enter.)">
+                  <p:dataTable id="table-distancias" var="distancia" value="#{localidadBean.listaEditarDistancia}" rowKey="#{localidad.id}"
+                               editable="true" editMode="cell" widgetVar="distanciaTable"  emptyMessage="Seleccione una ciudad haciendo Click en el ID." >
+                    
+                    <p:ajax event="cellEdit" listener="#{localidadBean.onCellEdit}"/>
+                    
+                    <p:column headerText="Nombre">  
+                      <h:outputText value="#{distancia.nombre}" />
+                    </p:column>
+                    
+                    <p:column headerText="Distancia" > 
+                      <p:cellEditor>
+                        <f:facet name="output">
+                          <h:outputText value="#{distancia.distancia}" />
+                        </f:facet>
+                        <f:facet name="input">
+                          <p:inputText value="#{distancia.distancia}" />                             
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
+                    
+
+                  </p:dataTable>
+                </p:layoutUnit>
+              </p:layout>
+
+            </p:tab>
+
+            
           </p:tabView>
         </h:form>  
 
@@ -601,7 +713,7 @@
                   </p:selectOneMenu>
 
 
-                  <h:outputLabel for="dorigen" value="Dirección origen: " />
+                  <h:outputLabel for="dorigen" value="Dirección origen: *" />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
 
@@ -612,7 +724,7 @@
                   </p:selectOneMenu>
 
 
-                  <h:outputLabel for="ddestino" value="Dirección destino: " />
+                  <h:outputLabel for="ddestino" value="Dirección destino: *" />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
                   </p:inputTextarea>                
 
@@ -625,14 +737,14 @@
                   <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
 
 
-                  <p:outputLabel value="Acompañantes Internos:" />
-                  <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                  <p:outputLabel value="Acompañantes Internos: *" />
+                  <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" id="internos" multiple="true" value="#{solicitudBean.solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                   maxResults="10" minQueryLength="2" queryDelay="500" 
                                   converter="usuarioInternoConverter" />
 
-                  <p:outputLabel value="Acompañantes Externos:" />
-                  <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                  <p:outputLabel value="Acompañantes Externos: *" />
+                  <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
                                   var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                   maxResults="10" minQueryLength="2" queryDelay="500" 
                                   converter="usuarioExternoConverter" />
@@ -733,6 +845,32 @@
             </center>
           </h:form>
         </p:dialog>
+        
+        <!-- ________________________   NEW LOCALIDAD FORM  ________________________   -->
+
+        <p:dialog dynamic="true" widgetVar="newLocalidad" header="Ingrese la nueva Localidad"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+          <h:form id="form-new-localidad">          
+            <center>
+              <p:panel id="pn2" style="margin-bottom:10px;">
+                <h:panelGrid id="grid2" columns="3" cellpadding="5">
+
+                  <h:outputLabel for="loc_nombre" value="Nombre *" />
+                  <p:inputText id="loc_nombre" value="#{localidadBean.localidad.nombre}" style="width:100%" required="true">                    
+                    <p:ajax update="msgLoc_nombre" event="blur" />
+                  </p:inputText>                
+                  <p:message for="loc_nombre" id="msgLoc_nombre" display="icon" />
+
+                </h:panelGrid>
+                <f:facet name="footer">
+                  <center>
+                    <p:commandButton ajax="true" oncomplete="cmdRefreshSolicitudes()" validateClient="true" value="Guardar" onclick="PF('newLocalidad').hide();"  action="#{localidadBean.saveLocalidad()}" />
+                  </center>
+                </f:facet> 
+              </p:panel>
+            </center>
+          </h:form>
+        </p:dialog>
+        
       </ui:define>
     </ui:composition>
   </h:body>

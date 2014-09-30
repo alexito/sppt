@@ -62,7 +62,7 @@
                   </p:cellEditor>
                 </p:column>
 
-                <p:column headerText="Fechas" style="vertical-align: top;"> 
+                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
 
                   <p:cellEditor>
                     <f:facet name="output">
@@ -83,6 +83,9 @@
                       </h:outputText>
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
 
                     </f:facet>
                     <f:facet name="input"> 
@@ -98,11 +101,11 @@
                   <p:cellEditor>
                     <f:facet name="output">
                       <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                       <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
+                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
                         - #{usuario.nombrecompleto}
                       </p:dataList>
                     </f:facet>
@@ -143,11 +146,17 @@
                       <h:outputText value="#{solicitud.estado_legible}" />
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                       <span style="font-weight: 600;">Enfermería: </span>
                       <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                     </f:facet>
                     <f:facet name="input">
                       <div style="font-weight: 600;">Seleccione para aprobar: </div>                      
@@ -163,10 +172,16 @@
                   <p:cellEditor>
                     <f:facet name="output">
                       <span style="font-weight: 600;">1: </span>
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />                      
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />   
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
                       <span style="font-weight: 600;">2: </span>
                       <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
                     </f:facet>
                     <f:facet name="input">                      
                       <span style="font-weight: 600;">1: </span>
