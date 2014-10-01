@@ -5,22 +5,22 @@ setInterval(function(){
   $('.solicitud-tipo.Emergencia').parent().css('background-color', '#FFDADA')
 },2000);
 
-if (!checkRangeTime()) {
-  $('.btn-nueva-solicitud').hide();
-}
-else {
-  $('.btn-nueva-solicitud').show();
-}
+//if (!checkRangeTime()) {
+//  $('.btn-nueva-solicitud').hide();
+//}
+//else {
+//  $('.btn-nueva-solicitud').show();
+//}
 
 //Controla el boton de Nueva solicitud cada minuto. Verificando q el sistema esta operando 
 //dentro del horario permitido.
 setInterval(function() {
-  if (!checkRangeTime()) {
-    $('.btn-nueva-solicitud').hide();
-  }
-  else {
-    $('.btn-nueva-solicitud').show();
-  }
+//  if (!checkRangeTime()) {
+//    $('.btn-nueva-solicitud').hide();
+//  }
+//  else {
+//    $('.btn-nueva-solicitud').show();
+//  }
 }, 60 * 1000);
 
 function checkRangeTime() {

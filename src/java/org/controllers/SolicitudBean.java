@@ -297,6 +297,10 @@ public class SolicitudBean {
     } else {
       solicitud.setEstado(true);
     }
+    
+    if(!solicitud.getRetorno())
+      solicitud.setFRetorno(new Date());
+    
     solicitud.setFCreacion(new Date());
     solicitud.setCancelado(false);
     solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados(), true));
@@ -315,6 +319,8 @@ public class SolicitudBean {
     solicitudEmergencia.setUsuarioByIdUsuarioSolicita(logged_user);
     int h = solicitudEmergencia.getFSalida().getHours();
     int m = solicitudEmergencia.getFSalida().getMinutes();
+    if(!solicitud.getRetorno())
+      solicitud.setFRetorno(new Date());
     solicitudEmergencia.setEstado(true);
     solicitudEmergencia.setEmergencia(true);
     solicitudEmergencia.setFCreacion(new Date());
@@ -348,6 +354,8 @@ public class SolicitudBean {
         }
       }
     }
+    
+    Update.UpdateSolicitudRetorno(editedSolicitud);
     
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados(), false));
     editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));

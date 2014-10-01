@@ -74,8 +74,8 @@ public class Insert {
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria,"
             + " novedades, id_usuario_solicita, id_usuario_aprobador,"
-            + " ids_interno, ids_externo)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " ids_interno, ids_externo, retorno, f_retorno, retorno_observacion)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -112,7 +112,10 @@ public class Insert {
     psInsert.setInt(11, id_aprobador);
     psInsert.setString(12, solicitud.getIds_interno()); 
     psInsert.setString(13, solicitud.getIds_externo()); 
-        
+    psInsert.setBoolean(14, solicitud.getRetorno());
+    psInsert.setTimestamp(15, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
+    psInsert.setString(16, solicitud.getRetornoObservacion()); 
+    
     return RunSQL(con, psInsert);
     
   }
@@ -124,8 +127,8 @@ public class Insert {
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
             + " id_tipo_emergencia, novedades, id_usuario_solicita, id_usuario_aprobador,"
-            + " ids_interno, ids_externo)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " ids_interno, ids_externo, retorno, f_retorno, retorno_observacion)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -164,6 +167,9 @@ public class Insert {
     psInsert.setInt(13, id_aprobador);
     psInsert.setString(14, solicitud.getIds_interno()); 
     psInsert.setString(15, solicitud.getIds_externo()); 
+    psInsert.setBoolean(16, solicitud.getRetorno());
+    psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
+    psInsert.setString(18, solicitud.getRetornoObservacion()); 
         
     return RunSQL(con, psInsert);
     

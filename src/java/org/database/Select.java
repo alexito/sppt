@@ -128,7 +128,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else
@@ -229,7 +233,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else
@@ -333,7 +341,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else
@@ -438,7 +450,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else
@@ -543,7 +559,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else
@@ -662,7 +682,11 @@ public class Select {
                 cancelado,
                 result.getString("id_solicitud_relacion")
                 );
-        
+        if(result.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(result.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(result.getString("retorno_observacion"));
+        }
         if(result.getString("ids_interno") != null)
           s.setListaInternosSeleccionados(Select.selectUsuariosById(result.getString("ids_interno")));
         else

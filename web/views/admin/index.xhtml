@@ -751,14 +751,31 @@
 
                   <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
                   <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
-                                   placeholder="Si no encontró el acompañante externo en la lista, ingrese aquí el nombre completo para mostrar en las próximas solicitudes. En caso de ser varios acompañantes, separe los nombres usando una coma." />
+                                   placeholder="Ejemplo: Juan Perez,Jose Duque,Carlos Ponce" />
 
                   <h:outputLabel for="novedades" value="Novedades: " />
-                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" >
-                  </p:inputTextarea>                
-
+                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
+                  
+                  <h:outputLabel for="retorno" value="Coordinar retorno: " />
+                  <p:selectBooleanCheckbox id="retorno" value="#{solicitudBean.solicitud.retorno}" >
+                    <p:ajax event="change" update="panelId" />
+                  </p:selectBooleanCheckbox>
+                  
                   <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
+                  
+                  <br></br>                    
+                  <h:panelGrid id="panelId" columns="2"  >
+                    
+                    <h:outputLabel rendered="#{solicitudBean.solicitud.retorno}" for="fretorno" value="Fecha y Hora de RETORNO: *"  />
+                    <p:calendar rendered="#{solicitudBean.solicitud.retorno}" id="fretorno" value="#{solicitudBean.solicitud.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
+
+                    <h:outputLabel rendered="#{solicitudBean.solicitud.retorno}" for="retornoObservaciones" value="Observaciones: " />
+                    <p:inputTextarea rendered="#{solicitudBean.solicitud.retorno}" id="retornoObservaciones" value="#{solicitudBean.solicitud.retornoObservacion}" style="width: 100%;" />
+                  
+                  </h:panelGrid>
+                  
+                  
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>

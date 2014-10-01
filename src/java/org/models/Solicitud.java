@@ -33,10 +33,13 @@ public class Solicitud implements java.io.Serializable {
   private String nombres_externo;
   private List<Usuario> listaInternosSeleccionados;
   private List<Usuario> listaExternosSeleccionados;
-  private Boolean cancelado;
+  private Boolean cancelado = false;
   private Emergencia emergenciaById;
   private String id_solicitud_relacion;
   private String tipo_solicitud_legible;
+  private Boolean retorno = false;
+  private Date FRetorno;
+  private String retornoObservacion = "";
 
   public Solicitud() {
     this.distanciaById = new Distancia();
@@ -212,7 +215,11 @@ public class Solicitud implements java.io.Serializable {
   public String getEstadoCancelado_legible() {            
     return (getCancelado()) ? "Cancelado" : "Activo";
   }
-
+  
+  public String getRetorno_legible() {            
+    return (getRetorno()) ? "Si" : "No";
+  }
+  
   public Boolean getEstadoEnfermeria() {
     if(this.estadoEnfermeria == null)
       this.estadoEnfermeria = false;
@@ -366,6 +373,30 @@ public class Solicitud implements java.io.Serializable {
       return "Emergencia";
     else
       return "Normal";
+  }
+  
+  public Boolean getRetorno() {
+    return retorno;
+  }
+
+  public void setRetorno(Boolean retorno) {
+    this.retorno = retorno;
+  }
+
+  public Date getFRetorno() {
+    return FRetorno;
+  }
+
+  public void setFRetorno(Date FRetorno) {
+    this.FRetorno = FRetorno;
+  }
+
+  public String getRetornoObservacion() {
+    return retornoObservacion;
+  }
+
+  public void setRetornoObservacion(String retornoObservacion) {
+    this.retornoObservacion = retornoObservacion;
   }
 
   public void setTipo_solicitud_legible(String tipo_solicitud_legible) {

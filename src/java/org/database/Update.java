@@ -250,16 +250,31 @@ public class Update {
   
   public static String UpdateSolicitudCancelar(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
-    String SQL = "UPDATE solicitud SET cancelado=? WHERE id=?";
+    String SQL = "UPDATE solicitud SET estado=?, estado_enfermeria=?, cancelado=? WHERE id=?";
        
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
-    psUpdate.setBoolean(1, true);
-    psUpdate.setInt(2, solicitud.getId());
+    psUpdate.setBoolean(1, false);
+    psUpdate.setBoolean(2, false);
+    psUpdate.setBoolean(3, true);
+    psUpdate.setInt(4, solicitud.getId());
     
     return RunSQL(con, psUpdate);
     
   }
   
+  public static String UpdateSolicitudRetorno(Solicitud solicitud) throws SQLException, ParseException {
+    ConnectDB con = new ConnectDB();
+    String SQL = "UPDATE solicitud SET retorno=?, f_retorno=?, retorno_observacion=? WHERE id=?";
+       
+    PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
+    psUpdate.setBoolean(1, solicitud.getRetorno());
+    psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
+    psUpdate.setString(3, solicitud.getRetornoObservacion());
+    
+    psUpdate.setInt(4, solicitud.getId());
+    
+    return RunSQL(con, psUpdate);    
+  }  
   
   public static String UpdateSolicitudEmergencia(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
