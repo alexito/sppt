@@ -925,6 +925,20 @@ public class Select {
     return response;
   }
   
+  public static String selectLocalidadNombreById(int lid) throws SQLException{
+    ConnectDB con = new ConnectDB();
+    String SQL = "SELECT * FROM localidad WHERE id='" + lid + "'";
+    Statement sent = con.getConnection().createStatement();
+    String response = "";
+    ResultSet res = sent.executeQuery(SQL);
+    
+    while (res.next()) {
+      response = res.getString("nombre");      
+    }
+    return response;
+    
+  }
+  
   public static Map<Integer, Usuario> selectMappedConductoresByDate(Date fs, Date fl) {
     ConnectDB con = new ConnectDB();
     Map<Integer, Usuario> response = new HashMap<Integer, Usuario>();
@@ -1271,6 +1285,27 @@ public class Select {
     }
     
     return id;
+  }
+  
+  public static String selectUsuarioEmailById(int uid){
+    
+    ConnectDB con = new ConnectDB();
+    String email = "";
+    try {
+      String SQL = "SELECT PRSNMAIL FROM usuario WHERE id='" + uid + "'";
+      
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+      while (result.next()) {
+         email = result.getString("PRSNMAIL");              
+      }
+      return email;
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+    
+    return email;
   }
   
    public static Map<Integer, Emergencia> selectMappedEmergencia() {

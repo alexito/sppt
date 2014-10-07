@@ -116,7 +116,16 @@ public class Insert {
     psInsert.setTimestamp(15, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
     psInsert.setString(16, solicitud.getRetornoObservacion()); 
     
-    return RunSQL(con, psInsert);
+    RunSQL(con, psInsert);
+    
+    SQL = "SELECT id FROM solicitud ORDER BY id DESC";
+    con = new ConnectDB();
+    Statement sent = con.getConnection().createStatement();
+    ResultSet  res = sent.executeQuery(SQL);
+    
+    res.next();
+       
+    return String.valueOf(res.getInt("id"));
     
   }
   
@@ -171,7 +180,16 @@ public class Insert {
     psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
     psInsert.setString(18, solicitud.getRetornoObservacion()); 
         
-    return RunSQL(con, psInsert);
+    RunSQL(con, psInsert);
+    
+    SQL = "SELECT id FROM solicitud ORDER BY id DESC";
+    con = new ConnectDB();
+    Statement sent = con.getConnection().createStatement();
+    ResultSet  res = sent.executeQuery(SQL);
+    
+    res.next();
+       
+    return String.valueOf(res.getInt("id"));
     
   }
   

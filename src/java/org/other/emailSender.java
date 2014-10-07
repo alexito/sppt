@@ -22,19 +22,18 @@ public class emailSender {
     props.put("mail.smtp.host", "smtp.gmail.com");
     props.put("mail.smtp.port", "587");
   }
-
-  public void send(String correo, String asunto, String sugerencia_comentario) throws Exception {
+  
+  public void send(Address[] enviar_a, Address[] responder_a, String asunto, String contenido) throws Exception {
     try {
 
       Session mailSession = Session.getInstance(props);
       MimeMessage message = new MimeMessage(mailSession);
-      Address[] receptores = new Address[]{
-        new InternetAddress(correo)
-      };      
-      message.addRecipients(Message.RecipientType.TO, receptores);
+      
+      message.addRecipients(Message.RecipientType.TO, enviar_a);
+      message.setReplyTo(responder_a);
       message.setSubject(asunto);
       MimeBodyPart messageBodyPart = new MimeBodyPart();
-      messageBodyPart.setText(sugerencia_comentario);
+      messageBodyPart.setText(contenido);
       Multipart multiparte = new MimeMultipart();
       multiparte.addBodyPart(messageBodyPart);
       //multiparte.addBodyPart(adjunto);

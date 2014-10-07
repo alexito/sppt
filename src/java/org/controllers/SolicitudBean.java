@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.mail.Address;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
@@ -22,6 +25,7 @@ import org.models.Emergencia;
 import org.models.Localidad;
 import org.models.Solicitud;
 import org.models.Usuario;
+import org.other.emailSender;
 import org.primefaces.event.RowEditEvent;
 
 @ManagedBean
@@ -47,6 +51,7 @@ public class SolicitudBean {
   private Usuario usuario;
   private Date currentDate = new Date();  
   private Map<String, Integer> listaEmergencia;
+  private List<Usuario> listaEnfermeros;
 
     
   public int getLoc_origen() {
@@ -287,13 +292,13 @@ public class SolicitudBean {
     return uids;
   }
   
-  public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException {
+  public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException, AddressException, Exception {
     Usuario logged_user = Select.LoggedUser();       
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
     int h = solicitud.getFSalida().getHours();
     int m = solicitud.getFSalida().getMinutes();
     if ((h > 15 && m > 29) || h >= 16) {
-      solicitud.setEstado(false);
+      solicitud.setEstado(false);      
     } else {
       solicitud.setEstado(true);
     }
@@ -306,7 +311,34 @@ public class SolicitudBean {
     solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados(), true));
     solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true, solicitud));
     
-    Insert.InsertSolicitud(solicitud);
+    String sol_id = Insert.InsertSolicitud(solicitud);
+    
+    if(!solicitud.getEstado()){
+      emailSender es = new emailSender();
+      listaEnfermeros = Select.selectUsuarios("enfermeros");
+      
+      Address[] responder_a = new Address[listaEnfermeros.size()];
+      Address[] enviar_a = new Address[1];
+      
+      for(int i = 0; i < listaEnfermeros.size(); i++){
+        Usuario u = listaEnfermeros.get(i);
+        responder_a[i] = new InternetAddress(u.getEmail());
+      }
+      
+      int id_aprobador = Select.selectUsuarioIDByEMPLFAPR(solicitud.getUsuarioByIdUsuarioSolicita().getCodapr());
+      String email = Select.selectUsuarioEmailById(id_aprobador);
+      enviar_a[0] = new InternetAddress(email);
+      
+      String origen = Select.selectLocalidadNombreById(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId());
+      String destino = Select.selectLocalidadNombreById(solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
+       
+      es.send(enviar_a, responder_a, "Solicitud Especial", "La solicitud Numero: " + sol_id + " necesita su aprobacion. Los datos son los siguientes:\n"
+              + "\nNombre del solicitante: " + usuario.getNombrecompleto()
+              + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + solicitud.getDistanciaById().getDistancia()
+              + "\nFecha Hora Salida / Llegada : " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
+              + " / " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
+              + "");
+    }
 
     solicitud = new Solicitud();
     updateInfoSolicitudes();

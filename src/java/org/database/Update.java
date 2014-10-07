@@ -206,7 +206,7 @@ public class Update {
     psUpdate.setTimestamp(4, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psUpdate.setString(5, solicitud.getDireccionOrigen());
     psUpdate.setString(6, solicitud.getDireccionDestino());
-    psUpdate.setBoolean(7, solicitud.getEstado());
+    psUpdate.setBoolean(7, solicitud.getEstadoEnfermeria());
     psUpdate.setBoolean(8, solicitud.getEstadoEnfermeria());
     psUpdate.setString(9, solicitud.getNovedades());
     psUpdate.setInt(10, solicitud.getUsuarioByIdUsuarioSolicita().getId());
