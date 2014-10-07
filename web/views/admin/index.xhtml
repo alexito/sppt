@@ -12,124 +12,6 @@
         <h:form id="form-main-data">          
 
           <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast" scrollable="true" >
-          <!--  <p:tab title="Solicitudes Por Aprobar" id="tab1">
-              <p:dataTable id="table-solicitudes-por-aprobar" var="solicitud" value="#{solicitudBean.listaSolicitudesXAprobar}" rowKey="#{solicitud}"
-                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                           editable="true"  paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
-                           widgetVar="solicitudPorAprobarTable"  emptyMessage="No se encontraron solicitudes pendientes." >
-
-                <p:ajax oncomplete="cmdRefreshSolicitudes()" event="rowEdit" listener="#{solicitudBean.onRowEdit}"/>
-                <p:ajax event="rowEditCancel" />
-
-                <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
-                  <h:outputText value="#{solicitud.id}" />                  
-                </p:column>
-
-                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" headerText="Origen" filterMatchMode="contains" style="vertical-align: top;">  
-                  <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />
-                  <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                  <h:outputText value="#{solicitud.direccionOrigen}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
-                </p:column>
-
-                <p:column width="80" filterBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" sortBy="#{solicitud.distanciaById.localidadByIdDestino.nombre}" headerText="Destino" filterMatchMode="contains" style="vertical-align: top;">  
-                  <h:outputText value="#{solicitud.distanciaById.localidadByIdDestino.nombre}" />
-                  (<h:outputText value="#{solicitud.distanciaById.distancia}" />)
-                  <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                  <h:outputText value="#{solicitud.direccionDestino}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />                      
-                </p:column>
-
-                <p:column headerText="Fechas" sortBy="#{solicitud.FSalida}" style="vertical-align: top;"> 
-
-                  <p:cellEditor>
-                    <f:facet name="output">
-                      <span style="font-weight: 600;">Salida: </span>
-                      <h:outputText value="#{solicitud.FSalida}">
-                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                      </h:outputText>
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
-                      <span style="font-weight: 600;">Llegada: </span>
-                      <h:outputText value="#{solicitud.FLlegada}">
-                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                      </h:outputText>
-
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
-                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
-                      <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
-                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
-                      </h:outputText>
-                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
-
-                    </f:facet>
-                    <f:facet name="input"> 
-                      <span style="font-weight: 600;">Salida: </span>
-                      <p:calendar id="fsalida" value="#{solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
-                      <span style="font-weight: 600;">Llegada: </span>
-                      <p:calendar id="fllegada" value="#{solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
-                      <span style="font-weight: 600;">Internos: </span>
-                      <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage=" ">
-                        - #{usuario.nombrecompleto}
-                      </p:dataList>
-                      <span style="font-weight: 600;">Externos: </span>
-                      <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage=" ">
-                        - #{usuario.nombrecompleto}
-                      </p:dataList>
-                </p:column>
-                
-                <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains" style="vertical-align: top;">  
-                  <p:cellEditor>
-                    <f:facet name="output">                      
-                      <span style="font-weight: 600;">Tipo: </span>
-                      <h:outputText value="#{solicitud.tipo_solicitud_legible}" style="font-size: 11.5px; margin-top: 5px;" />
-                      (<h:outputText value="#{solicitud.emergenciaById.nombre}" style="font-size: 11.5px; margin-top: 5px;" />)
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>
-                      <h:outputText value="#{solicitud.novedades}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputTextarea id="novedades" value="#{solicitud.novedades}" style="width:100%">
-                      </p:inputTextarea>                
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column headerText="Estado" style="vertical-align: top;">  
-                  <p:cellEditor>
-                    <f:facet name="output">
-                      <span style="font-weight: 600;">Aprobador: </span>
-                      <h:outputText value="#{solicitud.estado_legible}" />
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioAprobador.nombrecompleto}" style="font-size: 11.5px; color: dimgrey;" />                  
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
-                      <span style="font-weight: 600;">Enfermería: </span>
-                      <h:outputText value="#{solicitud.estadoEnfermeria_legible }" />
-                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd;"></div>                      
-                      <h:outputText value="#{solicitud.usuarioByIdUsuarioEnfermero.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" />
-                    </f:facet>
-                    <f:facet name="input">
-                      <span style="font-weight: 600;">Seleccione para aprobar: </span>
-                      <p:selectBooleanCheckbox value="#{solicitud.estado}" style="margin-left: 45%" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column filterBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" sortBy="#{solicitud.usuarioByIdUsuarioConductor.apellido}" headerText="Conductor" filterMatchMode="contains" style="vertical-align: top;">  
-                  <span style="font-weight: 600;">1: </span>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor.nombrecompleto}" />
-                  <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>  
-                  <span style="font-weight: 600;">2: </span>
-                  <h:outputText value="#{solicitud.usuarioByIdUsuarioConductor2.nombrecompleto}" />
-                </p:column>
-
-                <p:column style="width:50px"> 
-                  <p:rowEditor id="editrow" /> 
-                </p:column> 
-              </p:dataTable>  
-            </p:tab>
--->
             <!-- ______________________MIS SOLICITUDES PENDIENTES_______________________ -->
 
             <p:tab title="Mis Solicitudes Pendientes" id="tab2">
@@ -192,8 +74,16 @@
                       <h:outputText value="#{solicitud.FLlegada}">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
                       </h:outputText>
-
+                      
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Retorno: </span>
+                      <h:outputText value="#{solicitud.FRetorno}" rendered="#{solicitud.retorno}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="font-size: 11.5px; color: dimgrey;"></div>
+                      <h:outputText value="#{solicitud.retornoObservacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" rendered="#{solicitud.retorno}" /> 
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                      
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
                       <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -340,6 +230,14 @@
                       </h:outputText>
 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Retorno: </span>
+                      <h:outputText value="#{solicitud.FRetorno}" rendered="#{solicitud.retorno}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="font-size: 11.5px; color: dimgrey;"></div>
+                      <h:outputText value="#{solicitud.retornoObservacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" rendered="#{solicitud.retorno}" /> 
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                        
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
                       <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -459,6 +357,14 @@
                       </h:outputText>
 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Retorno: </span>
+                      <h:outputText value="#{solicitud.FRetorno}" rendered="#{solicitud.retorno}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="font-size: 11.5px; color: dimgrey;"></div>
+                      <h:outputText value="#{solicitud.retornoObservacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" rendered="#{solicitud.retorno}" /> 
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                        
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
                       <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -566,6 +472,14 @@
                       </h:outputText>
 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Retorno: </span>
+                      <h:outputText value="#{solicitud.FRetorno}" rendered="#{solicitud.retorno}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="font-size: 11.5px; color: dimgrey;"></div>
+                      <h:outputText value="#{solicitud.retornoObservacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" rendered="#{solicitud.retorno}" /> 
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                       
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
                       <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -756,25 +670,20 @@
                   <h:outputLabel for="novedades" value="Novedades: " />
                   <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
                   
-                  <h:outputLabel for="retorno" value="Coordinar retorno: " />
-                  <p:selectBooleanCheckbox id="retorno" value="#{solicitudBean.solicitud.retorno}" >
-                    <p:ajax event="change" update="panelId" />
-                  </p:selectBooleanCheckbox>
+                  <br></br>                    
+                  <h:panelGrid id="panelId" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
+                    <h:outputLabel for="retorno" value="Coordinar retorno: " />
+                    <p:selectBooleanCheckbox id="retorno" value="#{solicitudBean.solicitud.retorno}" >
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel for="fretorno" value="Fecha y Hora de RETORNO: *"  />
+                    <p:calendar id="fretorno" value="#{solicitudBean.solicitud.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
+
+                    <h:outputLabel for="retornoObservaciones" value="Observaciones: " />
+                    <p:inputTextarea id="retornoObservaciones" value="#{solicitudBean.solicitud.retornoObservacion}" style="width: 90%;" />                  
+                  </h:panelGrid>
                   
                   <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
-                  
-                  <br></br>                    
-                  <h:panelGrid id="panelId" columns="2"  >
-                    
-                    <h:outputLabel rendered="#{solicitudBean.solicitud.retorno}" for="fretorno" value="Fecha y Hora de RETORNO: *"  />
-                    <p:calendar rendered="#{solicitudBean.solicitud.retorno}" id="fretorno" value="#{solicitudBean.solicitud.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-
-                    <h:outputLabel rendered="#{solicitudBean.solicitud.retorno}" for="retornoObservaciones" value="Observaciones: " />
-                    <p:inputTextarea rendered="#{solicitudBean.solicitud.retorno}" id="retornoObservaciones" value="#{solicitudBean.solicitud.retornoObservacion}" style="width: 100%;" />
-                  
-                  </h:panelGrid>
-                  
                   
                 </h:panelGrid>
                 <f:facet name="footer">
@@ -850,8 +759,23 @@
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="emergencia" value="#{solicitudBean.solicitudEmergencia.emergenciaById.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaEmergencia}" />                    
                   </p:selectOneMenu>
-                  <br></br>
+                  
+                  
+                  <br></br>                    
+                  <h:panelGrid id="panelId2" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
+                    <h:outputLabel for="retorno2" value="Coordinar retorno: " />
+                    <p:selectBooleanCheckbox id="retorno2" value="#{solicitudBean.solicitudEmergencia.retorno}" >
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel for="fretorno2" value="Fecha y Hora de RETORNO: *"  />
+                    <p:calendar id="fretorno2" value="#{solicitudBean.solicitudEmergencia.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
 
+                    <h:outputLabel for="retornoObservaciones2" value="Observaciones: " />
+                    <p:inputTextarea id="retornoObservaciones2" value="#{solicitudBean.solicitudEmergencia.retornoObservacion}" style="width: 90%;" />                  
+                  </h:panelGrid>
+                  
+                  <br></br>
+                  <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
+                  
                 </h:panelGrid>
                 <f:facet name="footer">
                   <center>

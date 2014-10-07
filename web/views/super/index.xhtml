@@ -77,6 +77,14 @@
                       </h:outputText>
 
                       <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Retorno: </span>
+                      <h:outputText value="#{solicitud.FRetorno}" rendered="#{solicitud.retorno}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="font-size: 11.5px; color: dimgrey;"></div>
+                      <h:outputText value="#{solicitud.retornoObservacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" rendered="#{solicitud.retorno}" /> 
+
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                         
                       <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
                       <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
@@ -636,54 +644,70 @@
             <center>
               <p:panel id="pn2" style="margin-bottom:10px;">
                 <p:messages id="messages" />
-                <h:panelGrid id="grid" columns="3" cellpadding="5">
+                <h:panelGrid id="grid" columns="4" cellpadding="5">
 
                   <h:outputLabel for="origen" value="Origen: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitudBean.solicitud.distanciaById.localidadByIdOrigen.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-                  <br></br>
-                  
-                  <h:outputLabel for="dorigen" value="Dirección origen: " />
+
+
+                  <h:outputLabel for="dorigen" value="Dirección origen: *" />
                   <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitud.direccionOrigen}" style="width:100%">
                   </p:inputTextarea>                
-                  <p:message for="dorigen" id="msgDorigen" display="icon" />
-                  
+
+
                   <h:outputLabel for="destino" value="Destino: *" />
                   <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitud.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
                     <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                   </p:selectOneMenu>
-                  <br></br>
-                  
-                  <h:outputLabel for="ddestino" value="Dirección destino: " />
+
+
+                  <h:outputLabel for="ddestino" value="Dirección destino: *" />
                   <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitud.direccionDestino}" style="width:100%">
                   </p:inputTextarea>                
-                  <p:message for="ddestino" id="msgDdestino" display="icon" />
+
 
                   <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
-                  <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" />
-                  <br></br>
+                  <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
+
 
                   <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
-                  <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" />
-                  <br></br>
+                  <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
 
-<!--                  <h:outputLabel for="hospedaje" value="Hospedaje: " />
-                  <p:inputTextarea id="hospedaje" value="#{solicitudBean.solicitud.hospedaje}" style="width:100%">
-                  </p:inputTextarea>                
-                  <p:message for="hospedaje" id="msgHospedaje" display="icon" />-->
-                  
+
+                  <p:outputLabel value="Acompañantes Internos: *" />
+                  <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" id="internos" multiple="true" value="#{solicitudBean.solicitud.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                  maxResults="10" minQueryLength="2" queryDelay="500" 
+                                  converter="usuarioInternoConverter" />
+
+                  <p:outputLabel value="Acompañantes Externos: *" />
+                  <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitud.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                  var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                  maxResults="10" minQueryLength="2" queryDelay="500" 
+                                  converter="usuarioExternoConverter" />
+
+                  <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
+                  <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
+                                   placeholder="Ejemplo: Juan Perez,Jose Duque,Carlos Ponce" />
+
                   <h:outputLabel for="novedades" value="Novedades: " />
-                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width:100%">
-                  </p:inputTextarea>                
-                  <p:message for="novedades" id="msgNovedades" display="icon" />
-
-<!--                  <h:outputLabel for="conductor" value="Conductor: *" />
-                  <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitudBean.solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">
-                    <f:selectItems value="#{solicitudBean.listaConductores}" />
-                  </p:selectOneMenu>
-                  <br></br>-->
+                  <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
                   
+                  <br></br>                    
+                  <h:panelGrid id="panelId" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
+                    <h:outputLabel for="retorno" value="Coordinar retorno: " />
+                    <p:selectBooleanCheckbox id="retorno" value="#{solicitudBean.solicitud.retorno}" >
+                    </p:selectBooleanCheckbox>
+                    <h:outputLabel for="fretorno" value="Fecha y Hora de RETORNO: *"  />
+                    <p:calendar id="fretorno" value="#{solicitudBean.solicitud.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
+
+                    <h:outputLabel for="retornoObservaciones" value="Observaciones: " />
+                    <p:inputTextarea id="retornoObservaciones" value="#{solicitudBean.solicitud.retornoObservacion}" style="width: 90%;" />                  
+                  </h:panelGrid>
+                  
+                  <br></br>
                   <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
                   
                 </h:panelGrid>
