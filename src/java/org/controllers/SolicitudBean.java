@@ -331,8 +331,19 @@ public class SolicitudBean {
       
       String origen = Select.selectLocalidadNombreById(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId());
       String destino = Select.selectLocalidadNombreById(solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
-       
+      
+      //Envia al aprobador
       es.send(enviar_a, responder_a, "Solicitud Especial", "La solicitud Numero: " + sol_id + " necesita su aprobacion. Los datos son los siguientes:\n"
+              + "\nNombre del solicitante: " + usuario.getNombrecompleto()
+              + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + solicitud.getDistanciaById().getDistancia()
+              + "\nFecha Hora Salida / Llegada : " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
+              + " / " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
+              + "");
+      
+      //Envia a los enfermeros
+      es = new emailSender();
+      Address[] responder_a_defecto = new Address[]{new InternetAddress ("noreply@mail.com")};       
+      es.send(responder_a, responder_a_defecto, "Solicitud Especial", "Se ha generado una nueva Solicitud de Transporte con id Numero: " + sol_id + ". Los datos son los siguientes:\n"
               + "\nNombre del solicitante: " + usuario.getNombrecompleto()
               + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + solicitud.getDistanciaById().getDistancia()
               + "\nFecha Hora Salida / Llegada : " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
@@ -369,7 +380,7 @@ public class SolicitudBean {
     return listaSolicitudesAprobadas;
   }
 
-  public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException {
+  public List<Solicitud> onRowEdit(RowEditEvent event) throws SQLException, ParseException, IOException, AddressException, Exception {
     Solicitud editedSolicitud = (Solicitud) event.getObject();
     
     int h = editedSolicitud.getFSalida().getHours();
@@ -386,8 +397,8 @@ public class SolicitudBean {
         }
       }
     }
-    
-    Update.UpdateSolicitudRetorno(editedSolicitud);
+    if(editedSolicitud.getFRetorno() != null)
+      Update.UpdateSolicitudRetorno(editedSolicitud);
     
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados(), false));
     editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));
@@ -399,6 +410,7 @@ public class SolicitudBean {
       if(!editedSolicitud.getId_solicitud_relacion().equals("0") && !editedSolicitud.getId_solicitud_relacion().equals("")) {        
         editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
         Update.UpdateSolicitudRelacion(editedSolicitud); 
+        notificarSolicitudActualizada(editedSolicitud, true, false);
       }else if(editedSolicitud.getEstadoEnfermeria() && editedSolicitud.getUsuarioByIdUsuarioConductor() != null && editedSolicitud.getUsuarioByIdUsuarioConductor().getFDisponible() != null){
           editedSolicitud.setUsuarioByIdUsuarioEnfermero(usuario);
           Update.UpdateUsuarioConductor(editedSolicitud.getUsuarioByIdUsuarioConductor());
@@ -406,8 +418,10 @@ public class SolicitudBean {
             Update.UpdateSolicitudConductor2(editedSolicitud);
             Update.UpdateUsuarioConductor2(editedSolicitud.getUsuarioByIdUsuarioConductor2());
           }       
+          notificarSolicitudActualizada(editedSolicitud, true, false);
       }else if(editedSolicitud.getCancelado()){
         Update.UpdateSolicitudCancelar(editedSolicitud);
+        notificarSolicitudActualizada(editedSolicitud, false, true);
       }else{
         return listaSolicitudes;
       }
@@ -433,6 +447,50 @@ public class SolicitudBean {
     solicitudEmergencia.setEmergencia(true);
     updateInfoSolicitudes();
     return listaSolicitudes;
+  }
+  
+  public void notificarSolicitudActualizada(Solicitud sol, Boolean aprobado, Boolean cancelado) throws AddressException, SQLException, Exception{
+    emailSender es = new emailSender();
+      Address[] enviar_a = new Address[3];
+      enviar_a[0] = new InternetAddress("noemail@gmail.com");
+      enviar_a[1] = new InternetAddress("noemail@gmail.com");
+      enviar_a[2] = new InternetAddress("noemail@gmail.com");
+      
+      String email = Select.selectUsuarioEmailById(sol.getUsuarioByIdUsuarioSolicita().getId());
+      enviar_a[0] = new InternetAddress(email);
+      
+      String origen = Select.selectLocalidadNombreById(sol.getDistanciaById().getLocalidadByIdOrigen().getId());
+      String destino = Select.selectLocalidadNombreById(sol.getDistanciaById().getLocalidadByIdDestino().getId());
+      
+      Address[] responder_a_defecto = new Address[]{new InternetAddress ("noreply@mail.com")};
+      
+      //Caso cancelado
+      if(cancelado){
+        
+        es.send(enviar_a, responder_a_defecto, "Solicitud actualizada", "La solicitud Numero: " + sol.getId() + " ha sido CANCELADA. Los datos son los siguientes:\n"
+              //  + "\nNombre del solicitante: " + usuario.getNombrecompleto()
+                + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + sol.getDistanciaById().getDistancia()
+                + "\nFecha Hora Salida / Llegada : " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
+                + " / " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
+                + "");
+      }
+      
+      if(aprobado){
+        email = Select.selectUsuarioEmailById(sol.getUsuarioByIdUsuarioConductor().getId());
+        if(email != "")
+          enviar_a[1] = new InternetAddress(email);
+        if(sol.getUsuarioByIdUsuarioConductor2() != null && sol.getUsuarioByIdUsuarioConductor2().getId() != 0){
+          email = Select.selectUsuarioEmailById(sol.getUsuarioByIdUsuarioConductor2().getId());
+          if(email != "")
+            enviar_a[2] = new InternetAddress(email);
+        }
+        es.send(enviar_a, responder_a_defecto, "Solicitud actualizada", "La solicitud Numero: " + sol.getId() + " ha sido APROBADA. Los datos son los siguientes:\n"
+              //  + "\nNombre del solicitante: " + usuario.getNombrecompleto()
+                + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + sol.getDistanciaById().getDistancia()
+                + "\nFecha Hora Salida / Llegada : " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
+                + " / " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
+                + "");
+      }
   }
 
   public void onRowCancel(RowEditEvent event) {

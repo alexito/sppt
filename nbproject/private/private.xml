@@ -15,10 +15,11 @@
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Select.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/super/index.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/admin/index.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/enfermeria/index.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/Insert.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/database/ConnectDB.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/web/views/enfermeria/index.xhtml</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/LocalidadBean.java</file>
+            <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/other/emailSender.java</file>
             <file>file:/C:/Users/Administrador/Documents/lafarge/SistemaParaPedirTransporte/src/java/org/controllers/UsuarioBean.java</file>
         </group>
     </open-files>
