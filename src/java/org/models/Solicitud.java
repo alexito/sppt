@@ -212,6 +212,10 @@ public class Solicitud implements java.io.Serializable {
     return (getEstadoEnfermeria()) ? "Aprobado" : "Pendiente";
   }
   
+  public String getEstadoGeneral_legible() {            
+    return (getCancelado())? "Cancelado" : (getEstadoEnfermeria()) ? "Aprobado" : "Pendiente";
+  }
+  
   public String getEstadoCancelado_legible() {            
     return (getCancelado()) ? "Cancelado" : "Activo";
   }

@@ -75,7 +75,7 @@ public class Select {
         id_usuarios.put(result.getInt("id_usuario_enfermero"), result.getInt("id_usuario_enfermero"));
         id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
       }
-
+      
       map_localidades = selectMappedLocalidades(true, null);
       map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
       map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
@@ -816,6 +816,12 @@ public class Select {
         
         s.setListaAprobador(true);
         
+        if(res.getBoolean("retorno")){
+          s.setRetorno(true);
+          s.setFRetorno(res.getTimestamp("f_retorno"));
+          s.setRetornoObservacion(res.getString("retorno_observacion"));
+        }
+        
         if("enfermero".equals(usuario.getRol()))
           s.setListaAprobador(false);        
         
@@ -1243,6 +1249,58 @@ public class Select {
     }
 
     return listLocalidades;
+  }
+  
+  public static List<Solicitud> selectSolicitudesDelConductor(int cid) throws SQLException {
+    List<Solicitud> lista = null;
+    ConnectDB con = new ConnectDB();
+    String SQL = "SELECT * FROM solicitud WHERE id_usuario_conductor='" + cid + "' OR id_usuario_conductor2='" + cid + "' ORDER BY f_salida DESC";
+    
+    Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+    Map<Integer, Distancia> map_distancias;
+    Map<Integer, Integer> id_usuarios = new HashMap<Integer, Integer>();
+    Map<Integer, Usuario> map_usuarios;
+    Map<Integer, Localidad> map_localidades;
+
+    try {
+      sentence = con.getConnection().createStatement();
+      result = sentence.executeQuery(SQL);
+      while (result.next()) {
+        id_usuarios.put(result.getInt("id_usuario_solicita"), result.getInt("id_usuario_solicita"));
+        id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
+      }
+      
+      map_localidades = selectMappedLocalidades(true, null);
+      map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+      map_usuarios = selectMappedUsuarios(false, false, id_usuarios);
+      
+      sentence = con.getConnection().createStatement(); 
+      result = sentence.executeQuery(SQL);
+      
+      lista = new ArrayList<Solicitud>();
+      while (result.next()) {
+
+        Solicitud s = new Solicitud();
+        
+        s.setId(result.getInt("id"));
+        s.setUsuarioByIdUsuarioSolicita(map_usuarios.get(result.getInt("id_usuario_solicita")));
+        s.setDistanciaById(map_distancias.get(result.getInt("id_distancia")));
+        s.setFSalida(result.getTimestamp("f_salida"));
+        s.setFLlegada(result.getTimestamp("f_llegada"));
+        s.setEstado(result.getBoolean("estado"));
+        s.setEstadoEnfermeria(result.getBoolean("estado"));
+        s.setCancelado(result.getBoolean("cancelado"));
+        s.setEmergencia(result.getBoolean("emergencia"));
+        
+        lista.add(s);
+      }
+      return lista;
+    } catch (SQLException e) {
+    } finally {
+      CloseCurrentConnection(sentence, result, con);
+    }
+
+    return lista;
   }
   
   public static Map<Integer, String> selectDistanciasById(int id){

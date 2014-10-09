@@ -335,9 +335,9 @@ public class SolicitudBean {
       //Envia al aprobador
       es.send(enviar_a, responder_a, "Solicitud Especial", "La solicitud Numero: " + sol_id + " necesita su aprobacion. Los datos son los siguientes:\n"
               + "\nNombre del solicitante: " + usuario.getNombrecompleto()
-              + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + solicitud.getDistanciaById().getDistancia()
-              + "\nFecha Hora Salida / Llegada : " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
-              + " / " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
+              + "\nOrigen: " + origen + " \nDestino: " + destino + " \nDistancia: " + solicitud.getDistanciaById().getDistancia()
+              + "\nFecha Salida: " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
+              + "\nFecha Llegada " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
               + "");
       
       //Envia a los enfermeros
@@ -345,9 +345,9 @@ public class SolicitudBean {
       Address[] responder_a_defecto = new Address[]{new InternetAddress ("noreply@mail.com")};       
       es.send(responder_a, responder_a_defecto, "Solicitud Especial", "Se ha generado una nueva Solicitud de Transporte con id Numero: " + sol_id + ". Los datos son los siguientes:\n"
               + "\nNombre del solicitante: " + usuario.getNombrecompleto()
-              + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + solicitud.getDistanciaById().getDistancia()
-              + "\nFecha Hora Salida / Llegada : " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
-              + " / " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
+              + "\nOrigen: " + origen + " \nDestino: " + destino + " \nDistancia: " + solicitud.getDistanciaById().getDistancia()
+              + "\nFecha Salida: " + ( 1900 + solicitud.getFSalida().getYear()) + "-" + (solicitud.getFSalida().getMonth()+1) + "-" + solicitud.getFSalida().getDate() + " " + solicitud.getFSalida().getHours() + ":" +solicitud.getFSalida().getMinutes()
+              + "\nFecha Llegada " +(1900 + solicitud.getFLlegada().getYear()) + "-" + (solicitud.getFLlegada().getMonth()+1) + "-" + solicitud.getFLlegada().getDate() + " " + solicitud.getFLlegada().getHours() + ":" +solicitud.getFLlegada().getMinutes()
               + "");
     }
 
@@ -469,9 +469,9 @@ public class SolicitudBean {
         
         es.send(enviar_a, responder_a_defecto, "Solicitud actualizada", "La solicitud Numero: " + sol.getId() + " ha sido CANCELADA. Los datos son los siguientes:\n"
               //  + "\nNombre del solicitante: " + usuario.getNombrecompleto()
-                + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + sol.getDistanciaById().getDistancia()
-                + "\nFecha Hora Salida / Llegada : " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
-                + " / " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
+                + "\nOrigen: " + origen + " \nDestino: " + destino + " \nDistancia: " + sol.getDistanciaById().getDistancia()
+                + "\nFecha Salida: " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
+                + "\nFecha Llegada " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
                 + "");
       }
       
@@ -486,9 +486,9 @@ public class SolicitudBean {
         }
         es.send(enviar_a, responder_a_defecto, "Solicitud actualizada", "La solicitud Numero: " + sol.getId() + " ha sido APROBADA. Los datos son los siguientes:\n"
               //  + "\nNombre del solicitante: " + usuario.getNombrecompleto()
-                + "\nOrigen / Destino / Distancia: " + origen + " / " + destino + " / " + sol.getDistanciaById().getDistancia()
-                + "\nFecha Hora Salida / Llegada : " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
-                + " / " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
+                + "\nOrigen: " + origen + " \nDestino: " + destino + " \nDistancia: " + sol.getDistanciaById().getDistancia()
+                + "\nFecha Salida: " + ( 1900 + sol.getFSalida().getYear()) + "-" + (sol.getFSalida().getMonth()+1) + "-" + sol.getFSalida().getDate() + " " + sol.getFSalida().getHours() + ":" +sol.getFSalida().getMinutes()
+                + "\nFecha Llegada " +(1900 + sol.getFLlegada().getYear()) + "-" + (sol.getFLlegada().getMonth()+1) + "-" + sol.getFLlegada().getDate() + " " + sol.getFLlegada().getHours() + ":" +sol.getFLlegada().getMinutes()
                 + "");
       }
   }

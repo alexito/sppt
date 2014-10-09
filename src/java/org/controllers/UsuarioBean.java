@@ -10,6 +10,7 @@ import javax.faces.bean.RequestScoped;
 import org.database.Insert;
 import org.database.Select;
 import org.database.Update;
+import org.models.Solicitud;
 import org.models.Usuario;
 import org.primefaces.event.*;
 
@@ -20,11 +21,35 @@ public class UsuarioBean {
   private List<Usuario> listaUsuarios;
   private List<Usuario> listaConductores;
   private List<Usuario> listaEnfermeros;
+  private List<Solicitud> listaSolicitudesDelConductor;
 
   private Map<String, String> tipos_rol = new HashMap<String, String>();
   private Usuario usuario;
   private Usuario conductor;
   private Usuario enfermero;
+  private Usuario usuarioSeleccionado;
+  
+
+  public Usuario getUsuarioSeleccionado() {
+    return usuarioSeleccionado;
+  }
+
+  public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
+    this.usuarioSeleccionado = usuarioSeleccionado;
+  }
+  
+  public void onRowSelect(SelectEvent event) throws SQLException {
+    Usuario usu = (Usuario) event.getObject();
+    listaSolicitudesDelConductor = Select.selectSolicitudesDelConductor(usu.getId());
+  }
+  
+   public List<Solicitud> getListaSolicitudesDelConductor() {
+    return listaSolicitudesDelConductor;
+  }
+
+  public void setListaSolicitudesDelConductor(List<Solicitud> listaSolicitudesDelConductor) {
+    this.listaSolicitudesDelConductor = listaSolicitudesDelConductor;
+  }
 
   public List<Usuario> saveUsuario() throws IOException, SQLException {
     Insert.InsertUsuario(usuario); 

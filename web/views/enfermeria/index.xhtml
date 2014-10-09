@@ -448,7 +448,7 @@
                     <p:column headerText="Nombre">  
                       <h:outputText value="#{distancia.nombre}" />
                     </p:column>
-
+                    
                     <p:column headerText="Distancia" > 
                       <p:cellEditor>
                         <f:facet name="output">
@@ -459,8 +459,8 @@
                         </f:facet>
                       </p:cellEditor>
                     </p:column>
-
-
+                    
+                    
                   </p:dataTable>
                 </p:layoutUnit>
               </p:layout>
@@ -611,108 +611,144 @@
             <!-- __________TAB 4__________ -->
 
             <p:tab title="Conductores" id="tab4">
-              <p:dataTable id="table-conductores" var="usuario" value="#{usuarioBean.listaConductores}" rowKey="#{usuario}"
-                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                           editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
-                           widgetVar="usuariosTable" emptyMessage="No se encontraron datos." >  
+              
+              <p:layout  >
+                <p:layoutUnit id="conductor-wrapper" position="west" size="800" header="LISTA CONDUCTORES (Seleccione dando Click en el ID)" resizable="true" >
+                  <p:dataTable id="table-conductores" var="usuario" value="#{usuarioBean.listaConductores}" rowKey="#{usuario.id}"
+                               paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                               editable="true"  paginator="true" rows="10"   rowsPerPageTemplate="10,20,30,40,50,100,1000"
+                               widgetVar="usuariosTable" emptyMessage="No se encontraron datos."
+                               selection="#{usuarioBean.usuarioSeleccionado}" selectionMode="single">  
 
-                <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" oncomplete="cmdRefreshSolicitudes()" />
-                <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" />
+                    <p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}" oncomplete="cmdRefreshSolicitudes()" />
+                    <p:ajax event="rowEditCancel" listener="#{usuarioBean.onRowCancel}" />
+                    <p:ajax event="rowSelect" listener="#{usuarioBean.onRowSelect}"  update=":form-main-data:tabview:table-solicitud-del-conductor" /> 
+                    
+                    <p:column headerText="ID" sortBy="#{solicitud.id}" width="40">  
+                      <h:outputText value="#{usuario.id}" />
+                    </p:column>
+                    <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
+                      <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{usuario.nombrecompleto}" /></f:facet>
+                        <f:facet name="input">
+                          <p:inputText id="apellido" value="#{usuario.apellido}" required="true" requiredMessage="El apellido es obligatorio." style="width: 100%;"/>
+                          <p:inputText id="nombre" value="#{usuario.nombre}" required="true" requiredMessage="La nombre es obligatorio." style="width:100%"/>
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
 
-                <p:column filterBy="#{usuario.apellido}" sortBy="#{usuario.apellido}" headerText="Apellidos" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.apellido}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="apellido" value="#{usuario.apellido}" required="true" requiredMessage="El apellido es obligatorio." style="width: 100%;">
-                        <f:validateLength minimum="2" />
-                        <p:ajax update="msgApellido" event="blur" />
-                      </p:inputText>                
-                      <p:message for="apellido" id="msgApellido" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column filterBy="#{usuario.cedula}"  headerText="Cédula" filterMatchMode="contains" width="70">  
+                      <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{usuario.cedula}" /></f:facet>
+                        <f:facet name="input">
+                          <p:inputText id="cedula" value="#{usuario.cedula}" required="true" requiredMessage="La cédula es obligatoria." style="width:100%"/>
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
 
-                <p:column filterBy="#{usuario.nombre}" sortBy="#{usuario.nombre}"  headerText="Nombres" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.nombre}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="nombre" value="#{usuario.nombre}" required="true" requiredMessage="La nombre es obligatorio." style="width:100%">
-                        <f:validateLength minimum="2" />
-                        <p:ajax update="msgNombre" event="blur" />
-                      </p:inputText>                
-                      <p:message for="nombre" id="msgNombre" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column headerText="Contacto">  
+                      <p:cellEditor>
+                        <f:facet name="output">    
+                          <span style="font-weight: 600;">Movil: </span>
+                          <h:outputText value="#{usuario.movil}" />
+                          <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div> 
+                          <span style="font-weight: 600;">Telefono: </span>
+                          <h:outputText value="#{usuario.telefono}" />
+                          <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div> 
+                          <span style="font-weight: 600;">Email: </span>
+                          <h:outputText value="#{usuario.email}" />
+                        </f:facet>
+                        <f:facet name="input">
+                          <span style="font-weight: 600;">Movil: </span>
+                          <p:inputText id="movil" value="#{usuario.movil}" required="false" style="width:100%"/> 
+                          <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div> 
+                          <span style="font-weight: 600;">Telefono: </span>
+                          <p:inputText id="telefono" value="#{usuario.telefono}" style="width:100%"/>
+                          <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div> 
+                          <span style="font-weight: 600;">Email: </span>
+                          <p:inputText id="email" value="#{usuario.email}" style="width:100%"/>        
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
 
-                <p:column filterBy="#{usuario.cedula}"  headerText="Cédula" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.cedula}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="cedula" value="#{usuario.cedula}" required="true" requiredMessage="La cédula es obligatoria." style="width:100%">
-                        <f:validateLength minimum="10" />
-                        <p:ajax update="msgCedula" event="blur" />
-                      </p:inputText>                
-                      <p:message for="cedula" id="msgCedula" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column filterBy="#{usuario.FDisponible}"  headerText="F. Disponible" filterMatchMode="contains">  
+                      <p:cellEditor>
+                        <f:facet name="output">
+                          <h:outputText value="#{usuario.FDisponible}" >
+                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                          </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                          <p:calendar id="ufdisponible" value="#{usuario.FDisponible}" pattern="MM/dd/yyyy HH:mm" />
+                        </f:facet>
+                      </p:cellEditor>
+                    </p:column>
 
-                <p:column filterBy="#{usuario.email}"  headerText="Email" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.email}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="email" value="#{usuario.email}" style="width:100%">
-                      </p:inputText>                
-                      <p:message for="email" id="msgEmail" display="icon" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column headerText="Estado" sortBy="#{usuario.estado_legible}">  
+                      <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{usuario.estado_legible}" /></f:facet>
+                        <f:facet name="input"><p:selectBooleanCheckbox value="#{usuario.estado}" style="margin-left: 45%" /></f:facet>
+                      </p:cellEditor>
+                    </p:column>
 
-                <p:column filterBy="#{usuario.telefono}"  headerText="Telefono" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.telefono}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="telefono" value="#{usuario.telefono}" style="width:100%"/>
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column style="width:50px">               
+                      <p:rowEditor id="editrow" />              
+                    </p:column>          
+                  </p:dataTable>  
+                  
+                  </p:layoutUnit>
+                <p:layoutUnit id="solicitudes-wrapper" position="center" header="Se muestra las solicitudes del conductor seleccionado.">
+                  <p:dataTable id="table-solicitud-del-conductor" var="solicitud" value="#{usuarioBean.listaSolicitudesDelConductor}" rowKey="#{solicitud.id}"
+                               widgetVar="solicitudTable"  emptyMessage="Seleccione un conductor haciendo Click en el ID." >
 
-                <p:column filterBy="#{usuario.movil}"  headerText="Movil" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.movil}" /></f:facet>
-                    <f:facet name="input">
-                      <p:inputText id="movil" value="#{usuario.movil}" required="false" style="width:100%"/>                      
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                    <p:column headerText="ID" width="40">  
+                      <h:outputText value="#{solicitud.id}" />
+                    </p:column>
 
-
-                <p:column filterBy="#{usuario.movil}"  headerText="Movil" filterMatchMode="contains">  
-                  <p:cellEditor>
-                    <f:facet name="output">
-                      <h:outputText value="#{usuario.FDisponible}" >
+                    <p:column headerText="Origen" width="90" >  
+                      <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />                     
+                    </p:column>
+                    
+                    <p:column headerText="Destino" width="90" >  
+                      <h:outputText value="#{solicitud.distanciaById.localidadByIdDestino.nombre}" />                     
+                    </p:column>
+                    
+                    <p:column headerText="Fechas" >  
+                      <span style="font-weight: 600;">Salida: </span>
+                      <h:outputText value="#{solicitud.FSalida}">
                         <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
                       </h:outputText>
-                    </f:facet>
-                    <f:facet name="input">
-                      <p:calendar id="ufdisponible" value="#{usuario.FDisponible}" pattern="MM/dd/yyyy HH:mm" />
-                    </f:facet>
-                  </p:cellEditor>
-                </p:column>
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 15px;"></div>                      
+                      <span style="font-weight: 600;">Llegada: </span>
+                      <h:outputText value="#{solicitud.FLlegada}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>                      
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">Creado el: </span>
+                      <h:outputText value="#{solicitud.FCreacion}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" timeZone="GMT-5" />
+                      </h:outputText>
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> por: </span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.nombrecompleto}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;"> (</span> 
+                      <h:outputText value="#{solicitud.usuarioByIdUsuarioSolicita.movil}" style="font-size: 11.5px; color: dimgrey; margin-top: 5px;" /> 
+                      <span style="font-size: 11.5px; color: dimgrey; margin-top: 5px;">)</span> 
+                    </p:column>
+                    
+                    <p:column headerText="Datos" style="vertical-align: top;"> 
+                      <span style="font-weight: 600;">Estado: </span>
+                      <h:outputText value="#{solicitud.estadoGeneral_legible}" />  
+                      <div style="width: 100%; height: 2px; display: block; border-bottom: 1px dashed #dddddd; margin-top: 10px;"></div>
+                      <span class="solicitud-tipo #{solicitud.tipo_solicitud_legible}" style="font-weight: 600;">Tipo: </span> 
+                      <h:outputText value="#{solicitud.tipo_solicitud_legible}" style="font-size: 11.5px; margin-top: 5px;" />
+                    </p:column>
 
-                <p:column headerText="Estado" sortBy="#{usuario.estado_legible}">  
-                  <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{usuario.estado_legible}" /></f:facet>
-                    <f:facet name="input"><p:selectBooleanCheckbox value="#{usuario.estado}" style="margin-left: 45%" /></f:facet>
-                  </p:cellEditor>
-                </p:column>
-
-                <p:column style="width:50px">               
-                  <p:rowEditor id="editrow" />              
-                </p:column>          
-              </p:dataTable>  
-            </p:tab>
+                  </p:dataTable>
+                </p:layoutUnit>
+                
+              </p:layout>
+                </p:tab>
+            
 
             <!-- __________TAB 5__________ -->
 
