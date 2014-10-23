@@ -39,7 +39,7 @@ public class SolicitudBean {
   private List<Solicitud> listaSolicitudesEmergencias;
   private List<Solicitud> listaSolicitudesXAprobar;
   private List<Solicitud> listaSolicitudesEnfermeriaXAprobar;
-  private List<Solicitud> listaSolicitudesEnfermeriaAprobadas;
+  private List<Solicitud> listaSolicitudesEnfermeriaAprobadas;  
   private Map<String, Integer> listaLocalidades;
   private Map<String, Integer> listaUsuarios;
   private Map<String, Integer> listaConductores;
@@ -562,5 +562,5 @@ public class SolicitudBean {
   public Date getCurrentDate() {
       return currentDate;
   }
-
+  
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+  <f:view contentType="text/html">
+    <h:head>
+      <f:facet name="first">
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>        
+        <title>SPST</title>
+      </f:facet>
+    </h:head>
+
+    <h:body>
+
+      <p:layout fullPage="true">
+        <p:layoutUnit position="center" header="SISTEMA PARA SOLICITAR TRANSPORTE (ENFERMERIA)">
+          <p:ajaxStatus id="ajax-status" >  
+            <f:facet name="start">  
+              <h:graphicImage value="../../resources/images/loader.GIF" />  
+            </f:facet>  
+
+            <f:facet name="complete">  
+              <h:outputText value="" />  
+            </f:facet>  
+          </p:ajaxStatus>
+          <h:form>  
+            <p:menubar>
+              <p:menuitem icon="ui-icon-check" value="Nueva Solicitud"  onclick="PF('newSolicitud').show();" style="margin-left: 15px;" />
+              <p:menuitem icon="ui-icon-clipboard" value="Nueva Localidad"  onclick="PF('newLocalidad').show();" style="margin-left: 15px;" />
+              <p:menuitem icon="ui-icon-person" value="Nuevo Usuario"  onclick="PF('newUsuario').show();" style="margin-left: 15px;" />
+              <p:menuitem icon="ui-icon-copy" value="Nuevo Conductor"  onclick="PF('newConductor').show();" style="margin-left: 15px;" />            
+              <p:menuitem icon="ui-icon-circle-plus" value="Nuevo Enfermero"  onclick="PF('newEnfermero').show();" style="margin-left: 15px;" />
+              <p:menuitem icon="ui-icon-refresh" value="Refrescar Página" action="#{solicitudBean.refreshAll()}" id="refreshButton" ajax="true" update=":form-main-data:tabview, :form-main-data:tabview:table-distancias, :form-main-data:tabview:table-localidades, :form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-new-localidad" style="margin-left: 15px; font-weight: bold;" />
+              <f:facet name="options">
+                <p:commandButton type="button" value="Salir" icon="ui-icon-extlink" />
+                <p:remoteCommand name="cmdRefreshSolicitudes" actionListener="#{solicitudBean.refreshAll()}" update=":form-main-data:tabview, :form-main-data:tabview:table-distancias, :form-main-data:tabview:table-localidades, :form-new-solicitud, :form-new-usuario, :form-new-conductor, :form-new-localidad"/>
+              </f:facet>
+            </p:menubar>
+            <p:growl id="messages"/>            
+          </h:form> 
+          <ui:insert name="main-body">Contenido</ui:insert>
+        </p:layoutUnit>
+      </p:layout>
+    </h:body>
+  </f:view>
+  <link href="../../resources/css/styles.css" type="text/css" rel="stylesheet"/>
+  <script type="text/javascript" src="../../resources/javascript/js.js"></script>
+</html>

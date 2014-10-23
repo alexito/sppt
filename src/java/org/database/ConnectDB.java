@@ -4,31 +4,32 @@ import java.sql.*;
 
 public class ConnectDB {
 
-  Connection connection;
-  
-  public ConnectDB() {
-    connection = null;
-    String host = "192.168.1.4",
-            port = "1433",
-            db_name = "sistemappt",
-            user = "sa",
-            pass = "root";
+    Connection connection;
+
+    public ConnectDB() {
+        connection = null;
+        String host = "192.168.0.3",
+                port = "1433",
+                db_name = "sistemappt",
+                user = "sa",
+                pass = "root";
 
     String connectionUrl = "jdbc:sqlserver://" + host + ":" + port + ";databaseName=" + db_name + ";user=" + user + "; password=" + pass + ";";
-    
-    try {
-      Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-      connection = DriverManager.getConnection(connectionUrl);
-    } catch (ClassNotFoundException | SQLException e) {
-      System.out.println("error: " + e.getMessage());
+//        String connectionUrl = "jdbc:sqlserver://USER-PC\\SQLEXPRESS;" + "databaseName=sistemappt;user=paul; password=sapaul;";
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = DriverManager.getConnection(connectionUrl);
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("error: " + e.getMessage());
+        }
     }
-  }
 
-  public Connection getConnection() {
-    return connection;
-  }
+    public Connection getConnection() {
+        return connection;
+    }
 
-  public void setConnection(Connection connection) {
-    this.connection = connection;
-  }
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 }
