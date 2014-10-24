@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.models.AsignacionSolicitud;
 import org.models.Distancia;
 import org.models.Emergencia;
 import org.models.Localidad;
@@ -1443,14 +1444,14 @@ public class Select {
                     + " FROM \n"
                     + "  dbo.Asignacion_conductores\n"
                     + " WHERE\n"
-                    + " f_salida >='"+fecha+"' and f_disponible>='"+fecha+"' and id_Conductor=" + id;
-           
+                    + " f_salida >='" + fecha + "' and f_disponible>='" + fecha + "' and id_Conductor=" + id;
+
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
             while (result.next()) {
-                response="El conductor tiene un viaje asignado: \n Origen: "+result.getString(1)+"\n Destino: "+result.getString(2)+"\n Fecha Salida: "+result.getString(3)+"\n Fecha Llegada: "+result.getString(4)+"\n Fecha Disponible: "+result.getString(5);
+                response = "El conductor tiene un viaje asignado: \n Origen: " + result.getString(1) + "\n Destino: " + result.getString(2) + "\n Fecha Salida: " + result.getString(3) + "\n Fecha Llegada: " + result.getString(4) + "\n Fecha Disponible: " + result.getString(5);
             }
-                       
+
             return response;
         } catch (SQLException e) {
         } finally {
@@ -1459,21 +1460,21 @@ public class Select {
 
         return response;
     }
-    
+
     public static String selectNumeroViajesConductor(int id, String fecha) {
         String response = " \t\n\rViajes: 0";
 
         ConnectDB con = new ConnectDB();
         try {
             String SQL = "SELECT count(f_salida) as nviajes FROM dbo.Asignacion_conductores WHERE "
-                    + " f_salida >='"+fecha+" 00:00:00.0' and f_salida <='"+fecha+" 23:59:00.0' and id_Conductor='" + id +"'";
-            
+                    + " f_salida >='" + fecha + " 00:00:00.0' and f_salida <='" + fecha + " 23:59:00.0' and id_Conductor='" + id + "'";
+
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
             while (result.next()) {
-              response = " \t\n\rViajes: " + result.getString("nviajes");
+                response = " \t\n\rViajes: " + result.getString("nviajes");
             }
-            
+
             return response;
         } catch (SQLException e) {
         } finally {
@@ -1482,20 +1483,20 @@ public class Select {
 
         return response;
     }
-    
+
     public static List<Solicitud> selectViajesConductor(int id, String fecha) {
-        
+
         List<Solicitud> listSolicitudes = null;
         listSolicitudes = new ArrayList<Solicitud>();
 
         ConnectDB con = new ConnectDB();
         try {
             String SQL = "SELECT * FROM dbo.Asignacion_conductores WHERE "
-                    + " f_salida >='"+fecha+" 00:00:00.0' and f_salida <='"+fecha+" 23:59:00.0' and id_Conductor='" + id +"'";
-            
+                    + " f_salida >='" + fecha + " 00:00:00.0' and f_salida <='" + fecha + " 23:59:00.0' and id_Conductor='" + id + "'";
+
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
-            
+
             Map<Integer, Localidad> map_localidades;
             Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
             Map<Integer, Distancia> map_distancias;
@@ -1509,18 +1510,77 @@ public class Select {
             map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
-            
+
+            while (result.next()) {
+                Solicitud s = new Solicitud();
+                s.setId(result.getInt("id"));
+                s.setDistanciaById(map_distancias.get(result.getInt("id_distancia")));
+                s.setFSalida(result.getTimestamp("f_salida"));
+                s.setFLlegada(result.getTimestamp("f_llegada"));
+                s.setEstado(result.getBoolean("estado"));
+                listSolicitudes.add(s);
+            }
+
+            return listSolicitudes;
+        } catch (SQLException e) {
+        } finally {
+            CloseCurrentConnection(sentence, result, con);
+        }
+
+        return listSolicitudes;
+    }
+
+    public static List<AsignacionSolicitud> selectViajesConductorNew(int id, String fecha) {
+
+        List<AsignacionSolicitud> listSolicitudes = null;
+        listSolicitudes = new ArrayList<AsignacionSolicitud>();
+
+        ConnectDB con = new ConnectDB();
+        try {
+            String SQL = "SELECT  direccion_origen,\n"
+                    + "  direccion_destino,\n"
+                    + "  f_salida,\n"
+                    + "  f_llegada,\n"
+                    + "  f_retorno,\n"
+                    + "  retorno_observacion,\n"
+                    + "  PRSNNMBR+' '+  PRSNAPLL,\n"
+                    + "  id_distancia\n"
+                    + " FROM dbo.Asignacion_conductores WHERE "
+                    + " f_salida >='" + fecha + " 00:00:00.0' and f_salida <='" + fecha + " 23:59:00.0' and id_Conductor='" + id + "'";
+
+            sentence = con.getConnection().createStatement();
+            result = sentence.executeQuery(SQL);
+
+            Map<Integer, Localidad> map_localidades;
+            Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+            Map<Integer, Distancia> map_distancias;
+
             
             while (result.next()) {
-              Solicitud s = new Solicitud();
-              s.setId(result.getInt("id"));
-              s.setDistanciaById(map_distancias.get(result.getInt("id_distancia")));
-              s.setFSalida(result.getTimestamp("f_salida"));
-              s.setFLlegada(result.getTimestamp("f_llegada"));
-              s.setEstado(result.getBoolean("estado"));
-              listSolicitudes.add(s);
+                id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
             }
+
+            map_localidades = selectMappedLocalidades(true, null);
+            map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
             
+            sentence = con.getConnection().createStatement();
+            result = sentence.executeQuery(SQL);
+
+            while (result.next()) {
+                AsignacionSolicitud new_asignacion=new AsignacionSolicitud(
+                        result.getString(1),
+                        result.getString(2),
+                        result.getTimestamp(3),
+                        result.getTimestamp(4),
+                        result.getTimestamp(5),
+                        result.getString(6),
+                        result.getString(7),
+                        map_distancias.get(result.getInt("id_distancia")
+                        )
+                );
+                listSolicitudes.add(new_asignacion);
+            }
+
             return listSolicitudes;
         } catch (SQLException e) {
         } finally {

@@ -1,10 +1,12 @@
 package org.models;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.database.Select;
 import org.primefaces.event.SelectEvent;
@@ -45,8 +47,8 @@ public class Solicitud implements java.io.Serializable {
     private Date FRetorno;
     private String retornoObservacion = "";
     private String estado_conductor;
-    private List<Solicitud> listaAsignaciones;  
-
+//    private List<Solicitud> listaAsignaciones;
+   private List<AsignacionSolicitud> lista_asignaciones_conductor=new ArrayList<AsignacionSolicitud>();
     public Solicitud() {
         this.distanciaById = new Distancia();
         this.usuarioByIdUsuarioSolicita = new Usuario();
@@ -59,6 +61,7 @@ public class Solicitud implements java.io.Serializable {
         this.cancelado = false;
         this.listaInternosSeleccionados = new ArrayList<Usuario>();
         this.listaExternosSeleccionados = new ArrayList<Usuario>();
+        //lista_asignaciones_conductor.add(new AsignacionSolicitud("ver", "ver", null, null, null, retornoObservacion, estado_conductor));
     }
 
     public Solicitud(int id) {
@@ -433,11 +436,18 @@ public class Solicitud implements java.io.Serializable {
     }
 
     public void handleEstadoChange() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+//        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
         estado_conductor = Select.selectEstadoConductor(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
-        sdf = new SimpleDateFormat("MM/dd/yyyy");
+//        sdf = new SimpleDateFormat("MM/dd/yyyy");
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
         estado_conductor += Select.selectNumeroViajesConductor(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
-        listaAsignaciones = Select.selectViajesConductor(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
+//        listaAsignaciones = Select.selectViajesConductor(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
+//        lista_asignaciones_conductor=Select.selectViajesConductorNew(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
+//        cargar_asignaciones();
+        VariablesEstaticas.fecha=sdf.format(FSalida);
+        VariablesEstaticas.id_conductor=usuarioByIdUsuarioConductor.getId();
+         VariablesEstaticas.obtener_datos=true;
     }
 
     public String getEstado_conductor() {
@@ -448,11 +458,36 @@ public class Solicitud implements java.io.Serializable {
         this.estado_conductor = estado_conductor;
     }
 
-  public List<Solicitud> getListaAsignaciones() {
-    return listaAsignaciones;
-  }
+    public List<AsignacionSolicitud> getLista_asignaciones_conductor() {
+        return lista_asignaciones_conductor;
+    }
 
-  public void setListaAsignaciones(List<Solicitud> listaAsignaciones) {
-    this.listaAsignaciones = listaAsignaciones;
-  }
+    public void setLista_asignaciones_conductor(List<AsignacionSolicitud> lista_asignaciones_conductor) {
+        this.lista_asignaciones_conductor = lista_asignaciones_conductor;
+    }
+    
+
+//    public List<Solicitud> getListaAsignaciones() {
+//        return listaAsignaciones;
+//    }
+//
+//    public void setListaAsignaciones(List<Solicitud> listaAsignaciones) {
+//        this.listaAsignaciones = listaAsignaciones;
+//    }
+    
+    public void cargar_asignaciones()
+    {
+         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+         lista_asignaciones_conductor=Select.selectViajesConductorNew(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
+    }
+
+    public void ListaAsiganciones() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        extContext.redirect("ac.jspx");
+    }
+
+
+
+    
 }

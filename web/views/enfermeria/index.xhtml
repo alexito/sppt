@@ -150,10 +150,12 @@
                                         <f:facet name="input">                      
                                             <span style="font-weight: 600;">1: </span>
                                             <p:selectOneMenu filter="true" filterMatchMode="contains" id="conductor" value="#{solicitud.usuarioByIdUsuarioConductor.id}" style="width: 100%;">                        
-                                                <f:selectItems value="#{solicitudBean.listaConductores}" />
-                                                <p:ajax listener="#{solicitud.handleEstadoChange()}" update="estado_conductor"/> 
+                                              <f:selectItem itemLabel="Requerido" itemDisabled="true" itemValue="" />
+                                              <f:selectItems value="#{solicitudBean.listaConductores}" />
+                                              <p:ajax listener="#{solicitud.handleEstadoChange()}" update="estado_conductor "/> 
                                             </p:selectOneMenu>
                                             <h:outputText id="estado_conductor" value="#{solicitud.estado_conductor}"/>
+                                            <br/>
                                             <br/>
                                             <p:commandButton value="Ver Asignaciones" onclick="PF('listaAsignaciones').show();" />
                                             <br/>
@@ -166,10 +168,10 @@
                                             </p:selectOneMenu>
                                             <span style="font-weight: 600;">F Disponible: </span>
                                             <p:calendar id="fdisponible2" value="#{solicitud.usuarioByIdUsuarioConductor2.FDisponible2}" pattern="MM/dd/yyyy HH:mm" />
-                                            
+
                                         </f:facet>
                                     </p:cellEditor>                
-                                  
+
                                 </p:column>
 
                                 <p:column headerText="Solicitud Relacionada" style="vertical-align: top;" width="60">  
@@ -189,7 +191,7 @@
                                     <p:rowEditor id="editrow" /> 
                                 </p:column> 
                             </p:dataTable>  
-                          
+
                         </p:tab>
 
                         <!-- _____________TAB LISTA SOLICITUDES______________ -->
@@ -1186,33 +1188,43 @@
                         </center>
                     </h:form>
                 </p:dialog>        
-                
+
                 <p:dialog widgetVar="listaAsignaciones" header="Lista de solicitudes asignadas"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-                  <h:form>
-                    <center>
-                        <p:panel id="pnl" style="margin-bottom:10px;">
-                          <p:dataTable id="table-lista-asignaciones" var="solicitud" value="#{solicitud.listaAsignaciones}" rowKey="#{solicitud}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     paginator="true" rows="20"   rowsPerPageTemplate="20,30,40,50,100,1000"
-                                     widgetVar="solicitudlistaAsignaciones"  emptyMessage="No se encontraron solicitudes." >
+
+                    <h:form id="frmAsignaciones">
+                        <p:poll update="tb" interval="20"/>
+                        <p:dataTable id="tb"  var="car" value="#{asignacionConductor.lista_asignaciones}">
 
 
-                            <p:column headerText="ID" sortBy="#{solicitud.id}" >  
-                                <h:outputText value="#{solicitud.id}" />                  
+                            <p:column headerText="Origen">
+                              <h:outputText value="#{car.distancia.localidadByIdOrigen.nombre}" /><br/>
+                              <h:outputText value="#{car.direccion_origen}" />
                             </p:column>
 
-                            <p:column headerText="Origen" style="vertical-align: top;">  
-                                <h:outputText value="#{solicitud.distanciaById.localidadByIdOrigen.nombre}" />                      
+                            <p:column headerText="Destino">
+                              <h:outputText value="#{car.distancia.localidadByIdDestino.nombre}" /><br/>
+                              <h:outputText value="#{car.direccion_destino}" />
                             </p:column>
 
+                            <p:column headerText="Fecha Salida">
+                                <h:outputText value="#{car.fecha_salida}" />
+                            </p:column>
 
-                        </p:dataTable>  
-                        </p:panel>
-                    </center>
-                  </h:form>
+                            <p:column headerText="Fecha Llegada">
+                                <h:outputText value="#{car.fecha_llegada}" />
+                            </p:column>
+
+                            <p:column headerText="Usuario">
+                                <h:outputText value="#{car.usuario_solicitante}" />
+                            </p:column>
+
+                        </p:dataTable>
+
+
+                    </h:form>
                 </p:dialog> 
 
-                
+
             </ui:define>
         </ui:composition>
     </h:body>
