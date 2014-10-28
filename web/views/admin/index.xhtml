@@ -10,6 +10,7 @@
         <ui:composition template="../templates/admin_template.xhtml">
             <ui:define name="main-body" >
                 <h:form id="form-main-data">          
+                   
 
                     <p:tabView id="tabview" dynamic="true" cache="false" effect="drop" effectDuration="fast" scrollable="true" >
                         <!-- ______________________MIS SOLICITUDES PENDIENTES_______________________ -->
@@ -583,7 +584,8 @@
                 <!-- ________________________   NEW SOLICITUD FORM  ________________________   -->
 
                 <p:dialog dynamic="true" closable="true" widgetVar="newSolicitud" header="Ingrese los datos de la Nueva Solicitud"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
-                    <h:form id="form-new-solicitud">          
+                    <h:form id="form-new-solicitud">    
+                      <p:growl id="msgs" showDetail="true" />
                         <center>
                             <p:panel id="pn2" style="margin-bottom:10px;">
                                 <p:messages id="messages" />
@@ -612,11 +614,15 @@
 
 
                                     <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
-                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de Salida"/>
+                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de Salida">
+                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="msgs" />                                    
+                                    </p:calendar>
 
 
                                     <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
-                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de llegada"/>
+                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de llegada">
+                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="msgs" />                                    
+                                    </p:calendar>
 
 
                                     <p:outputLabel value="Acompañantes Internos: *" />

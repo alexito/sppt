@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.mail.Address;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -27,6 +29,7 @@ import org.models.Solicitud;
 import org.models.Usuario;
 import org.other.emailSender;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @RequestScoped
@@ -297,7 +300,7 @@ public class SolicitudBean {
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
     int h = solicitud.getFSalida().getHours();
     int m = solicitud.getFSalida().getMinutes();
-    if ((h > 15 && m > 29) || h >= 16) {
+    if ((h == 15 && m > 30) || h >= 16) {
       solicitud.setEstado(false);      
     } else {
       solicitud.setEstado(true);
@@ -390,7 +393,7 @@ public class SolicitudBean {
     //If true both conditions then is approved
     if(!editedSolicitud.getEstado() || !editedSolicitud.getEstadoEnfermeria()){
       if(!editedSolicitud.getListaAprobador()){
-        if ((h > 15 && m > 29) || h >= 16) {
+        if ((h == 15 && m > 30) || h >= 16) {
           editedSolicitud.setEstado(false);
         } else {
           editedSolicitud.setEstado(true);
@@ -561,6 +564,32 @@ public class SolicitudBean {
   
   public Date getCurrentDate() {
       return currentDate;
+  }
+  
+  public void onDateSelect(SelectEvent event) throws ParseException {
+    FacesContext facesContext = FacesContext.getCurrentInstance();
+    
+    int h = solicitud.getFSalida().getHours();
+    int m = solicitud.getFSalida().getMinutes();
+    if ((h == 15 && m > 30) || h >= 16) {
+      facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", "La solicitud tiene la Fecha y hora de Salida fuera del horario permitido y se notificará a su Aprobador. Permitido de 8:00 a.m. a 15:30 p.m."));
+    } 
+    if(solicitud.getFLlegada() != null){
+      if(solicitud.getFLlegada().getDate() < solicitud.getFSalida().getDate()){
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", "La Fecha y hora de Llegada debe ser mayor a la Fecha y hora de Salida."));
+      }
+      else if(solicitud.getFLlegada().getDate() == solicitud.getFSalida().getDate()){
+        if(solicitud.getFLlegada().getHours() < solicitud.getFSalida().getHours()){
+          facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", "La Fecha y hora de Llegada debe ser mayor a la Fecha y hora de Salida."));
+        }
+        else if(solicitud.getFLlegada().getHours() == solicitud.getFSalida().getHours()){
+          if(solicitud.getFLlegada().getMinutes() < solicitud.getFSalida().getMinutes()){
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Date Selected", "La Fecha y hora de Llegada debe ser mayor a la Fecha y hora de Salida."));
+          }
+        } 
+      }
+    }
+    
   }
   
 }

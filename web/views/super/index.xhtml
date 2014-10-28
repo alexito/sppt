@@ -846,17 +846,17 @@
                   <p:message for="cedula" id="msgCedula" display="icon" />
 
                   <h:outputLabel for="email" value="Email: " />
-                  <p:inputText id="email" value="#{usuarioBean.usuario.email}" required="false" style="width:100%">
+                  <p:inputText id="email" value="#{usuarioBean.conductor.email}" required="false" style="width:100%">
                   </p:inputText>                
                   <p:message for="email" id="msgEmail" display="icon" />
 
                   <h:outputLabel for="telefono" value="Teléfono: " />
-                  <p:inputText id="telefono" value="#{usuarioBean.usuario.telefono}" required="false" style="width:100%">                    
+                  <p:inputText id="telefono" value="#{usuarioBean.conductor.telefono}" required="false" style="width:100%">                    
                   </p:inputText>                
                   <p:message for="telefono" id="msgTelefono" display="icon" />
 
                   <h:outputLabel for="movil" value="Movil: " />
-                  <p:inputText id="movil" value="#{usuarioBean.usuario.movil}" required="false" style="width:100%">
+                  <p:inputText id="movil" value="#{usuarioBean.conductor.movil}" required="false" style="width:100%">
                   </p:inputText>                
                   <p:message for="movil" id="msgMovil" display="icon" />
 
@@ -905,7 +905,7 @@
                   <p:message for="cedula" id="msgCedula" display="icon" />
                   
                   <h:outputLabel for="clave" value="Clave: *" />
-                  <p:inputText id="clave" value="#{usuarioBean.usuario.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
+                  <p:inputText id="clave" value="#{usuarioBean.enfermero.clave}" required="true" requiredMessage="La clave es obligatoria." style="width:100%">
                     <f:validateLength minimum="5" />
                     <p:ajax update="msgClave" event="blur" />
                   </p:inputText>                
