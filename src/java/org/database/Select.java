@@ -829,10 +829,10 @@ public class Select {
                     s.setListaInternosSeleccionados(new ArrayList<Usuario>());
                 }
 
-                if (res.getString("ids_interno") != null) {
-                    s.setListaInternosSeleccionados(Select.selectUsuariosById(res.getString("ids_interno")));
+                if (res.getString("ids_externo") != null) {
+                    s.setListaExternosSeleccionados(Select.selectUsuariosById(res.getString("ids_externo")));
                 } else {
-                    s.setListaInternosSeleccionados(new ArrayList<Usuario>());
+                    s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
 
                 listSolicitudes.add(s);

@@ -567,7 +567,15 @@ public class SolicitudBean {
   }
   
   public void onDateSelect(SelectEvent event) throws ParseException {
+    
+    
     FacesContext facesContext = FacesContext.getCurrentInstance();
+    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    Object o = event.getObject();
+    
+    
+    
+    facesContext = FacesContext.getCurrentInstance();
     
     int h = solicitud.getFSalida().getHours();
     int m = solicitud.getFSalida().getMinutes();

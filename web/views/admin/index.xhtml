@@ -614,14 +614,14 @@
 
 
                                     <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
-                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de Salida">
-                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="msgs" />                                    
+                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" required="true" requiredMessage="Ingrese Fecha y Hora de Salida">
+                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="fllegada,msgs" />                                       
                                     </p:calendar>
 
 
                                     <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
-                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" requiredMessage="Ingrese Fecha y Hora de llegada">
-                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="msgs" />                                    
+                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitud.FSalida}" required="true" requiredMessage="Ingrese Fecha y Hora de llegada">
+                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="msgs" />                                      
                                     </p:calendar>
 
 
@@ -642,7 +642,7 @@
                                                      placeholder="Ejemplo: Juan Perez,Jose Duque,Carlos Ponce" />
 
                                     <h:outputLabel for="novedades" value="Novedades: " />
-                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" required="true" requiredMessage="Ingrese novedad"/>                                 
+                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
 
                                     <br></br>                    
                                     <h:panelGrid id="panelId" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
@@ -662,7 +662,7 @@
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <center>
-                                        <h:commandButton   value="Guardar"   action="#{solicitudBean.saveSolicitud()}"   />
+                                        <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitud()}"   />
                                     </center>
                                 </f:facet> 
                             </p:panel>
@@ -700,14 +700,16 @@
                                     <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitudEmergencia.direccionDestino}" style="width:100%">
                                     </p:inputTextarea>                
 
-
                                     <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
-                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitudEmergencia.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
+                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" required="true" requiredMessage="Ingrese Fecha y Hora de Salida">
+                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="fllegada,msgs" />                                       
+                                    </p:calendar>
 
 
                                     <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
-                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitudEmergencia.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-
+                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitud.FSalida}" required="true" requiredMessage="Ingrese Fecha y Hora de llegada">
+                                      <p:ajax event="blur"  update="msgs" />                                      
+                                    </p:calendar>
 
                                     <p:outputLabel value="Acompañantes Internos:" />
                                     <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.solicitudEmergencia.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
@@ -753,7 +755,7 @@
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <center>
-                                        <p:commandButton ajax="true" oncomplete="cmdRefreshSolicitudes()" validateClient="true" value="Guardar" onclick="PF('newSolicitudEmergencia').hide();"  action="#{solicitudBean.saveSolicitudEmergencia()}" />
+                                        <p:commandButton value="Guardar"  action="#{solicitudBean.saveSolicitudEmergencia()}" />
                                     </center>
                                 </f:facet> 
                             </p:panel>
