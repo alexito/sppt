@@ -264,15 +264,14 @@ public class Update {
   
   public static String UpdateSolicitudRetorno(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
-    String SQL = "UPDATE solicitud SET retorno=?, f_retorno=?, retorno_observacion=?, id_interno_retorno=?, id_externo_retorno=?, WHERE id=?";
+    String SQL = "UPDATE solicitud SET retorno=?, f_retorno=?, retorno_observacion=?, id_interno_retorno=?, id_externo_retorno=? WHERE id=?";
        
     PreparedStatement psUpdate = con.getConnection().prepareStatement(SQL);   
     psUpdate.setBoolean(1, solicitud.getRetorno());
     psUpdate.setTimestamp(2, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
     psUpdate.setString(3, solicitud.getRetornoObservacion());
     psUpdate.setString(4, solicitud.getIds_interno_retorno());
-    psUpdate.setString(5, solicitud.getIds_externo_retorno());
-    
+    psUpdate.setString(5, solicitud.getIds_externo_retorno());     
     psUpdate.setInt(6, solicitud.getId());
     
     return RunSQL(con, psUpdate);    

@@ -112,8 +112,22 @@
                                             <p:dataList value="#{solicitud.listaInternosSeleccionados}"   var="usuario" type="definition"  emptyMessage="Ninguno">
                                                 - #{usuario.nombrecompleto}
                                             </p:dataList>
+                                            
+                                            
+                                            
+                                            <p:dataList value="#{solicitud.listaInternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
+                                            
+                                            
+                                            
                                             <span style="font-weight: 600;">Externos: </span>
                                             <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
+                                            
+                                            
+                                            <p:dataList value="#{solicitud.listaExternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
                                                 - #{usuario.nombrecompleto}
                                             </p:dataList>
                                         </f:facet>
@@ -690,9 +704,9 @@
 
                                 </h:panelGrid>
                                 <f:facet name="footer">
-                                    <center>
-                                      <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitudyDatosRetorno()}" />
-                                      <h:commandButton value="Cancelar" action="#{solicitudBean.cancelSolicitudyDatosRetorno()}" />                                        
+                                    <center>                                      
+                                      <p:commandButton ajax="true" oncomplete="cmdRefreshSolicitudes()" validateClient="true" value="Guardar" onclick="PF('editRetorno').hide();"  action="#{solicitudBean.saveSolicitudyDatosRetorno()}" />                                      
+                                      <h:commandButton value="Cancelar" action="#{solicitudBean.cancelSolicitudyDatosRetorno()}" /> 
                                     </center>
                                 </f:facet> 
                             </p:panel>

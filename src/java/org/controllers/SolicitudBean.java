@@ -319,8 +319,6 @@ public class SolicitudBean {
     
     Update.UpdateSolicitudRetorno(solicitudRetorno);
     
-    solicitud = new Solicitud();
-    updateInfoSolicitudes();
   }
   
   public List<Solicitud> saveSolicitudyEditarRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
@@ -605,6 +603,7 @@ public class SolicitudBean {
   }
 
   public void refreshAll() {
+    updateInfoSolicitudes();
   }
   
   public Date getCurrentDate() {
