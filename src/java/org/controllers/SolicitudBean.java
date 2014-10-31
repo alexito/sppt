@@ -49,6 +49,7 @@ public class SolicitudBean {
   private List<Usuario> listaInternos;
   private List<Usuario> listaExternos;  
   private Solicitud solicitud;
+  private Solicitud solicitudRetorno;
   private Solicitud solicitudEmergencia;
   private int loc_origen;
   private Usuario usuario;
@@ -91,6 +92,17 @@ public class SolicitudBean {
 
   public void setSolicitud(Solicitud solicitud) {
     this.solicitud = solicitud;
+  }
+  
+  public Solicitud getSolicitudRetorno() {
+    if(solicitudRetorno == null){
+      solicitudRetorno = Select.selectLastSolicitud();
+    }
+    return solicitudRetorno;
+  }
+
+  public void setSolicitudRetorno(Solicitud solicitudRetorno) {
+    this.solicitudRetorno = solicitudRetorno;
   }
 
   public Solicitud getSolicitudEmergencia() {
@@ -295,6 +307,26 @@ public class SolicitudBean {
     return uids;
   }
   
+  public List<Solicitud> cancelSolicitudyDatosRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
+    return null;
+  }
+  
+  public void saveSolicitudyDatosRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
+    
+    solicitudRetorno.setRetorno(true);
+    solicitudRetorno.setIds_interno_retorno(pickUsuarioInternoIds(solicitudRetorno.getListaInternosSeleccionados_retorno(), true));
+    solicitudRetorno.setIds_externo_retorno(pickUsuarioExternoIds(solicitudRetorno.getListaExternosSeleccionados_retorno(), false, solicitudRetorno));
+    
+    Update.UpdateSolicitudRetorno(solicitudRetorno);
+    
+    solicitud = new Solicitud();
+    updateInfoSolicitudes();
+  }
+  
+  public List<Solicitud> saveSolicitudyEditarRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
+    saveSolicitud();
+    return listaSolicitudesAprobadas;
+  }
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException, AddressException, Exception {
     Usuario logged_user = Select.LoggedUser();       
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
@@ -314,7 +346,16 @@ public class SolicitudBean {
     solicitud.setIds_interno(pickUsuarioInternoIds(solicitud.getListaInternosSeleccionados(), true));
     solicitud.setIds_externo(pickUsuarioExternoIds(solicitud.getListaExternosSeleccionados(), true, solicitud));
     
+    solicitud.setIds_interno_retorno(solicitud.getIds_interno());
+    solicitud.setIds_externo_retorno(solicitud.getIds_externo());
+    
     String sol_id = Insert.InsertSolicitud(solicitud);
+    
+    solicitudRetorno = new Solicitud();
+    solicitudRetorno.setId(Integer.parseInt(sol_id));
+    solicitudRetorno.setIds_interno_retorno(solicitud.getIds_interno());
+    solicitudRetorno.setIds_externo_retorno(solicitud.getIds_externo());
+    solicitudRetorno.setFRetorno(solicitud.getFLlegada());
     
     if(!solicitud.getEstado()){
       emailSender es = new emailSender();
@@ -400,11 +441,15 @@ public class SolicitudBean {
         }
       }
     }
-    if(editedSolicitud.getFRetorno() != null)
-      Update.UpdateSolicitudRetorno(editedSolicitud);
     
     editedSolicitud.setIds_interno(pickUsuarioInternoIds(editedSolicitud.getListaInternosSeleccionados(), false));
     editedSolicitud.setIds_externo(pickUsuarioExternoIds(editedSolicitud.getListaExternosSeleccionados(), false, editedSolicitud));
+    
+    if(editedSolicitud.getFRetorno() != null){
+//      editedSolicitud.setIds_interno_retorno(editedSolicitud.getIds_interno());
+//      editedSolicitud.setIds_externo_retorno(editedSolicitud.getIds_externo());
+      Update.UpdateSolicitudRetorno(editedSolicitud);
+    }
     
     boolean es_relacion = false;
     

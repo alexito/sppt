@@ -587,7 +587,7 @@
                     <h:form id="form-new-solicitud">    
                       <p:growl id="msgs" showDetail="true" />
                         <center>
-                            <p:panel id="pn2" style="margin-bottom:10px;">
+                            <p:panel id="pn6" style="margin-bottom:10px;">
                                 <p:messages id="messages" />
                                 <h:panelGrid id="grid" columns="4" cellpadding="5">
 
@@ -644,17 +644,6 @@
                                     <h:outputLabel for="novedades" value="Novedades: " />
                                     <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
 
-                                    <br></br>                    
-                                    <h:panelGrid id="panelId" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
-                                        <h:outputLabel for="retorno" value="Coordinar retorno: " />
-                                        <p:selectBooleanCheckbox id="retorno" value="#{solicitudBean.solicitud.retorno}" >
-                                        </p:selectBooleanCheckbox>
-                                        <h:outputLabel for="fretorno" value="Fecha y Hora de RETORNO: *"  />
-                                        <p:calendar id="fretorno" value="#{solicitudBean.solicitud.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-
-                                        <h:outputLabel for="retornoObservaciones" value="Observaciones: " />
-                                        <p:inputTextarea id="retornoObservaciones" value="#{solicitudBean.solicitud.retornoObservacion}" style="width: 90%;" />                  
-                                    </h:panelGrid>
 
                                     <br></br>
                                     <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
@@ -663,6 +652,47 @@
                                 <f:facet name="footer">
                                     <center>
                                         <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitud()}"   />
+                                        <p:commandButton ajax="true" update=":form-edit-retorno" oncomplete="PF('editRetorno').show()" validateClient="true" value="Guardar y Editar Retorno" onclick="PF('newSolicitud').hide();"  action="#{solicitudBean.saveSolicitudyEditarRetorno()}" />
+                                        
+                                    </center>
+                                </f:facet> 
+                            </p:panel>
+                        </center>
+                    </h:form>
+                </p:dialog>
+                
+                
+                <!-- ________________________   EDITAR RETORNO FORM  ________________________   -->
+
+                <p:dialog dynamic="true" closable="true" widgetVar="editRetorno" header="Edite el retorno"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+                    <h:form id="form-edit-retorno">    
+                      <p:growl id="msgs" showDetail="true" />
+                        <center>
+                            <p:panel id="pn2" style="margin-bottom:10px;">
+                                <p:messages id="messages" />
+                                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+                                  <h:outputLabel for="fretorno" value="Fecha y Hora de Retorno: *" />
+                                  <p:calendar id="fretorno" value="#{solicitudBean.solicitudRetorno.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitudRetorno.FLlegada}" required="true" requiredMessage="Ingrese Fecha y Hora de Retorno">
+                                  </p:calendar>
+
+                                    <p:outputLabel value="Acompañantes Internos Retorno: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" id="internos" multiple="true" value="#{solicitudBean.solicitudRetorno.listaInternosSeleccionados_retorno}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                                    var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                                    maxResults="10" minQueryLength="2" queryDelay="500" 
+                                                    converter="usuarioInternoConverter" />
+
+                                    <p:outputLabel value="Acompañantes Externos Retorno: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitudRetorno.listaExternosSeleccionados_retorno}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                                    var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                                    maxResults="10" minQueryLength="2" queryDelay="500" 
+                                                    converter="usuarioExternoConverter" />
+
+                                </h:panelGrid>
+                                <f:facet name="footer">
+                                    <center>
+                                      <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitudyDatosRetorno()}" />
+                                      <h:commandButton value="Cancelar" action="#{solicitudBean.cancelSolicitudyDatosRetorno()}" />                                        
                                     </center>
                                 </f:facet> 
                             </p:panel>

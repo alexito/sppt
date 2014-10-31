@@ -35,10 +35,16 @@ public class Solicitud implements java.io.Serializable {
     private String nuevoUsuarioExterno;
     private String ids_interno;
     private String ids_externo;
+    private String ids_interno_retorno;
+    private String ids_externo_retorno;
     private String nombres_interno;
     private String nombres_externo;
+    private String nombres_interno_retorno;
+    private String nombres_externo_retorno;
     private List<Usuario> listaInternosSeleccionados;
     private List<Usuario> listaExternosSeleccionados;
+    private List<Usuario> listaInternosSeleccionados_retorno;
+    private List<Usuario> listaExternosSeleccionados_retorno;
     private Boolean cancelado = false;
     private Emergencia emergenciaById;
     private String id_solicitud_relacion;
@@ -466,14 +472,53 @@ public class Solicitud implements java.io.Serializable {
         this.lista_asignaciones_conductor = lista_asignaciones_conductor;
     }
     
+    public String getIds_interno_retorno() {
+    return ids_interno_retorno;
+  }
 
-//    public List<Solicitud> getListaAsignaciones() {
-//        return listaAsignaciones;
-//    }
-//
-//    public void setListaAsignaciones(List<Solicitud> listaAsignaciones) {
-//        this.listaAsignaciones = listaAsignaciones;
-//    }
+  public void setIds_interno_retorno(String ids_interno_retorno) {
+    this.ids_interno_retorno = ids_interno_retorno;
+  }
+
+  public String getIds_externo_retorno() {
+    return ids_externo_retorno;
+  }
+
+  public void setIds_externo_retorno(String ids_externo_retorno) {
+    this.ids_externo_retorno = ids_externo_retorno;
+  }
+
+  public String getNombres_interno_retorno() {
+    return nombres_interno_retorno;
+  }
+
+  public void setNombres_interno_retorno(String nombres_interno_retorno) {
+    this.nombres_interno_retorno = nombres_interno_retorno;
+  }
+
+  public String getNombres_externo_retorno() {
+    return nombres_externo_retorno;
+  }
+
+  public void setNombres_externo_retorno(String nombres_externo_retorno) {
+    this.nombres_externo_retorno = nombres_externo_retorno;
+  }
+
+  public List<Usuario> getListaInternosSeleccionados_retorno() {
+    return listaInternosSeleccionados_retorno;
+  }
+
+  public void setListaInternosSeleccionados_retorno(List<Usuario> listaInternosSeleccionados_retorno) {
+    this.listaInternosSeleccionados_retorno = listaInternosSeleccionados_retorno;
+  }
+
+  public List<Usuario> getListaExternosSeleccionados_retorno() {
+    return listaExternosSeleccionados_retorno;
+  }
+
+  public void setListaExternosSeleccionados_retorno(List<Usuario> listaExternosSeleccionados_retorno) {
+    this.listaExternosSeleccionados_retorno = listaExternosSeleccionados_retorno;
+  }
     
     public void cargar_asignaciones()
     {
