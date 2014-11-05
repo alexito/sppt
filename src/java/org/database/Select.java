@@ -89,6 +89,43 @@ public class Select {
         }
         return s;
     }
+    
+    public static Solicitud selectLastEmergenciaSolicitud() {
+        ConnectDB con = new ConnectDB();
+        Solicitud s = new Solicitud();
+        try {
+
+            String SQL = "SELECT TOP 1 * FROM solicitud WHERE emergencia=1 ORDER BY id DESC;";
+            sentence = con.getConnection().createStatement();
+            result = sentence.executeQuery(SQL);           
+
+            result.next();
+
+                s = new Solicitud();
+                s.setId(result.getInt("id"));
+                s.setFRetorno(result.getTimestamp("f_retorno"));
+                s.setRetornoObservacion(result.getString("retorno_observacion"));
+                    
+                if (result.getString("id_interno_retorno") != null) {
+                    s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
+                } else {
+                    s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
+                }
+
+                if (result.getString("id_externo_retorno") != null) {
+                    s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_externo_retorno")));
+                } else {
+                    s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
+                }
+
+            return s;
+
+        } catch (SQLException e) {
+        } finally {
+            CloseCurrentConnection(sentence, result, con);
+        }
+        return s;
+    }
 
     public static Solicitud selectSolicitudById(int sid) {
         ConnectDB con = new ConnectDB();

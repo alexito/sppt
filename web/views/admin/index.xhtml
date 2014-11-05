@@ -114,7 +114,7 @@
                                             </p:dataList>
                                             
                                             
-                                            
+                                            <div style="font-style: italic">Retorno: </div>
                                             <p:dataList value="#{solicitud.listaInternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
                                                 - #{usuario.nombrecompleto}
                                             </p:dataList>
@@ -126,7 +126,7 @@
                                                 - #{usuario.nombrecompleto}
                                             </p:dataList>
                                             
-                                            
+                                            <div style="font-style: italic">Retorno: </div>
                                             <p:dataList value="#{solicitud.listaExternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
                                                 - #{usuario.nombrecompleto}
                                             </p:dataList>
@@ -258,13 +258,27 @@
 
                                 <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                                     <span style="font-weight: 600;">Internos: </span>
-                                    <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
-                                        - #{usuario.nombrecompleto}
-                                    </p:dataList>
-                                    <span style="font-weight: 600;">Externos: </span>
-                                    <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
-                                        - #{usuario.nombrecompleto}
-                                    </p:dataList>
+                                            <p:dataList value="#{solicitud.listaInternosSeleccionados}"   var="usuario" type="definition"  emptyMessage="Ninguno">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
+                                            
+                                            
+                                            <div style="font-style: italic">Retorno: </div>
+                                            <p:dataList value="#{solicitud.listaInternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
+                                            
+                                            
+                                            
+                                            <span style="font-weight: 600;">Externos: </span>
+                                            <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
+                                            
+                                            <div style="font-style: italic">Retorno: </div>
+                                            <p:dataList value="#{solicitud.listaExternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
+                                                - #{usuario.nombrecompleto}
+                                            </p:dataList>
                                 </p:column>
 
                                 <p:column filterBy="#{solicitud.novedades}"  headerText="Novedades" filterMatchMode="contains" style="vertical-align: top;">  
@@ -377,11 +391,25 @@
 
                                 <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                                     <span style="font-weight: 600;">Internos: </span>
-                                    <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
+                                    <p:dataList value="#{solicitud.listaInternosSeleccionados}"   var="usuario" type="definition"  emptyMessage="Ninguno">
                                         - #{usuario.nombrecompleto}
                                     </p:dataList>
+
+
+                                    <div style="font-style: italic">Retorno: </div>
+                                    <p:dataList value="#{solicitud.listaInternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
+                                        - #{usuario.nombrecompleto}
+                                    </p:dataList>
+
+
+
                                     <span style="font-weight: 600;">Externos: </span>
                                     <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
+                                        - #{usuario.nombrecompleto}
+                                    </p:dataList>
+
+                                    <div style="font-style: italic">Retorno: </div>
+                                    <p:dataList value="#{solicitud.listaExternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
                                         - #{usuario.nombrecompleto}
                                     </p:dataList>
                                 </p:column>
@@ -485,11 +513,25 @@
 
                                 <p:column headerText="Acompañantes" width="200" style="vertical-align: top;">  
                                     <span style="font-weight: 600;">Internos: </span>
-                                    <p:dataList value="#{solicitud.listaInternosSeleccionados}"  var="usuario" type="definition"  emptyMessage="Ninguno">
+                                    <p:dataList value="#{solicitud.listaInternosSeleccionados}"   var="usuario" type="definition"  emptyMessage="Ninguno">
                                         - #{usuario.nombrecompleto}
                                     </p:dataList>
+
+
+                                    <div style="font-style: italic">Retorno: </div>
+                                    <p:dataList value="#{solicitud.listaInternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
+                                        - #{usuario.nombrecompleto}
+                                    </p:dataList>
+
+
+
                                     <span style="font-weight: 600;">Externos: </span>
                                     <p:dataList value="#{solicitud.listaExternosSeleccionados}"  var="usuario" type="definition" emptyMessage="Ninguno">
+                                        - #{usuario.nombrecompleto}
+                                    </p:dataList>
+
+                                    <div style="font-style: italic">Retorno: </div>
+                                    <p:dataList value="#{solicitud.listaExternosSeleccionados_retorno}"   var="usuario" type="definition"  emptyMessage="-" rendered="#{solicitud.retorno}">
                                         - #{usuario.nombrecompleto}
                                     </p:dataList>
                                 </p:column>
@@ -667,7 +709,6 @@
                                     <center>
                                         <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitud()}"   />
                                         <p:commandButton ajax="true" update=":form-edit-retorno" oncomplete="PF('editRetorno').show()" validateClient="true" value="Guardar y Editar Retorno" onclick="PF('newSolicitud').hide();"  action="#{solicitudBean.saveSolicitudyEditarRetorno()}" />
-                                        
                                     </center>
                                 </f:facet> 
                             </p:panel>
@@ -718,62 +759,63 @@
 
                 <p:dialog dynamic="true" widgetVar="newSolicitudEmergencia" header="Ingrese los datos de la Nueva Solicitud de Emergencia"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
                     <h:form id="form-new-solicitud-emergencia">          
+                      <p:growl id="msgs" showDetail="true" />
                         <center>
                             <p:panel id="pn2" style="margin-bottom:10px;">
-                                <p:messages id="messages" />
                                 <h:panelGrid id="grid" columns="4" cellpadding="5">
 
-                                    <h:outputLabel for="origen" value="Origen: *" />
+                                  <h:outputLabel for="origen" value="Origen: *" />
                                     <p:selectOneMenu filter="true" filterMatchMode="contains" id="origen" value="#{solicitudBean.solicitudEmergencia.distanciaById.localidadByIdOrigen.id}" style="width: 100%;">
                                         <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                                     </p:selectOneMenu>
 
 
-                                    <h:outputLabel for="dorigen" value="Dirección origen: " />
+                                    <h:outputLabel for="dorigen" value="Dirección origen: *" />
                                     <p:inputTextarea id="dorigen" value="#{solicitudBean.solicitudEmergencia.direccionOrigen}" style="width:100%">
                                     </p:inputTextarea>                
 
 
                                     <h:outputLabel for="destino" value="Destino: *" />
-                                    <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitudEmergencia.distanciaById.localidadByIdDestino.id}" style="width: 100%;">
+                                    <p:selectOneMenu filter="true" filterMatchMode="contains" id="destino" value="#{solicitudBean.solicitudEmergencia.distanciaById.localidadByIdDestino.id}" style="width: 100%;" required="true" requiredMessage="Seleccione Destino">
                                         <f:selectItems value="#{solicitudBean.listaLocalidades}" />                    
                                     </p:selectOneMenu>
 
 
-                                    <h:outputLabel for="ddestino" value="Dirección destino: " />
-                                    <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitudEmergencia.direccionDestino}" style="width:100%">
+                                    <h:outputLabel for="ddestino" value="Dirección destino: *" />
+                                    <p:inputTextarea id="ddestino" value="#{solicitudBean.solicitudEmergencia.direccionDestino}" style="width:100%" requiredMessage="Ingrese Dirección Destino">
                                     </p:inputTextarea>                
 
                                     <h:outputLabel for="fsalida" value="Fecha y Hora de salida: *" />
-                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitud.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" required="true" requiredMessage="Ingrese Fecha y Hora de Salida">
-                                      <p:ajax event="dateSelect" listener="#{solicitudBean.onDateSelect}" update="fllegada,msgs" />                                       
+                                    <p:calendar id="fsalida" value="#{solicitudBean.solicitudEmergencia.FSalida}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" required="true" requiredMessage="Ingrese Fecha y Hora de Salida">
+                                      <p:ajax event="dateSelect" update="fllegada" />                                       
                                     </p:calendar>
 
 
                                     <h:outputLabel for="fllegada" value="Fecha y Hora de llegada: *" />
-                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitud.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitud.FSalida}" required="true" requiredMessage="Ingrese Fecha y Hora de llegada">
-                                      <p:ajax event="blur"  update="msgs" />                                      
+                                    <p:calendar id="fllegada" value="#{solicitudBean.solicitudEmergencia.FLlegada}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitudEmergencia.FSalida}" required="true" requiredMessage="Ingrese Fecha y Hora de llegada">
+                                      
                                     </p:calendar>
 
-                                    <p:outputLabel value="Acompañantes Internos:" />
-                                    <p:autoComplete forceSelection="true" id="internos" multiple="true" value="#{solicitudBean.solicitudEmergencia.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+
+                                    <p:outputLabel value="Acompañantes Internos: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" id="internos" multiple="true" value="#{solicitudBean.solicitudEmergencia.listaInternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
                                                     var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                                     maxResults="10" minQueryLength="2" queryDelay="500" 
                                                     converter="usuarioInternoConverter" />
 
-                                    <p:outputLabel value="Acompañantes Externos:" />
-                                    <p:autoComplete forceSelection="true" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitudEmergencia.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                    <p:outputLabel value="Acompañantes Externos: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitudEmergencia.listaExternosSeleccionados}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
                                                     var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
                                                     maxResults="10" minQueryLength="2" queryDelay="500" 
                                                     converter="usuarioExternoConverter" />
 
                                     <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
-                                    <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitudEmergencia.nuevoUsuarioExterno}" style="width: 100%;"
-                                                     placeholder="Si no encontró el acompañante externo en la lista, ingrese aquí el nombre completo para mostrar en las próximas solicitudes. En caso de ser varios acompañantes, separe los nombres usando una coma." />
+                                    <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
+                                                     placeholder="Ejemplo: Juan Perez,Jose Duque,Carlos Ponce" />
 
                                     <h:outputLabel for="novedades" value="Novedades: " />
-                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitudEmergencia.novedades}" style="width: 100%;" >
-                                    </p:inputTextarea>                
+                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
+
 
                                     <h:outputLabel for="emergencia" value="Tipo de emergencia: *" />
                                     <p:selectOneMenu filter="true" filterMatchMode="contains" id="emergencia" value="#{solicitudBean.solicitudEmergencia.emergenciaById.id}" style="width: 100%;">
@@ -781,25 +823,52 @@
                                     </p:selectOneMenu>
 
 
-                                    <br></br>                    
-                                    <h:panelGrid id="panelId2" columns="2" style="border: 1px solid #c3c3c3; padding: 10px;" >
-                                        <h:outputLabel for="retorno2" value="Coordinar retorno: " />
-                                        <p:selectBooleanCheckbox id="retorno2" value="#{solicitudBean.solicitudEmergencia.retorno}" >
-                                        </p:selectBooleanCheckbox>
-                                        <h:outputLabel for="fretorno2" value="Fecha y Hora de RETORNO: *"  />
-                                        <p:calendar id="fretorno2" value="#{solicitudBean.solicitudEmergencia.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.currentDate}" />
-
-                                        <h:outputLabel for="retornoObservaciones2" value="Observaciones: " />
-                                        <p:inputTextarea id="retornoObservaciones2" value="#{solicitudBean.solicitudEmergencia.retornoObservacion}" style="width: 90%;" />                  
-                                    </h:panelGrid>
-
-                                    <br></br>
+                                    <br></br> 
                                     <h:outputLabel value="POR FAVOR, NO SE OLVIDE DE COORDINAR EL HOSPEDAJE." style="color: darkred; border: 1px dotted darkred; padding: 7px; font-weight: bold;" />
 
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <center>
-                                        <p:commandButton value="Guardar"  action="#{solicitudBean.saveSolicitudEmergencia()}" />
+                                        <h:commandButton value="Guardar" action="#{solicitudBean.saveSolicitudEmergencia()}" />
+                                        <p:commandButton ajax="true" update=":form-edit-emergencia-retorno" oncomplete="PF('editEmergenciaRetorno').show()" validateClient="true" value="Guardar y Editar Retorno" onclick="PF('newSolicitudEmergencia').hide();"  action="#{solicitudBean.saveSolicitudEmergenciayEditarRetorno()}" />
+                                    </center>
+                                </f:facet> 
+                            </p:panel>
+                        </center>
+                    </h:form>
+                </p:dialog>
+                
+                <!-- ________________________   EDITAR RETORNO FORM  ________________________   -->
+
+                <p:dialog dynamic="true" closable="true" widgetVar="editEmergenciaRetorno" header="Edite el retorno"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+                    <h:form id="form-edit-emergencia-retorno">    
+                      <p:growl id="msgs" showDetail="true" />
+                        <center>
+                            <p:panel id="pn2" style="margin-bottom:10px;">
+                                <p:messages id="messages" />
+                                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+                                  <h:outputLabel for="fretorno" value="Fecha y Hora de Retorno: *" />
+                                  <p:calendar id="fretorno" value="#{solicitudBean.solicitudEmergenciaRetorno.FRetorno}" pattern="MM/dd/yyyy HH:mm" stepMinute="5" mindate="#{solicitudBean.solicitudEmergenciaRetorno.FLlegada}" required="true" requiredMessage="Ingrese Fecha y Hora de Retorno">
+                                  </p:calendar>
+
+                                    <p:outputLabel value="Acompañantes Internos Retorno: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" id="internos" multiple="true" value="#{solicitudBean.solicitudEmergenciaRetorno.listaInternosSeleccionados_retorno}" completeMethod="#{solicitudBean.completeUsuarioInterno}"
+                                                    var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                                    maxResults="10" minQueryLength="2" queryDelay="500" 
+                                                    converter="usuarioInternoConverter" />
+
+                                    <p:outputLabel value="Acompañantes Externos Retorno: *" />
+                                    <p:autoComplete forceSelection="true" placeholder="ninguno seleccionado" size="100" id="externos" multiple="true" value="#{solicitudBean.solicitudEmergenciaRetorno.listaExternosSeleccionados_retorno}" completeMethod="#{solicitudBean.completeUsuarioExterno}"
+                                                    var="usuario" itemLabel="#{usuario.nombrecompleto}" itemValue="#{usuario}" cache="true"
+                                                    maxResults="10" minQueryLength="2" queryDelay="500" 
+                                                    converter="usuarioExternoConverter" />
+
+                                </h:panelGrid>
+                                <f:facet name="footer">
+                                    <center>                                      
+                                      <p:commandButton ajax="true" oncomplete="cmdRefreshSolicitudes()" validateClient="true" value="Guardar" onclick="PF('editEmergenciaRetorno').hide();"  action="#{solicitudBean.saveSolicitudEmergenciayDatosRetorno()}" />                                      
+                                      <h:commandButton value="Cancelar" action="#{solicitudBean.cancelSolicitudyDatosRetorno()}" /> 
                                     </center>
                                 </f:facet> 
                             </p:panel>

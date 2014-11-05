@@ -138,8 +138,8 @@ public class Insert {
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
             + " direccion_origen, direccion_destino, estado, estado_enfermeria, emergencia,"
             + " id_tipo_emergencia, novedades, id_usuario_solicita, id_usuario_aprobador,"
-            + " ids_interno, ids_externo, retorno, f_retorno, retorno_observacion)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " ids_interno, ids_externo, retorno, f_retorno, retorno_observacion, id_interno_retorno, id_externo_retorno)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
     int dist_id = checkExistRelation(solicitud.getDistanciaById().getLocalidadByIdOrigen().getId(),
             solicitud.getDistanciaById().getLocalidadByIdDestino().getId());
@@ -181,6 +181,8 @@ public class Insert {
     psInsert.setBoolean(16, solicitud.getRetorno());
     psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
     psInsert.setString(18, solicitud.getRetornoObservacion()); 
+    psInsert.setString(19, solicitud.getIds_interno()); 
+    psInsert.setString(20, solicitud.getIds_externo()); 
         
     RunSQL(con, psInsert);
     

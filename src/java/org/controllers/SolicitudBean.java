@@ -50,6 +50,7 @@ public class SolicitudBean {
   private List<Usuario> listaExternos;  
   private Solicitud solicitud;
   private Solicitud solicitudRetorno;
+  private Solicitud solicitudEmergenciaRetorno;
   private Solicitud solicitudEmergencia;
   private int loc_origen;
   private Usuario usuario;
@@ -103,6 +104,17 @@ public class SolicitudBean {
 
   public void setSolicitudRetorno(Solicitud solicitudRetorno) {
     this.solicitudRetorno = solicitudRetorno;
+  }
+  
+  public Solicitud getSolicitudEmergenciaRetorno() {
+    if(solicitudEmergenciaRetorno == null){
+      solicitudEmergenciaRetorno = Select.selectLastEmergenciaSolicitud();
+    }
+    return solicitudEmergenciaRetorno;
+  }
+
+  public void setSolicitudEmergenciaRetorno(Solicitud solicitudEmergenciaRetorno) {
+    this.solicitudEmergenciaRetorno = solicitudEmergenciaRetorno;
   }
 
   public Solicitud getSolicitudEmergencia() {
@@ -325,6 +337,12 @@ public class SolicitudBean {
     saveSolicitud();
     return listaSolicitudesAprobadas;
   }
+  
+  public List<Solicitud> saveSolicitudEmergenciayEditarRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
+    saveSolicitudEmergencia();
+    return listaSolicitudesEmergencias;
+  }
+  
   public List<Solicitud> saveSolicitud() throws IOException, SQLException, ParseException, AddressException, Exception {
     Usuario logged_user = Select.LoggedUser();       
     solicitud.setUsuarioByIdUsuarioSolicita(logged_user);
@@ -402,10 +420,7 @@ public class SolicitudBean {
   public List<Solicitud> saveSolicitudEmergencia() throws IOException, SQLException, ParseException {
     Usuario logged_user = Select.LoggedUser();       
     solicitudEmergencia.setUsuarioByIdUsuarioSolicita(logged_user);
-    int h = solicitudEmergencia.getFSalida().getHours();
-    int m = solicitudEmergencia.getFSalida().getMinutes();
-    if(!solicitud.getRetorno())
-      solicitud.setFRetorno(new Date());
+   
     solicitudEmergencia.setEstado(true);
     solicitudEmergencia.setEmergencia(true);
     solicitudEmergencia.setFCreacion(new Date());
@@ -413,11 +428,17 @@ public class SolicitudBean {
     solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados(), false));
     solicitudEmergencia.setIds_externo(pickUsuarioExternoIds(solicitudEmergencia.getListaExternosSeleccionados(), true, solicitudEmergencia));
     
-    Insert.InsertSolicitudEmergencia(solicitudEmergencia);
+    String sol_id = Insert.InsertSolicitudEmergencia(solicitudEmergencia);
+    
+    solicitudRetorno = new Solicitud();
+    solicitudRetorno.setId(Integer.parseInt(sol_id));
+    solicitudRetorno.setIds_interno_retorno(solicitud.getIds_interno());
+    solicitudRetorno.setIds_externo_retorno(solicitud.getIds_externo());
+    solicitudRetorno.setFRetorno(solicitud.getFLlegada());
 
     solicitudEmergencia = new Solicitud();
     solicitudEmergencia.setEmergencia(true);
-    updateInfoSolicitudes();
+    //updateInfoSolicitudes();
 
     return listaSolicitudesAprobadas;
   }
