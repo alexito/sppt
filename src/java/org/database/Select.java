@@ -981,14 +981,14 @@ public class Select {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
                 
-                if (result.getString("id_interno_retorno") != null) {
-                    s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
+                if (res.getString("id_interno_retorno") != null) {
+                    s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(res.getString("id_interno_retorno")));
                 } else {
                     s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
                 }
 
-                if (result.getString("id_externo_retorno") != null) {
-                    s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_externo_retorno")));
+                if (res.getString("id_externo_retorno") != null) {
+                    s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(res.getString("id_externo_retorno")));
                 } else {
                     s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
                 }

@@ -179,7 +179,7 @@ public class Insert {
     psInsert.setString(14, solicitud.getIds_interno()); 
     psInsert.setString(15, solicitud.getIds_externo()); 
     psInsert.setBoolean(16, solicitud.getRetorno());
-    psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFRetorno().getTime()));
+    psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psInsert.setString(18, solicitud.getRetornoObservacion()); 
     psInsert.setString(19, solicitud.getIds_interno()); 
     psInsert.setString(20, solicitud.getIds_externo()); 

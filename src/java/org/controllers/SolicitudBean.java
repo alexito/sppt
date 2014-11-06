@@ -304,7 +304,7 @@ public class SolicitudBean {
     }
     if(is_insert){
       String[] nombres;
-      nombres = solic.getNuevoUsuarioExterno().split(",");
+        nombres = solic.getNuevoUsuarioExterno().split(",");
       String nombre;
       for(int i = 0; i < nombres.length; i++){
         if(!"".equals(uids))
@@ -326,10 +326,20 @@ public class SolicitudBean {
   public void saveSolicitudyDatosRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
     
     solicitudRetorno.setRetorno(true);
-    solicitudRetorno.setIds_interno_retorno(pickUsuarioInternoIds(solicitudRetorno.getListaInternosSeleccionados_retorno(), true));
+    solicitudRetorno.setIds_interno_retorno(pickUsuarioInternoIds(solicitudRetorno.getListaInternosSeleccionados_retorno(), false));
     solicitudRetorno.setIds_externo_retorno(pickUsuarioExternoIds(solicitudRetorno.getListaExternosSeleccionados_retorno(), false, solicitudRetorno));
     
     Update.UpdateSolicitudRetorno(solicitudRetorno);
+    
+  }
+  
+  public void saveSolicitudEmergenciayDatosRetorno() throws IOException, SQLException, ParseException, AddressException, Exception {
+    
+    solicitudEmergenciaRetorno.setRetorno(true);
+    solicitudEmergenciaRetorno.setIds_interno_retorno(pickUsuarioInternoIds(solicitudEmergenciaRetorno.getListaInternosSeleccionados_retorno(), false));
+    solicitudEmergenciaRetorno.setIds_externo_retorno(pickUsuarioExternoIds(solicitudEmergenciaRetorno.getListaExternosSeleccionados_retorno(), false, solicitudEmergenciaRetorno));
+    
+    Update.UpdateSolicitudRetorno(solicitudEmergenciaRetorno);
     
   }
   
@@ -425,16 +435,16 @@ public class SolicitudBean {
     solicitudEmergencia.setEmergencia(true);
     solicitudEmergencia.setFCreacion(new Date());
     solicitudEmergencia.setCancelado(false);
-    solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados(), false));
+    solicitudEmergencia.setIds_interno(pickUsuarioInternoIds(solicitudEmergencia.getListaInternosSeleccionados(), true));
     solicitudEmergencia.setIds_externo(pickUsuarioExternoIds(solicitudEmergencia.getListaExternosSeleccionados(), true, solicitudEmergencia));
     
     String sol_id = Insert.InsertSolicitudEmergencia(solicitudEmergencia);
     
-    solicitudRetorno = new Solicitud();
-    solicitudRetorno.setId(Integer.parseInt(sol_id));
-    solicitudRetorno.setIds_interno_retorno(solicitud.getIds_interno());
-    solicitudRetorno.setIds_externo_retorno(solicitud.getIds_externo());
-    solicitudRetorno.setFRetorno(solicitud.getFLlegada());
+//    solicitudRetorno = new Solicitud();
+//    solicitudRetorno.setId(Integer.parseInt(sol_id));
+//    solicitudRetorno.setIds_interno_retorno(solicitud.getIds_interno());
+//    solicitudRetorno.setIds_externo_retorno(solicitud.getIds_externo());
+//    solicitudRetorno.setFRetorno(solicitud.getFLlegada());
 
     solicitudEmergencia = new Solicitud();
     solicitudEmergencia.setEmergencia(true);

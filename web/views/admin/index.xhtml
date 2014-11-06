@@ -810,11 +810,11 @@
                                                     converter="usuarioExternoConverter" />
 
                                     <h:outputLabel for="externo_nuevo" value="Nuevo acompañante Externo:" />
-                                    <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitud.nuevoUsuarioExterno}" style="width: 100%;"
+                                    <p:inputTextarea id="externo_nuevo" value="#{solicitudBean.solicitudEmergencia.nuevoUsuarioExterno}" style="width: 100%;"
                                                      placeholder="Ejemplo: Juan Perez,Jose Duque,Carlos Ponce" />
 
                                     <h:outputLabel for="novedades" value="Novedades: " />
-                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitud.novedades}" style="width: 100%;" />                                 
+                                    <p:inputTextarea id="novedades" value="#{solicitudBean.solicitudEmergencia.novedades}" style="width: 100%;" />                                 
 
 
                                     <h:outputLabel for="emergencia" value="Tipo de emergencia: *" />
@@ -840,7 +840,7 @@
                 
                 <!-- ________________________   EDITAR RETORNO FORM  ________________________   -->
 
-                <p:dialog dynamic="true" closable="true" widgetVar="editEmergenciaRetorno" header="Edite el retorno"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
+                <p:dialog dynamic="true" closable="true" widgetVar="editEmergenciaRetorno" header="Edite el retorno (Emergencia)"  closeOnEscape="true" draggable="false" resizable="false" showEffect="drop" hideEffect="drop">
                     <h:form id="form-edit-emergencia-retorno">    
                       <p:growl id="msgs" showDetail="true" />
                         <center>
