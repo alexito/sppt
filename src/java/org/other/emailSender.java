@@ -3,6 +3,7 @@ package org.other;
 import java.util.Properties;
 import javax.mail.Address;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -43,7 +44,8 @@ public class emailSender {
       transporte.connect("lafargenotificacion@gmail.com", "lafarge123");
       transporte.sendMessage(message, message.getAllRecipients());
       transporte.close();
-    } catch (Exception ex) {
+    } catch (MessagingException me) {
+        me.getMessage();
 
     }
   }

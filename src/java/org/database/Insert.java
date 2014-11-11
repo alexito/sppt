@@ -45,8 +45,8 @@ public class Insert {
   public static String InsertUsuario(Usuario usuario) throws SQLException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO usuario (EMPLCDGO, EMPLFAPR, PRSNNMBR, PRSNAPLL, PRSNCDLA, clave, PRSNMAIL,"
-            + " PRSNTLFN, estado, rol, f_disponible, f_disponible2, observacion, observacion2, es_interno)"
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + " PRSNTLFN, estado, rol, f_disponible, f_disponible2, observacion, observacion2, es_interno, NumeroPasajeros)"
+            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     java.sql.Timestamp currentDate = new java.sql.Timestamp(new Date().getTime());
     PreparedStatement psInsert = con.getConnection().prepareStatement(SQL);
     psInsert.setString(1, usuario.getCodemp());
@@ -64,11 +64,10 @@ public class Insert {
     psInsert.setString(13, usuario.getObservacion());
     psInsert.setString(14, "");
     psInsert.setBoolean(15, usuario.getEsInterno());
-    
+    psInsert.setInt(16, usuario.getNumero_pasajeros());
     return RunSQL(con, psInsert);
     
   }
-  
   public static String InsertSolicitud(Solicitud solicitud) throws SQLException, ParseException {
     ConnectDB con = new ConnectDB();
     String SQL = "INSERT INTO solicitud (id_distancia, f_creacion, f_salida, f_llegada,"
@@ -181,8 +180,8 @@ public class Insert {
     psInsert.setBoolean(16, solicitud.getRetorno());
     psInsert.setTimestamp(17, new java.sql.Timestamp(solicitud.getFLlegada().getTime()));
     psInsert.setString(18, solicitud.getRetornoObservacion()); 
-    psInsert.setString(19, solicitud.getIds_interno()); 
-    psInsert.setString(20, solicitud.getIds_externo()); 
+    psInsert.setString(19, solicitud.getIds_interno_retorno()); 
+    psInsert.setString(20, solicitud.getIds_externo_retorno()); 
         
     RunSQL(con, psInsert);
     

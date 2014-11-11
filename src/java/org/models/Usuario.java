@@ -23,7 +23,7 @@ public class Usuario implements java.io.Serializable {
   private Date FDisponible;
   private Date FDisponible2;
   private String nombrecompleto;
-
+  private int numero_pasajeros;
   public Usuario() {
   }
 
@@ -37,7 +37,7 @@ public class Usuario implements java.io.Serializable {
   }
 
   public Usuario(int id, String nombre, String apellido, String cedula, String clave, String email, String telefono,
-          String movil, Boolean estado, Boolean esInterno, String observacion, String observacion2, String rol, String codemp, String codapr, Date FDisponible, Date FDisponible2) {
+          String movil, Boolean estado, Boolean esInterno, String observacion, String observacion2, String rol, String codemp, String codapr, Date FDisponible, Date FDisponible2, int numero_pasajeros) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -55,6 +55,7 @@ public class Usuario implements java.io.Serializable {
     this.codapr = codapr;
     this.FDisponible = FDisponible;
     this.FDisponible2 = FDisponible2;
+    this.numero_pasajeros=numero_pasajeros;
   }
 
   public int getId() {
@@ -223,6 +224,17 @@ public class Usuario implements java.io.Serializable {
   public void setFDisponible2(Date FDisponible2) {
     this.FDisponible2 = FDisponible2;
   }
+
+    public int getNumero_pasajeros() {
+        return numero_pasajeros;
+    }
+
+    public void setNumero_pasajeros(int numero_pasajeros) {
+        this.numero_pasajeros = numero_pasajeros;
+    }
+  
+  
+  
 
   @Override
   public String toString() {

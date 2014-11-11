@@ -54,7 +54,8 @@ public class Solicitud implements java.io.Serializable {
     private String retornoObservacion = "";
     private String estado_conductor;
 //    private List<Solicitud> listaAsignaciones;
-   private List<AsignacionSolicitud> lista_asignaciones_conductor=new ArrayList<AsignacionSolicitud>();
+    private List<AsignacionSolicitud> lista_asignaciones_conductor = new ArrayList<AsignacionSolicitud>();
+
     public Solicitud() {
         this.distanciaById = new Distancia();
         this.usuarioByIdUsuarioSolicita = new Usuario();
@@ -451,9 +452,9 @@ public class Solicitud implements java.io.Serializable {
 //        listaAsignaciones = Select.selectViajesConductor(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
 //        lista_asignaciones_conductor=Select.selectViajesConductorNew(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
 //        cargar_asignaciones();
-        VariablesEstaticas.fecha=sdf.format(FSalida);
-        VariablesEstaticas.id_conductor=usuarioByIdUsuarioConductor.getId();
-         VariablesEstaticas.obtener_datos=true;
+        VariablesEstaticas.fecha = sdf.format(FSalida);
+        VariablesEstaticas.id_conductor = usuarioByIdUsuarioConductor.getId();
+        VariablesEstaticas.obtener_datos = true;
     }
 
     public String getEstado_conductor() {
@@ -471,59 +472,58 @@ public class Solicitud implements java.io.Serializable {
     public void setLista_asignaciones_conductor(List<AsignacionSolicitud> lista_asignaciones_conductor) {
         this.lista_asignaciones_conductor = lista_asignaciones_conductor;
     }
-    
+
     public String getIds_interno_retorno() {
-    return ids_interno_retorno;
-  }
+        return ids_interno_retorno;
+    }
 
-  public void setIds_interno_retorno(String ids_interno_retorno) {
-    this.ids_interno_retorno = ids_interno_retorno;
-  }
+    public void setIds_interno_retorno(String ids_interno_retorno) {
+        this.ids_interno_retorno = ids_interno_retorno;
+    }
 
-  public String getIds_externo_retorno() {
-    return ids_externo_retorno;
-  }
+    public String getIds_externo_retorno() {
+        return ids_externo_retorno;
+    }
 
-  public void setIds_externo_retorno(String ids_externo_retorno) {
-    this.ids_externo_retorno = ids_externo_retorno;
-  }
+    public void setIds_externo_retorno(String ids_externo_retorno) {
+        this.ids_externo_retorno = ids_externo_retorno;
+    }
 
-  public String getNombres_interno_retorno() {
-    return nombres_interno_retorno;
-  }
+    public String getNombres_interno_retorno() {
+        return nombres_interno_retorno;
+    }
 
-  public void setNombres_interno_retorno(String nombres_interno_retorno) {
-    this.nombres_interno_retorno = nombres_interno_retorno;
-  }
+    public void setNombres_interno_retorno(String nombres_interno_retorno) {
+        this.nombres_interno_retorno = nombres_interno_retorno;
+    }
 
-  public String getNombres_externo_retorno() {
-    return nombres_externo_retorno;
-  }
+    public String getNombres_externo_retorno() {
+        return nombres_externo_retorno;
+    }
 
-  public void setNombres_externo_retorno(String nombres_externo_retorno) {
-    this.nombres_externo_retorno = nombres_externo_retorno;
-  }
+    public void setNombres_externo_retorno(String nombres_externo_retorno) {
+        this.nombres_externo_retorno = nombres_externo_retorno;
+    }
 
-  public List<Usuario> getListaInternosSeleccionados_retorno() {
-    return listaInternosSeleccionados_retorno;
-  }
+    public List<Usuario> getListaInternosSeleccionados_retorno() {
+        return listaInternosSeleccionados_retorno;
+    }
 
-  public void setListaInternosSeleccionados_retorno(List<Usuario> listaInternosSeleccionados_retorno) {
-    this.listaInternosSeleccionados_retorno = listaInternosSeleccionados_retorno;
-  }
+    public void setListaInternosSeleccionados_retorno(List<Usuario> listaInternosSeleccionados_retorno) {
+        this.listaInternosSeleccionados_retorno = listaInternosSeleccionados_retorno;
+    }
 
-  public List<Usuario> getListaExternosSeleccionados_retorno() {
-    return listaExternosSeleccionados_retorno;
-  }
+    public List<Usuario> getListaExternosSeleccionados_retorno() {
+        return listaExternosSeleccionados_retorno;
+    }
 
-  public void setListaExternosSeleccionados_retorno(List<Usuario> listaExternosSeleccionados_retorno) {
-    this.listaExternosSeleccionados_retorno = listaExternosSeleccionados_retorno;
-  }
-    
-    public void cargar_asignaciones()
-    {
-         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-         lista_asignaciones_conductor=Select.selectViajesConductorNew(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
+    public void setListaExternosSeleccionados_retorno(List<Usuario> listaExternosSeleccionados_retorno) {
+        this.listaExternosSeleccionados_retorno = listaExternosSeleccionados_retorno;
+    }
+
+    public void cargar_asignaciones() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        lista_asignaciones_conductor = Select.selectViajesConductorNew(usuarioByIdUsuarioConductor.getId(), sdf.format(FSalida));
     }
 
     public void ListaAsiganciones() throws IOException {
@@ -532,7 +532,4 @@ public class Solicitud implements java.io.Serializable {
         extContext.redirect("ac.jspx");
     }
 
-
-
-    
 }

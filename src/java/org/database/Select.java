@@ -52,77 +52,143 @@ public class Select {
         }
         return usuario;
     }
-    
+
     public static Solicitud selectLastSolicitud() {
         ConnectDB con = new ConnectDB();
         Solicitud s = new Solicitud();
+        Statement sentence2 = null;
+        ResultSet result2 = null;
         try {
 
             String SQL = "SELECT TOP 1 * FROM solicitud ORDER BY id DESC;";
-            sentence = con.getConnection().createStatement();
-            result = sentence.executeQuery(SQL);           
+            sentence2 = con.getConnection().createStatement();
+            result2 = sentence2.executeQuery(SQL);
 
-            result.next();
+            result2.next();
+            
+            Map<Integer, Localidad> map_localidades;
+            map_localidades = selectMappedLocalidades(true, null);
+            Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+            Map<Integer, Distancia> map_distancias;
+            id_distancias.put(result2.getInt("id_distancia"), result2.getInt("id_distancia"));
+            map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+            
+            Distancia dist = map_distancias.get(result2.getInt("id_distancia"));
+            int dist_id = selectDistanciaIdByLocalidadesId(dist.getLocalidadByIdDestino().getId(), dist.getLocalidadByIdOrigen().getId());
+            
+            id_distancias = new HashMap<Integer, Integer>();
+            id_distancias.put(dist_id, dist_id);
+            map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+            dist = map_distancias.get(dist_id);
+            
+            s.setFRetorno(result2.getTimestamp("f_retorno"));
+            s.setFSalida(result2.getTimestamp("f_llegada"));
+            s.setFLlegada(result2.getTimestamp("f_llegada"));
+            s.setDistanciaById(dist);
+            s.setRetornoObservacion(result2.getString("retorno_observacion"));
+            s.setNovedades(result2.getString("novedades"));
+            s.setDireccionOrigen(result2.getString("direccion_destino"));
+            s.setDireccionDestino(result2.getString("direccion_origen"));
+            s.setId(result2.getInt("id"));
 
-                s = new Solicitud();
-                s.setId(result.getInt("id"));
-                s.setFRetorno(result.getTimestamp("f_retorno"));
-                s.setRetornoObservacion(result.getString("retorno_observacion"));
-                    
-                if (result.getString("id_interno_retorno") != null) {
-                    s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
-                } else {
-                    s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
-                }
+            if (result2.getString("id_interno_retorno") != null) {
+                s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result2.getString("id_interno_retorno")));
+            } else {
+                s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
+            }
 
-                if (result.getString("id_externo_retorno") != null) {
-                    s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_externo_retorno")));
-                } else {
-                    s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
-                }
+            if (result2.getString("id_externo_retorno") != null) {
+                s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result2.getString("id_externo_retorno")));
+            } else {
+                s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
+            }
 
             return s;
+
+        } catch (SQLException e) {
+        } finally {
+            CloseCurrentConnection(sentence2, result2, con);
+        }
+        return s;
+    }
+    public static int selectDistanciaIdByLocalidadesId(int ori, int dest){
+      int resp =0;
+      ConnectDB con = new ConnectDB();
+        try {
+            String SQL = "SELECT id FROM distancia WHERE id_origen=" + ori + " and id_destino=" + dest + ";";
+
+            sentence = con.getConnection().createStatement();
+            result = sentence.executeQuery(SQL);
+            result.next();
+               
+            resp = result.getInt("id");
+            
+            return resp;
 
         } catch (SQLException e) {
         } finally {
             CloseCurrentConnection(sentence, result, con);
         }
-        return s;
+        return resp;
     }
-    
     public static Solicitud selectLastEmergenciaSolicitud() {
+      
         ConnectDB con = new ConnectDB();
         Solicitud s = new Solicitud();
+        Statement sentence2 = null;
+        ResultSet result2 = null;
         try {
 
             String SQL = "SELECT TOP 1 * FROM solicitud WHERE emergencia=1 ORDER BY id DESC;";
-            sentence = con.getConnection().createStatement();
-            result = sentence.executeQuery(SQL);           
+            sentence2 = con.getConnection().createStatement();
+            result2 = sentence2.executeQuery(SQL);
 
-            result.next();
+            result2.next();
+            
+            Map<Integer, Localidad> map_localidades;
+            map_localidades = selectMappedLocalidades(true, null);
+            Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
+            Map<Integer, Distancia> map_distancias;
+            id_distancias.put(result2.getInt("id_distancia"), result2.getInt("id_distancia"));
+            map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+            
+            Distancia dist = map_distancias.get(result2.getInt("id_distancia"));
+            int dist_id = selectDistanciaIdByLocalidadesId(dist.getLocalidadByIdDestino().getId(), dist.getLocalidadByIdOrigen().getId());
+            
+            id_distancias = new HashMap<Integer, Integer>();
+            id_distancias.put(dist_id, dist_id);
+            map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
+            dist = map_distancias.get(dist_id);
+            
+            s.setFRetorno(result2.getTimestamp("f_retorno"));
+            s.setFSalida(result2.getTimestamp("f_llegada"));
+            s.setFLlegada(result2.getTimestamp("f_llegada"));
+            s.setDistanciaById(dist);
+            s.setRetornoObservacion(result2.getString("retorno_observacion"));
+            s.setNovedades(result2.getString("novedades"));
+            s.setDireccionOrigen(result2.getString("direccion_destino"));
+            s.setDireccionDestino(result2.getString("direccion_origen"));
+            s.setId(result2.getInt("id"));
+            Emergencia emergencia_tipo = selectEmergenciaById(result2.getInt("id_tipo_emergencia")).get(0);
+            s.setEmergenciaById(emergencia_tipo);
 
-                s = new Solicitud();
-                s.setId(result.getInt("id"));
-                s.setFRetorno(result.getTimestamp("f_retorno"));
-                s.setRetornoObservacion(result.getString("retorno_observacion"));
-                    
-                if (result.getString("id_interno_retorno") != null) {
-                    s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
-                } else {
-                    s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
-                }
+            if (result2.getString("id_interno_retorno") != null) {
+                s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result2.getString("id_interno_retorno")));
+            } else {
+                s.setListaInternosSeleccionados_retorno(new ArrayList<Usuario>());
+            }
 
-                if (result.getString("id_externo_retorno") != null) {
-                    s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_externo_retorno")));
-                } else {
-                    s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
-                }
+            if (result2.getString("id_externo_retorno") != null) {
+                s.setListaExternosSeleccionados_retorno(Select.selectUsuariosById(result2.getString("id_externo_retorno")));
+            } else {
+                s.setListaExternosSeleccionados_retorno(new ArrayList<Usuario>());
+            }
 
             return s;
 
         } catch (SQLException e) {
         } finally {
-            CloseCurrentConnection(sentence, result, con);
+            CloseCurrentConnection(sentence2, result2, con);
         }
         return s;
     }
@@ -217,7 +283,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -335,7 +401,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -456,7 +522,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -577,7 +643,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -697,7 +763,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -832,7 +898,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (result.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(result.getString("id_interno_retorno")));
                 } else {
@@ -980,7 +1046,7 @@ public class Select {
                 } else {
                     s.setListaExternosSeleccionados(new ArrayList<Usuario>());
                 }
-                
+
                 if (res.getString("id_interno_retorno") != null) {
                     s.setListaInternosSeleccionados_retorno(Select.selectUsuariosById(res.getString("id_interno_retorno")));
                 } else {
@@ -1288,7 +1354,7 @@ public class Select {
                         res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
                         res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
                         res.getString("observacion2"), res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"),
-                        res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"));
+                        res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"), 0);
                 listUsuarios.add(s);
             }
             return listUsuarios;
@@ -1318,7 +1384,7 @@ public class Select {
                         res.getString("PRSNCDLA"), res.getString("clave"), res.getString("PRSNMAIL"), res.getString("PRSNTLFN"),
                         res.getString("PRSNMVIL"), res.getBoolean("estado"), res.getBoolean("es_interno"), res.getString("observacion"),
                         res.getString("observacion2"), res.getString("rol"), res.getString("EMPLCDGO"), res.getString("EMPLFAPR"),
-                        res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"));
+                        res.getTimestamp("f_disponible"), res.getTimestamp("f_disponible2"), 0);
                 listUsuarios.add(s);
             }
             return listUsuarios;
@@ -1352,7 +1418,7 @@ public class Select {
                         result.getString("PRSNCDLA"), result.getString("clave"), result.getString("PRSNMAIL"), result.getString("PRSNTLFN"),
                         result.getString("PRSNMVIL"), result.getBoolean("estado"), result.getBoolean("es_interno"), result.getString("observacion"),
                         result.getString("observacion2"), result.getString("rol"), result.getString("EMPLCDGO"), result.getString("EMPLFAPR"),
-                        result.getTimestamp("f_disponible"), result.getTimestamp("f_disponible2"));
+                        result.getTimestamp("f_disponible"), result.getTimestamp("f_disponible2"), result.getInt("NumeroPasajeros"));
                 listUsuarios.add(s);
             }
             return listUsuarios;
@@ -1598,18 +1664,59 @@ public class Select {
                     + "  direccion_destino,\n"
                     + "  f_salida,\n"
                     + "  f_llegada,\n"
-                    + "  f_disponible\n"
+                    + "  f_disponible,"
+                    + "  NumeroPasajeros,\n"
+                    + "  ids_interno,\n"
+                    + "  ids_externo \n"
                     + " FROM \n"
                     + "  dbo.Asignacion_conductores\n"
                     + " WHERE\n"
-                    + " f_salida >='" + fecha + "' and f_disponible>='" + fecha + "' and id_Conductor=" + id;
+                    + " (f_salida >='" + fecha + "'  or f_salida <='"+fecha+"') and f_disponible>='" + fecha + "' and id_Conductor=" + id;
 
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
+            boolean obtener_num_pasajeros = true;
             while (result.next()) {
-                response = "El conductor tiene un viaje asignado: \n Origen: " + result.getString(1) + "\n Destino: " + result.getString(2) + "\n Fecha Salida: " + result.getString(3) + "\n Fecha Llegada: " + result.getString(4) + "\n Fecha Disponible: " + result.getString(5);
+                int numero_pasajeros_total = result.getString("ids_interno").split(",").length;
+                String[] exter = result.getString("ids_externo").split(",");
+                if (!exter[0].equals("")) {
+                    numero_pasajeros_total+=exter.length;
+                } 
+                int asientos_disponibles = result.getInt("NumeroPasajeros") - numero_pasajeros_total;
+                response = "El conductor tiene un viaje asignado: \n Origen: " + result.getString(1) + "\n Destino: " + result.getString(2) + "\n Fecha Salida: " + result.getString(3) + "\n Fecha Llegada: " + result.getString(4) + "\n Fecha Disponible: " + result.getString(5) + "\n ASIENTOS DISPONIBLES: " + asientos_disponibles;
+                obtener_num_pasajeros = false;
             }
+            if (obtener_num_pasajeros) {
+                response += " Asientos disponibles " + selectAsientosConductor(id);
+            }
+            return response;
+        } catch (SQLException e) {
+        } finally {
+            CloseCurrentConnection(sentence, result, con);
+        }
 
+        return response;
+    }
+
+    public static int selectAsientosConductor(int id) {
+        int response = -1;
+
+        ConnectDB con = new ConnectDB();
+        try {
+            String SQL = "SELECT \n"
+                    + "  NumeroPasajeros\n"
+                    + "FROM \n"
+                    + "  dbo.Conductores Where id=" + id;
+
+            sentence = con.getConnection().createStatement();
+            result = sentence.executeQuery(SQL);
+            boolean obtener_num_pasajeros = true;
+            while (result.next()) {
+                response = result.getInt("NumeroPasajeros");
+            }
+            if (obtener_num_pasajeros) {
+
+            }
             return response;
         } catch (SQLException e) {
         } finally {
@@ -1713,19 +1820,18 @@ public class Select {
             Map<Integer, Integer> id_distancias = new HashMap<Integer, Integer>();
             Map<Integer, Distancia> map_distancias;
 
-            
             while (result.next()) {
                 id_distancias.put(result.getInt("id_distancia"), result.getInt("id_distancia"));
             }
 
             map_localidades = selectMappedLocalidades(true, null);
             map_distancias = selectMappedDistancias(false, id_distancias, map_localidades);
-            
+
             sentence = con.getConnection().createStatement();
             result = sentence.executeQuery(SQL);
 
             while (result.next()) {
-                AsignacionSolicitud new_asignacion=new AsignacionSolicitud(
+                AsignacionSolicitud new_asignacion = new AsignacionSolicitud(
                         result.getString(1),
                         result.getString(2),
                         result.getTimestamp(3),
